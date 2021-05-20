@@ -8,16 +8,16 @@ branches:
   except:
     - gh-pages
 stages:
-#  - lint
+  - lint
   - unit test
   - e2e test
   - coverage
 jobs:
   include:
-#    - stage: lint
-#      script:
-#        # Run linter
-#        - npm run lint
+    - stage: lint
+      script:
+        # Run linter
+        - npm run lint
     - stage: unit test
       before_script:
         - chmod +x ./firebaseEmulator.sh
