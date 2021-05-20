@@ -3,6 +3,7 @@ node_js:
   - "node"
 install:
   - npm install
+  - curl -sL firebase.tools | bash
 branches:
   except:
     - gh-pages
@@ -20,6 +21,7 @@ jobs:
     - stage: unit test
       script:
         # Run tests
+        - firebase emulator:start
         - npm run test:unit
     - stage: e2e test
       script:
