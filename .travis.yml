@@ -21,11 +21,9 @@ jobs:
     - stage: unit test
       before_script:
         - chmod +x ./firebaseEmulator.sh
-        - sh ./firebaseEmulator.sh
-        - sleep 5000
       script:
         # Run tests
-        - npm run test:unit
+        - sh ./firebaseEmulator.sh
     - stage: e2e test
       script:
         # Run e2e test
