@@ -8,22 +8,21 @@ branches:
   except:
     - gh-pages
 stages:
-  - lint
+#  - lint
   - unit test
   - e2e test
   - coverage
 jobs:
   include:
-    - stage: lint
-      script:
-        # Run linter
-        - npm run lint
+#    - stage: lint
+#      script:
+#        # Run linter
+#        - npm run lint
     - stage: unit test
       before_script:
-        - firebase emulators:start &
+        - firebase emulators:start & sleep 5000
       script:
         # Run tests
-        - sleep 5000
         - npm run test:unit
     - stage: e2e test
       script:
