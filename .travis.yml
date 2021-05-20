@@ -21,7 +21,7 @@ jobs:
     - stage: unit test
       script:
         # Run tests
-        - firebase emulator:start
+        - firebase emulators:start
         - npm run test:unit
     - stage: e2e test
       script:
