@@ -3,6 +3,7 @@ node_js:
   - "node"
 install:
   - npm install
+  - npm install codecov -g
   - curl -sL firebase.tools | bash
 branches:
   except:
@@ -11,7 +12,6 @@ stages:
   - lint
   - unit test
   - e2e test
-  - coverage
 jobs:
   include:
     - stage: lint
@@ -24,10 +24,9 @@ jobs:
       script:
         # Run tests
         - sh ./firebaseEmulator.sh
+      after_success:
+        - codecov
     - stage: e2e test
       script:
         # Run e2e test
         - npm run test:e2e
-    - stage: coverage
-      script:
-        codecov
