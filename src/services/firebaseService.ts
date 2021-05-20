@@ -3,7 +3,7 @@ import firebase from "firebase";
 
 export const register = async (email: string, password: string): Promise<firebase.User| null> => {
   let user: firebase.User | null = null;
-  firebaseApp.auth().useEmulator("http://localhost:9099");
+  firebaseApp.auth().useEmulator("http://127.0.0.1:9099");
   await firebaseApp.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       user = userCredential.user;
@@ -17,7 +17,7 @@ export const register = async (email: string, password: string): Promise<firebas
 
 export const signIn = async (email: string, password: string): Promise<firebase.User | null> => {
   let user: firebase.User | null = null;
-  firebaseApp.auth().useEmulator("http://localhost:9099");
+  firebaseApp.auth().useEmulator("http://127.0.0.1:9099");
   await firebaseApp.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       user = userCredential.user;
