@@ -1,0 +1,1 @@
+firebase emulators:start --token 1//0geD3sD-B0sdmCgYIARAAGBASNwF-L9IrseqfihLsr1syZ-JhZxBkYBx1bW5ES6jlocLhjyC0AuglV9TlXvyWRLIgITtJpzWx0j0 &
