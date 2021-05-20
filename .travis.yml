@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+  - "node"
+install:
+  - npm install
+branches:
+  except:
+    - gh-pages
+stages:
+  - lint
+  - unit test
+  - e2e test
+  - coverage
+jobs:
+  include:
+    - stage: lint
+      script:
+        # Run linter
+        - npm run lint
+    - stage: unit test
+      script:
+        # Run tests
+        - npm run test:unit
+    - stage: e2e test
+      script:
+        # Run e2e test
+        - npm run test:e2e
+    - stage: coverage
+      script:
+        codecov
