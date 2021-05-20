@@ -1,0 +1,69 @@
+[debug] [2021-05-20T17:53:50.044Z] ----------------------------------------------------------------------
+[debug] [2021-05-20T17:53:50.045Z] Command:       /usr/local/bin/firebase /Users/mark/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start
+[debug] [2021-05-20T17:53:50.045Z] CLI Version:   9.11.0
+[debug] [2021-05-20T17:53:50.046Z] Platform:      darwin
+[debug] [2021-05-20T17:53:50.046Z] Node Version:  v12.18.1
+[debug] [2021-05-20T17:53:50.047Z] Time:          Fri May 21 2021 01:53:50 GMT+0800 (Singapore Standard Time)
+[debug] [2021-05-20T17:53:50.047Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-20T17:53:50.052Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-20T17:53:50.052Z] > authorizing via signed-in user (markwongmanchun@gmail.com)
+[info] i  emulators: Starting emulators: auth, firestore, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore, storage"}}
+[warn] ⚠  hub: emulator hub unable to start on port 4400, starting on 4401 instead. {"metadata":{"emulator":{"name":"hub"},"message":"emulator hub unable to start on port 4400, starting on 4401 instead."}}
+[debug] [2021-05-20T17:53:50.073Z] [hub] writing locator at /var/folders/c1/b_bjy94s5r5_5cgk2fkb5vbr0000gn/T/hub-timelinus-2021.json
+[info] i  firestore: downloading cloud-firestore-emulator-v1.11.15.jar... {"metadata":{"emulator":{"name":"firestore"},"message":"downloading cloud-firestore-emulator-v1.11.15.jar..."}}
+[debug] [2021-05-20T17:53:50.082Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.11.15.jar 
+[debug] [2021-05-20T17:53:50.798Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.11.15.jar 200
+[debug] [2021-05-20T17:53:50.798Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.11.15.jar [stream]
+[debug] [2021-05-20T17:54:01.006Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2021-05-20T17:54:01.006Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-05-20T17:54:01.007Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/mark/.cache/firebase/emulators/cloud-firestore-emulator-v1.11.15.jar","--host","localhost","--port",8080,"--rules","/Users/mark/timelinus-web/firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/mark/.cache/firebase/emulators/cloud-firestore-emulator-v1.11.15.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--rules\",\"/Users/mark/timelinus-web/firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2021-05-20T17:54:02.453Z] May 21, 2021 1:54:02 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://localhost:50111
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 21, 2021 1:54:02 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://localhost:50111\n"}}
+[debug] [2021-05-20T17:54:02.478Z] API endpoint: http://localhost: {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost:"}}
+[debug] [2021-05-20T17:54:02.478Z] 8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8080\n\nDev App Server is now running.\n\n"}}
+[info] i  storage: downloading cloud-storage-rules-runtime-v1.0.0.jar... {"metadata":{"emulator":{"name":"storage"},"message":"downloading cloud-storage-rules-runtime-v1.0.0.jar..."}}
+[debug] [2021-05-20T17:54:04.959Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.0.0.jar 
+[debug] [2021-05-20T17:54:05.644Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.0.0.jar 200
+[debug] [2021-05-20T17:54:05.644Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.0.0.jar [stream]
+[debug] [2021-05-20T17:54:09.768Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2021-05-20T17:54:10.025Z] Temp file directory for storage emulator: /var/folders/c1/b_bjy94s5r5_5cgk2fkb5vbr0000gn/T/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /var/folders/c1/b_bjy94s5r5_5cgk2fkb5vbr0000gn/T/firebase/storage/blobs"}}
+[info] i  ui: downloading ui-v1.5.0.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.5.0.zip..."}}
+[debug] [2021-05-20T17:54:10.951Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.5.0.zip 
+[debug] [2021-05-20T17:54:11.192Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.5.0.zip 200
+[debug] [2021-05-20T17:54:11.192Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.5.0.zip [stream]
+[debug] [2021-05-20T17:54:12.434Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-05-20T17:54:12.434Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2021-05-20T17:54:12.434Z] Starting Emulator UI with command {"binary":"node","args":["/Users/mark/.cache/firebase/emulators/ui-v1.5.0/server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/mark/.cache/firebase/emulators/ui-v1.5.0/server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2021-05-20T17:54:12.645Z] Web / API server started at http://localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at http://localhost:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Storage        │ localhost:9199 │ http://localhost:4000/storage   │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4401
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
