@@ -20,7 +20,8 @@ jobs:
 #        - npm run lint
     - stage: unit test
       before_script:
-        - ./firebaseEmulator.sh
+        - chmod +x ./firebaseEmulator.sh
+        - sh ./firebaseEmulator.sh
         - sleep 5000
       script:
         # Run tests
