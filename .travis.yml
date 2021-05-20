@@ -19,11 +19,11 @@ jobs:
 #        # Run linter
 #        - npm run lint
     - stage: unit test
-#      before_script:
-#        -  sleep 5000
+      before_script:
+        - ./firebaseEmulator.sh
+        - sleep 5000
       script:
         # Run tests
-        - ./firebaseEmulator.sh
         - npm run test:unit
     - stage: e2e test
       script:
