@@ -24,7 +24,7 @@ jobs:
       script:
         # Run tests
         - firebase emulators:start &
-        - sleep 5000
+        - sleep 5000 &
         - npm run test:unit
     - stage: e2e test
       script:
