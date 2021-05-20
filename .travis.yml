@@ -23,8 +23,7 @@ jobs:
 #        -  sleep 5000
       script:
         # Run tests
-        - firebase emulators:start --token 1//0geD3sD-B0sdmCgYIARAAGBASNwF-L9IrseqfihLsr1syZ-JhZxBkYBx1bW5ES6jlocLhjyC0AuglV9TlXvyWRLIgITtJpzWx0j0 &
-        - sleep 10000 &
+        - ./firebaseEmulator.sh
         - npm run test:unit
     - stage: e2e test
       script:
