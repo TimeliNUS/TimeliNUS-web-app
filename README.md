@@ -1,3 +1,5 @@
+[![Build Status](https://www.travis-ci.com/TimeliNUS/TimeliNUS-web-app.svg?branch=main)](https://www.travis-ci.com/TimeliNUS/TimeliNUS-web-app)
+[![codecov](https://codecov.io/gh/TimeliNUS/TimeliNUS-web-app/branch/main/graph/badge.svg?token=7f9N6qH4fC)](https://codecov.io/gh/TimeliNUS/TimeliNUS-web-app)
 # timelinus-web
 
 ## Project setup
