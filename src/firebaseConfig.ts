@@ -12,5 +12,5 @@ export const firebaseConfig = {
   measurementId: "G-VM2EZ21140"
 };
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
-// firebase.auth().useEmulator("http://localhost:9099");
-// export const firebaseAuth = firebase;
+//firebase.auth().useEmulator("http://localhost:9099");
+//export const firebaseAuth = firebase;
