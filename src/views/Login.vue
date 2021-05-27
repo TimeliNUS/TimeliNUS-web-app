@@ -4,21 +4,19 @@
         class=" align-center mb-6 fill-height centerAlign"
     >
       <v-card class="test" rounded="xl">
-        <v-row class="test">
+        <v-row class="test" >
 
           <v-col align="center" justify="center" cols="6" class="orange centerAlign">
             <div class="image-container">
-              <v-img src="@/assets/65.png" class="image-container" alt=""></v-img>
+              <v-img src="@/assets/65.png" class="image-container" alt="" ></v-img>
             </div>
           </v-col>
 
           <v-col cols="6" class="blue leftAlign">
             <div>
               <div>
-                <h1 style="color:#ff6f1e"> Get started.</h1>
-                <p style="color: #979797"> Already have an account?
-                  <router-link style="color:#ff9d66" to="/login">Login</router-link>
-                </p>
+                <h1 style="color:#ff6f1e"> Login.</h1>
+                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/about">Register</router-link> </p>
 
                 <br/>
 
@@ -33,7 +31,7 @@
                         color="#ff9d66"
                         @click="googleSignIn"
                     >
-                      Sign up with Google
+                      Login with Google
                     </v-btn>
                   </v-col>
                   <v-col>
@@ -42,7 +40,7 @@
                         outlined
                         color="#ff9d66"
                     >
-                      Sign up with NUS Email
+                      Login with NUS Email
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -50,10 +48,8 @@
                 <br/><br/>
               </div>
               <div>
-                <v-row>
-                  <v-divider class="divider"></v-divider>
-                  <span style="color: #e0e0e0">OR </span>
-                  <v-divider class="divider"></v-divider>
+                <v-row >
+                  <v-divider class="divider"></v-divider> <span style="color: #e0e0e0">OR </span> <v-divider class="divider"></v-divider>
                 </v-row>
               </div>
               <div>
@@ -92,7 +88,7 @@
                             large
                             type="submit"
                         >
-                          <span style="color:#ffffff">Register</span>
+                          <span style="color:#ffffff">Login</span>
                         </v-btn>
                       </div>
                     </v-col>
@@ -102,7 +98,6 @@
                 <div v-if="error" class="error">
                   {{ error.message }}
                 </div>
-
               </div>
 
             </div>
@@ -119,9 +114,11 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 export default {
+  name: "Login.vue",
+
   data: () => ({
     alignments: [
       'start',
@@ -134,13 +131,14 @@ export default {
   }),
 
 
-
   methods: {
     async pressed() {
       try {
-        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
-        // console.log(user);
-        this.$router.replace({name: "Secret"});
+        const val = await firebase
+            .auth()
+            .signInWithEmailAndPassword(this.email, this.password);
+        console.log(val);
+        this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);
       }
@@ -153,13 +151,13 @@ export default {
       }).catch(err => {
         console.log(err);
       })
-    }
+    },
   },
-}
+};
 </script>
 
 <style scoped>
-.test {
+.test{
   width: 80vw;
   height: 60vh;
   margin: auto;
@@ -177,41 +175,41 @@ export default {
   font-size: 18px;
 }
 
-.orange {
-  width: 40vw;
+.orange{
+  width:40vw;
   height: 60vh;
   background-color: #ffd0a5;
 }
 
-.blue {
+.blue{
   width: 40vw;
   height: 60vh;
   background-color: white;
 }
 
-.image-container {
-  width: 80%;
+.image-container{
+  width:80%;
   /*height:80%;*/
   justify-content: center;
   align-content: center;
   vertical-align: middle;
   align-items: center;
-  display: block;
+  display:block;
 }
 
-.background {
+.background{
   background-color: #ff9d66;
   min-height: 100vh;
   align-items: center;
 }
 
-.centerAlign {
+.centerAlign{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.leftAlign {
+.leftAlign{
   display: flex;
   align-items: center;
   text-align: left;
