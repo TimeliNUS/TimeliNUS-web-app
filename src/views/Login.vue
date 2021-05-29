@@ -12,11 +12,11 @@
             </div>
           </v-col>
 
-          <v-col cols="6" class="blue leftAlign">
-            <div>
+          <v-col cols="6" class=" blue leftAlign">
+            <div style="max-height:100%;">
               <div>
                 <h1 style="color:#ff6f1e"> Login.</h1>
-                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/about">Register</router-link> </p>
+                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/register">Register</router-link> </p>
 
                 <br/>
 
@@ -58,12 +58,17 @@
                   <v-row>
 
                     <v-col>
+                      <div class="error" v-if="error">
+                        {{error}}
+                      </div>
+
                       <div>
                         <v-text-field
                             outlined
                             type="email"
                             placeholder="Email address"
                             v-model="email"
+                            hide-details="auto"
                         />
                       </div>
                       <div class="v-text-field">
@@ -74,6 +79,7 @@
                             placeholder="Password"
                             v-model="password"
                             color="success"
+                            hide-details="auto"
                         />
                       </div>
                     </v-col>
@@ -95,9 +101,7 @@
                   </v-row>
                 </form>
 
-                <div v-if="error" class="error">
-                  {{ error.message }}
-                </div>
+
               </div>
 
             </div>
@@ -141,6 +145,7 @@ export default {
         this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);
+        this.error = "Invalid username/password."
       }
     },
 
@@ -162,17 +167,12 @@ export default {
   height: 60vh;
   margin: auto;
 
-
 }
 
-.v {
-  min-width: 0;
-  padding: 0px;
-}
 
 .error {
   color: red;
-  font-size: 18px;
+  /*font-size: 18px;*/
 }
 
 .orange{
@@ -220,6 +220,5 @@ export default {
   padding: 10px;
   margin: 10px;
 }
-
 
 </style>
