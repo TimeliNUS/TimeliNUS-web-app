@@ -62,8 +62,8 @@
                   <v-row>
 
                     <v-col>
-                      <div v-if="error" class="error">
-                        {{ error.message }}
+                      <div class="error" v-if="error">
+                        {{error}}
                       </div>
                       <div>
                         <v-text-field
@@ -147,7 +147,7 @@ export default {
         this.$router.replace({name: "Secret"});
       } catch (err) {
         console.log(err);
-        this.error = "This email has been used in other account."
+        this.error = "This email has already been used in other account."
       }
     },
 

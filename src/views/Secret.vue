@@ -16,7 +16,7 @@
       <br/>
     </div>
     <br>
-    <v-img src="require('@/assets/Dashboard.png')" alt=""></v-img>
+    <v-img src="@/assets/Dashboard.png" alt=""></v-img>
 
   </div>
 </template>
