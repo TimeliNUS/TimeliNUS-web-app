@@ -62,6 +62,9 @@
                   <v-row>
 
                     <v-col>
+                      <div v-if="error" class="error">
+                        {{ error.message }}
+                      </div>
                       <div>
                         <v-text-field
                             prepend-inner-icon="mdi-map-marker"
@@ -102,9 +105,7 @@
                   </v-row>
                 </form>
 
-                <div v-if="error" class="error">
-                  {{ error.message }}
-                </div>
+
 
               </div>
 
@@ -146,6 +147,7 @@ export default {
         this.$router.replace({name: "Secret"});
       } catch (err) {
         console.log(err);
+        this.error = "This email has been used in other account."
       }
     },
 
