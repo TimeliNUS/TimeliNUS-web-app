@@ -13,7 +13,7 @@
           </v-col>
 
           <v-col cols="6" class="blue leftAlign">
-            <div style="max-height:100%;">
+            <div style="max-height:100%; max-width:100%;">
               <div>
                 <h1 style="color:#ff6f1e"> Get started.</h1>
                 <p style="color: #979797"> Already have an account?
