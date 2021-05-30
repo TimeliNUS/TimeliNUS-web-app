@@ -13,7 +13,7 @@
           </v-col>
 
           <v-col cols="6" class="blue leftAlign">
-            <div>
+            <div style="max-height:100%;">
               <div>
                 <h1 style="color:#ff6f1e"> Get started.</h1>
                 <p style="color: #979797"> Already have an account?
@@ -64,10 +64,12 @@
                     <v-col>
                       <div>
                         <v-text-field
+                            prepend-inner-icon="mdi-map-marker"
                             outlined
                             type="email"
                             placeholder="Email address"
                             v-model="email"
+                            hide-details="auto"
                         />
                       </div>
                       <div class="v-text-field">
@@ -78,6 +80,7 @@
                             placeholder="Password"
                             v-model="password"
                             color="success"
+                            hide-details="auto"
                         />
                       </div>
                     </v-col>

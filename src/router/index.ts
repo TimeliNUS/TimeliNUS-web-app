@@ -10,17 +10,12 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
     path: "/login",
     name: "Login",
     component: Login,
   },
   {
-    path: "/register",
+    path: "/",
     name: "Register",
     component: Register,
   },
@@ -30,7 +25,7 @@ const routes = [
     component: Secret,
     meta: { requiresAuth: true },
   },
-  
+
 ];
 
 const router = new VueRouter({
