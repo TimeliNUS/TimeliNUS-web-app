@@ -64,7 +64,7 @@
 
                       <div>
                         <v-text-field
-                            prepend-inner-icon="mdi-map-marker"
+                            prepend-inner-icon="email"
                             outlined
                             type="email"
                             placeholder="Email address"
