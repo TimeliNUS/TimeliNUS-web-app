@@ -1,9 +1,23 @@
 <template>
   <div>
-    Secret
     <div>
-      <button v-on:click="signOut">Sign Out</button>
+      <br>
+      <v-btn
+          color="#ff9d66"
+          depressed
+          large
+          type="submit"
+          v-on:click="signOut"
+      >
+        <span style="color:#ffffff">Sign Out</span>
+      </v-btn>
+      <br>
+      Here would be a dashboard like this.
+      <br/>
     </div>
+    <br>
+    <v-img src="@/assets/Dashboard.png" alt=""></v-img>
+
   </div>
 </template>
 

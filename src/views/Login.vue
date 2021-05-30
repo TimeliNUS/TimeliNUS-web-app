@@ -16,7 +16,7 @@
             <div style="max-height:100%;">
               <div>
                 <h1 style="color:#ff6f1e"> Login.</h1>
-                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/register">Register</router-link> </p>
+                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/">Register</router-link> </p>
 
                 <br/>
 
@@ -64,6 +64,7 @@
 
                       <div>
                         <v-text-field
+                            prepend-inner-icon="mdi-map-marker"
                             outlined
                             type="email"
                             placeholder="Email address"
