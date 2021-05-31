@@ -164,7 +164,7 @@ export default {
 
 <style scoped>
 .test{
-  width: 80vw;
+  /*width: 80vw;*/
   height: 60vh;
   margin: auto;
 
