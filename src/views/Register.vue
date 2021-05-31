@@ -196,7 +196,7 @@ export default {
 
 .image-container {
   width: 80%;
-  /*height:80%;*/
+  /*height:80%;
   justify-content: center;
   align-content: center;
   vertical-align: middle;
