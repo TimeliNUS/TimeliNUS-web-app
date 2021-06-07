@@ -8,5 +8,5 @@ export default new Vuex.Store({
   state: {},
   mutations: { ...vuexfireMutations },
   actions: {},
-  modules: {}
+  modules: {},
 });

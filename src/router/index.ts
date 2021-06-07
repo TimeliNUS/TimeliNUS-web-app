@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Secret from "../views/Secret.vue";
 import Login from "../views/Login.vue";
+import Todo from "../views/Todo.vue";
 import Register from "../views/Register.vue";
 import firebase from "firebase";
 
@@ -25,7 +26,12 @@ const routes = [
     component: Secret,
     meta: { requiresAuth: true },
   },
-
+  {
+    path: "/todo",
+    name: "Todo",
+    component: Todo,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = new VueRouter({

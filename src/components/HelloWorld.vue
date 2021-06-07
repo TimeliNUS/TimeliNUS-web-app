@@ -75,13 +75,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-// import { register, signIn } from "../services/firebaseService";
 
 export default Vue.extend({
   name: "HelloWorld",
-  // methods: {
-  //   signIn
-  // },
+
   data: () => ({
     ecosystem: [
       {

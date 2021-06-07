@@ -1,24 +1,15 @@
 import { firebaseApp } from "@/firebaseConfig";
 import firebase from "firebase";
 
-export const register = async (email: string, password: string): Promise<firebase.User| null> => {
+export const register = async (
+  email: string,
+  password: string
+): Promise<firebase.User | null> => {
   let user: firebase.User | null = null;
   firebaseApp.auth().useEmulator("http://localhost:9099");
-  await firebaseApp.auth().createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      user = userCredential.user;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message
-    });
-  return user;
-}
-
-export const signIn = async (email: string, password: string): Promise<firebase.User | null> => {
-  let user: firebase.User | null = null;
-  firebaseApp.auth().useEmulator("http://localhost:9099");
-  await firebaseApp.auth().signInWithEmailAndPassword(email, password)
+  await firebaseApp
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       user = userCredential.user;
     })
@@ -27,11 +18,31 @@ export const signIn = async (email: string, password: string): Promise<firebase.
       const errorMessage = error.message;
     });
   return user;
-}
+};
+
+export const signIn = async (
+  email: string,
+  password: string
+): Promise<firebase.User | null> => {
+  let user: firebase.User | null = null;
+  firebaseApp.auth().useEmulator("http://localhost:9099");
+  await firebaseApp
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      user = userCredential.user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+  return user;
+};
 
 export const googleSignIn = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  firebaseApp.auth()
+  firebaseApp
+    .auth()
     .signInWithPopup(provider)
     .then((result) => {
       /** @type {firebase.auth.OAuthCredential} */
@@ -41,12 +52,11 @@ export const googleSignIn = () => {
       const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
-    }).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const email = error.email;
-    const credential = error.credential;
-  });
-}
-
-
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.email;
+      const credential = error.credential;
+    });
+};

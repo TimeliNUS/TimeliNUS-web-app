@@ -3,7 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import firebase from "firebase/app";
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import "material-design-icons-iconfont/dist/material-design-icons.css";
+import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
@@ -14,20 +15,20 @@ const firebaseConfig = {
   storageBucket: "timelinus-2021.appspot.com",
   messagingSenderId: "114066663509",
   appId: "1:114066663509:web:343682da3ba6a668600cdc",
-  measurementId: "G-VM2EZ21140"
+  measurementId: "G-VM2EZ21140",
 };
 
 firebase.initializeApp(firebaseConfig);
 
 let app;
-firebase.auth().onAuthStateChanged(user=> {
+firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
   // if (!app) {
-    app = new Vue({
-      router,
-      store,
-      render: (h) => h(App),
-    }).$mount("#app");
+  app = new Vue({
+    router,
+    store,
+    vuetify,
+    render: (h) => h(App),
+  }).$mount("#app");
   // }
-})
-
+});

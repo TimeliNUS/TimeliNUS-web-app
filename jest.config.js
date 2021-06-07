@@ -5,5 +5,5 @@ module.exports = {
   // set a directory for coverage cache
   // coverageDirectory: '<rootDir>/tests/__coverage__',
   // set patterns to ignore for coverage
-  coveragePathIgnorePatterns: ['/node_modules/']
+  coveragePathIgnorePatterns: ["/node_modules/"],
 };
