@@ -1,15 +1,22 @@
 <template>
-  <div id="app">
-<!--    <top-header></top-header>-->
+  <v-app>
+    <div id="app">
+      <!--    <top-header></top-header>-->
 
-    <!--    <div id="nav">-->
-<!--      <router-link to="/about">About</router-link> |-->
-<!--      <router-link to="/login">Login</router-link> |-->
-<!--      <router-link to="/secret">Secret</router-link> |-->
-<!--      <router-link to="/register">Register</router-link> |-->
-<!--    </div>-->
-    <router-view />
-  </div>
+      <div id="nav">
+        <router-link to="/login">Login</router-link> |
+        <router-link to="/register">Register</router-link> |
+        <router-link to="/secret">Secret</router-link> |
+        <router-link to="/todo">Todo</router-link> |
+      </div>
+      <router-view />
+    </div>
+
+
+<!--    <v-main>-->
+<!--      <router-view />-->
+<!--    </v-main>-->
+  </v-app>
 </template>
 
 <style lang="scss">
@@ -18,17 +25,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   min-height:100vh;
 }
-
 #nav {
   padding: 30px;
-
   a {
     font-weight: bold;
     color: #2c3e50;
-
     &.router-link-exact-active {
       color: #42b983;
     }
@@ -36,9 +39,14 @@
 }
 </style>
 
-<script>
-import TopHeader from "./components/Top-header";
-export default {
-  // components: { "top-header": TopHeader },
-};
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "App",
+
+  data: () => ({
+    //
+  }),
+});
 </script>

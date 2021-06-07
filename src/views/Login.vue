@@ -1,216 +1,204 @@
 <template>
   <div class="background centerAlign">
-    <v-container
-        class=" align-center mb-6 fill-height centerAlign"
-    >
+    <v-container class="align-center mb-6 fill-height centerAlign">
       <v-card class="test" rounded="xl">
-        <v-row class="test" >
-
-          <v-col align="center" justify="center" cols="6" class="orange centerAlign">
+        <v-row class="test">
+          <v-col
+            align="center"
+            justify="center"
+            cols="6"
+            class="orangeorange centerAlign"
+          >
             <div class="image-container">
-              <v-img src="@/assets/65.png" class="image-container" alt="" ></v-img>
+              <v-img
+                src="@/assets/65.png"
+                class="image-container"
+                alt=""
+              ></v-img>
             </div>
           </v-col>
 
-          <v-col cols="6" class=" blue leftAlign">
-            <div style="max-height:100%;">
+          <v-col cols="6" class="blueblue leftAlign">
+            <div style="max-height: 100%">
               <div>
-                <h1 style="color:#ff6f1e"> Login.</h1>
-                <p style="color: #979797"> Don't have an account?  <router-link style="color:#ff9d66" to="/">Register</router-link> </p>
+                <h1 style="color: #ff6f1e">Login.</h1>
+                <p style="color: #979797">
+                  Don't have an account?
+                  <router-link style="color: #ff9d66" to="/"
+                    >Register</router-link
+                  >
+                </p>
 
-                <br/>
-
-
+                <br />
               </div>
               <div>
                 <v-row>
                   <v-col>
                     <v-btn
-                        class="order-1 ma-2"
-                        outlined
-                        color="#ff9d66"
-                        @click="googleSignIn"
+                      class="order-1 ma-2"
+                      outlined
+                      color="#ff9d66"
+                      @click="googleSignIn"
                     >
                       Login with Google
                     </v-btn>
                   </v-col>
                   <v-col>
-                    <v-btn
-                        class="order-2 ma-2"
-                        outlined
-                        color="#ff9d66"
-                    >
+                    <v-btn class="order-2 ma-2" outlined color="#ff9d66">
                       Login with NUS Email
                     </v-btn>
                   </v-col>
                 </v-row>
 
-                <br/><br/>
+                <br /><br />
               </div>
               <div>
-                <v-row >
-                  <v-divider class="divider"></v-divider> <span style="color: #e0e0e0">OR </span> <v-divider class="divider"></v-divider>
+                <v-row>
+                  <v-divider class="divider"></v-divider>
+                  <span style="color: #e0e0e0">OR </span>
+                  <v-divider class="divider"></v-divider>
                 </v-row>
               </div>
               <div>
                 <form @submit.prevent="pressed">
-
                   <v-row>
-
                     <v-col>
                       <div class="error" v-if="error">
-                        {{error}}
+                        {{ error }}
                       </div>
 
                       <div>
                         <v-text-field
-                            prepend-inner-icon="email"
-                            outlined
-                            type="email"
-                            placeholder="Email address"
-                            v-model="email"
-                            hide-details="auto"
+                          prepend-inner-icon="email"
+                          outlined
+                          type="email"
+                          placeholder="Email address"
+                          v-model="email"
+                          hide-details="auto"
+                          color="#ff9d66"
                         />
                       </div>
                       <div class="v-text-field">
                         <v-text-field
-                            prepend-inner-icon="mdi-map-marker"
-                            outlined
-                            type="password"
-                            placeholder="Password"
-                            v-model="password"
-                            color="success"
-                            hide-details="auto"
+                          prepend-inner-icon="email"
+                          outlined
+                          type="password"
+                          placeholder="Password"
+                          v-model="password"
+                          color="#ff9d66"
+                          hide-details="auto"
                         />
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-
                       <div class="my-2 centerAlign">
-                        <v-btn
-                            color="#ff9d66"
-                            depressed
-                            large
-                            type="submit"
-                        >
-                          <span style="color:#ffffff">Login</span>
+                        <v-btn color="#ff9d66" depressed large type="submit">
+                          <span style="color: #ffffff">Login</span>
                         </v-btn>
                       </div>
                     </v-col>
                   </v-row>
                 </form>
-
-
               </div>
-
             </div>
-
           </v-col>
         </v-row>
-
-
       </v-card>
-
     </v-container>
-
-
   </div>
 </template>
 <script>
-import firebase from 'firebase';
+import firebase from "firebase";
 
 export default {
   name: "Login.vue",
 
   data: () => ({
-    alignments: [
-      'start',
-      'center',
-      'end',
-    ],
+    alignments: ["start", "center", "end"],
     email: "",
     password: "",
     error: "",
   }),
 
-
   methods: {
     async pressed() {
       try {
         const val = await firebase
-            .auth()
-            .signInWithEmailAndPassword(this.email, this.password);
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password);
         console.log(val);
         this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);
-        this.error = "Invalid username/password."
+        this.error = "Invalid username/password.";
       }
     },
 
-    googleSignIn: function (){
+    googleSignIn: function () {
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(() => {
-        this.$router.replace({name: "Secret"});
-      }).catch(err => {
-        console.log(err);
-      })
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$router.replace({ name: "Secret" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
 </script>
 
 <style scoped>
-.test{
+.test {
   /*width: 80vw;*/
   height: 60vh;
   margin: auto;
-
 }
-
 
 .error {
   color: red;
   /*font-size: 18px;*/
 }
 
-.orange{
-  width:40vw;
+.orangeorange {
+  width: 40vw;
   height: 60vh;
   background-color: #ffd0a5;
 }
 
-.blue{
+.blueblue {
   width: 40vw;
   height: 60vh;
   background-color: white;
 }
 
-.image-container{
-  width:80%;
+.image-container {
+  width: 80%;
   /*height:80%;*/
   justify-content: center;
   align-content: center;
   vertical-align: middle;
   align-items: center;
-  display:block;
+  display: block;
 }
 
-.background{
+.background {
   background-color: #ff9d66;
   min-height: 100vh;
   align-items: center;
 }
 
-.centerAlign{
+.centerAlign {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.leftAlign{
+.leftAlign {
   display: flex;
   align-items: center;
   text-align: left;
@@ -221,5 +209,4 @@ export default {
   padding: 10px;
   margin: 10px;
 }
-
 </style>

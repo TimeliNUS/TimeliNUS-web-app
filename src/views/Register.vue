@@ -1,53 +1,56 @@
 <template>
   <div class="background centerAlign">
-    <v-container
-        class=" align-center mb-6 fill-height centerAlign"
-    >
+    <v-container class="align-center mb-6 fill-height centerAlign">
       <v-card class="test" rounded="xl">
         <v-row class="test">
-
-          <v-col align="center" justify="center" cols="6" class="orange centerAlign">
+          <v-col
+            align="center"
+            justify="center"
+            cols="6"
+            class="orangeorange centerAlign"
+          >
             <div class="image-container">
-              <v-img src="@/assets/65.png" class="image-container" alt=""></v-img>
+              <v-img
+                src="@/assets/65.png"
+                class="image-container"
+                alt=""
+              ></v-img>
             </div>
           </v-col>
 
-          <v-col cols="6" class="blue leftAlign">
-            <div style="max-height:100%; max-width:100%;">
+          <v-col cols="6" class="blueblue leftAlign">
+            <div style="max-height: 100%; max-width: 100%">
               <div>
-                <h1 style="color:#ff6f1e"> Get started.</h1>
-                <p style="color: #979797"> Already have an account?
-                  <router-link style="color:#ff9d66" to="/login">Login</router-link>
+                <h1 style="color: #ff6f1e">Get started.</h1>
+                <p style="color: #979797">
+                  Already have an account?
+                  <router-link style="color: #ff9d66" to="/login"
+                    >Login</router-link
+                  >
                 </p>
 
-                <br/>
-
-
+                <br />
               </div>
               <div>
                 <v-row>
                   <v-col>
                     <v-btn
-                        class="order-1 ma-2"
-                        outlined
-                        color="#ff9d66"
-                        @click="googleSignIn"
+                      class="order-1 ma-2"
+                      outlined
+                      color="#ff9d66"
+                      @click="googleSignIn"
                     >
                       Sign up with Google
                     </v-btn>
                   </v-col>
                   <v-col>
-                    <v-btn
-                        class="order-2 ma-2"
-                        outlined
-                        color="#ff9d66"
-                    >
+                    <v-btn class="order-2 ma-2" outlined color="#ff9d66">
                       Sign up with NUS Email
                     </v-btn>
                   </v-col>
                 </v-row>
 
-                <br/><br/>
+                <br /><br />
               </div>
               <div>
                 <v-row>
@@ -58,109 +61,92 @@
               </div>
               <div>
                 <form @submit.prevent="pressed">
-
                   <v-row>
-
                     <v-col>
                       <div class="error" v-if="error">
-                        {{error}}
+                        {{ error }}
                       </div>
                       <div>
                         <v-text-field
-                            prepend-inner-icon="mdi-map-marker"
-                            outlined
-                            type="email"
-                            placeholder="Email address"
-                            v-model="email"
-                            hide-details="auto"
+                          prepend-inner-icon="email"
+                          outlined
+                          type="email"
+                          placeholder="Email address"
+                          v-model="email"
+                          hide-details="auto"
+                          color="#ff9d66"
                         />
                       </div>
                       <div class="v-text-field">
                         <v-text-field
-                            prepend-inner-icon="mdi-map-marker"
-                            outlined
-                            type="password"
-                            placeholder="Password"
-                            v-model="password"
-                            color="success"
-                            hide-details="auto"
+                          prepend-inner-icon="email"
+                          outlined
+                          type="password"
+                          placeholder="Password"
+                          v-model="password"
+                          color="#ff9d66"
+                          hide-details="auto"
                         />
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-
                       <div class="my-2 centerAlign">
-                        <v-btn
-                            color="#ff9d66"
-                            depressed
-                            large
-                            type="submit"
-                        >
-                          <span style="color:#ffffff">Register</span>
+                        <v-btn color="#ff9d66" depressed large type="submit">
+                          <span style="color: #ffffff">Register</span>
                         </v-btn>
                       </div>
                     </v-col>
                   </v-row>
                 </form>
-
-
-
               </div>
-
             </div>
-
           </v-col>
         </v-row>
-
-
       </v-card>
-
     </v-container>
-
-
   </div>
 </template>
 <script>
-import firebase from 'firebase'
+import firebase from "firebase";
 
 export default {
   data: () => ({
-    alignments: [
-      'start',
-      'center',
-      'end',
-    ],
+    alignments: ["start", "center", "end"],
     email: "",
     password: "",
     error: "",
   }),
 
-
-
   methods: {
     async pressed() {
       try {
-        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
+        await firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.email, this.password);
         // console.log(user);
-        this.$router.replace({name: "Secret"});
+        this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);
-        this.error = "This email has already been used in other account."
+        this.error = "This email has already been used in other account.";
       }
     },
 
-    googleSignIn: function (){
+    googleSignIn: function () {
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(() => {
-        this.$router.replace({name: "Secret"});
-      }).catch(err => {
-        console.log(err);
-      })
-    }
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$router.replace({ name: "Secret" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -168,8 +154,6 @@ export default {
   /*width: 80vw;*/
   height: 60vh;
   margin: auto;
-
-
 }
 
 .v {
@@ -182,13 +166,13 @@ export default {
   font-size: 18px;
 }
 
-.orange {
+.orangeorange {
   width: 40vw;
   height: 60vh;
   background-color: #ffd0a5;
 }
 
-.blue {
+.blueblue {
   width: 40vw;
   height: 60vh;
   background-color: white;
@@ -202,8 +186,6 @@ export default {
   vertical-align: middle;
   align-items: center;
   display: block;
-
-
 }
 
 .background {
@@ -229,6 +211,4 @@ export default {
   padding: 10px;
   margin: 10px;
 }
-
-
 </style>

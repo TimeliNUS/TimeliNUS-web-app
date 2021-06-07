@@ -1,29 +1,21 @@
 <template>
   <div>
     <div>
-      <br>
-      <v-btn
-          color="#ff9d66"
-          depressed
-          large
-          type="submit"
-          v-on:click="signOut"
-      >
-        <span style="color:#ffffff">Sign Out</span>
+      <br />
+      <v-btn color="#ff9d66" depressed large type="submit" v-on:click="signOut">
+        <span style="color: #ffffff">Sign Out</span>
       </v-btn>
-      <br>
+      <br />
       Here would be a dashboard like this.
-      <br/>
+      <br />
     </div>
-    <br>
+    <br />
     <v-img src="@/assets/Dashboard.png" alt=""></v-img>
-
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
-
 
 export default {
   name: "Secret.vue",
@@ -50,12 +42,7 @@ export default {
       }
     },
   },
-
-
 };
 </script>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>
