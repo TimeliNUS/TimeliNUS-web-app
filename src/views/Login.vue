@@ -1,7 +1,7 @@
 <template>
   <div class="background centerAlign">
     <v-container class="align-center mb-6 fill-height centerAlign">
-      <v-card class="test" rounded="xl">
+      <v-card class="test" >
         <v-row class="test">
           <v-col
             align="center"
@@ -28,29 +28,39 @@
                     >Register</router-link
                   >
                 </p>
+                <br>
 
-                <br />
               </div>
               <div>
                 <v-row>
-                  <v-col>
+                  <v-col col="3">
                     <v-btn
-                      class="order-1 ma-2"
+                      class=""
                       outlined
+                      large
                       color="#ff9d66"
                       @click="googleSignIn"
+
                     >
-                      Login with Google
+                      <v-icon
+
+                          dark
+                          left
+                      >
+                        mdi-google
+                      </v-icon>
+                       Google
                     </v-btn>
                   </v-col>
-                  <v-col>
-                    <v-btn class="order-2 ma-2" outlined color="#ff9d66">
-                      Login with NUS Email
+
+                  <v-col col="3">
+                    <v-btn class="" large outlined color="#ff9d66">
+                      NUS Email
                     </v-btn>
                   </v-col>
                 </v-row>
 
-                <br /><br />
+                <br />
               </div>
               <div>
                 <v-row>
@@ -80,7 +90,7 @@
                       </div>
                       <div class="v-text-field">
                         <v-text-field
-                          prepend-inner-icon="email"
+                          prepend-inner-icon="mdi-lock"
                           outlined
                           type="password"
                           placeholder="Password"
@@ -202,7 +212,12 @@ export default {
   display: flex;
   align-items: center;
   text-align: left;
-  padding: 5%;
+  padding-left: 5%;
+  padding-top: 5%;
+
+
+
+
 }
 
 .divider {
