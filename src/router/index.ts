@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Secret from "../views/Secret.vue";
+import Project from "../views/Project.vue"
 import Login from "../views/Login.vue";
 import Todo from "../views/Todo.vue";
 import Register from "../views/Register.vue";
@@ -30,6 +31,12 @@ const routes = [
     path: "/todo",
     name: "Todo",
     component: Todo,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/project",
+    name: "Project",
+    component: Project,
     meta: { requiresAuth: true },
   },
 ];
