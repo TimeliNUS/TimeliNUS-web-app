@@ -2,6 +2,7 @@
   <div class="background centerAlign">
     <v-container class="align-center mb-6 fill-height centerAlign">
       <v-card class="test" >
+
         <v-row class="test">
           <v-col
             align="center"
@@ -15,6 +16,11 @@
                 class="image-container"
                 alt=""
               ></v-img>
+              <br>
+              <br>
+              <br>
+              <br>
+
             </div>
           </v-col>
 
@@ -139,6 +145,8 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email, this.password);
         console.log(val);
+        console.log(firebase.auth().currentUser);
+        this.$store.dispatch("setUser", firebase.auth().currentUser)
         this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);

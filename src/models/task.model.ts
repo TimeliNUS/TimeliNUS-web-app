@@ -1,26 +1,31 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import firebase from "firebase";
 
 export interface Task {
   id: string;
   task: string;
   complete: boolean;
-  _createdAt: Date;
-  deadline: Date;
+  _createdAt: firebase.firestore.Timestamp;
+  deadline: firebase.firestore.Timestamp;
   note: string;
   project: Project;
 }
 
 export interface Project {
   id: string;
-  task: string;
-  complete: boolean;
+  title: string;
+  todos: [];
+  meetings: [];
+  _createdAt: Date;
   deadline: Date;
-  groupmates: User;
+  progress: Number;
+  modCode: string;
 }
 
 export interface User {
-  id: string;
-  task: string;
-  project: string;
+  uid: string;
+  email: string;
+  task: [];
+  project: [];
 }

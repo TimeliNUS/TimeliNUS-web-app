@@ -38,7 +38,7 @@
                       class="order-1 ma-2"
                       outlined
                       color="#ff9d66"
-                      @click="googleSignIn"
+                      @click="googleSignIn; addUser"
                     >
                       Sign up with Google
                     </v-btn>
@@ -110,8 +110,10 @@
 </template>
 <script>
 import firebase from "firebase";
+import {db} from "../main.ts"
 
 export default {
+
   data: () => ({
     alignments: ["start", "center", "end"],
     email: "",
@@ -124,8 +126,15 @@ export default {
       try {
         await firebase
           .auth()
-          .createUserWithEmailAndPassword(this.email, this.password);
+          .createUserWithEmailAndPassword(this.email, this.password).then((userCredential) => {
+
+              const user = userCredential.user;
+            console.log(firebase.auth().currentUser);
+            this.$store.getters.getProjects
+            });
         // console.log(user);
+        this.$store.dispatch("setUser", firebase.auth().currentUser)
+        this.addUser();
         this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);
@@ -144,6 +153,28 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    addUser() {
+      if (this.email !== "") {
+        db.collection('user').doc(this.$store.state.user.uid).set({
+          email: this.email,
+          todo: [],
+          project:[],
+          created_at: Date.now(),
+        }).then((response) => {
+          if (response) {
+            this.email = ''
+          }
+        }).catch((error) => {
+          this.errors = error
+        })
+      } else {
+        this.errors = "Please enter your email"
+      }
+      this.email = ''
+      this.password= ""
+
     },
   },
 };
