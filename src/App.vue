@@ -16,6 +16,9 @@
 </template>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,6 +35,28 @@
       color: #42b983;
     }
   }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.3);
+  -webkit-border-radius: 12px;
+  border-radius: 12px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 12px;
+  border-radius: 12px;
+  background: rgba(255,157,102,0.8);
+  -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255,157,102,0.4);
 }
 </style>
 

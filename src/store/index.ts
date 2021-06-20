@@ -4,6 +4,7 @@ import { User } from "@/models/task.model";
 import Vue from "vue";
 import Vuex from "vuex";
 
+
 import { vuexfireMutations } from "vuexfire";
 import {db} from "../main"
 
@@ -14,9 +15,23 @@ export default new Vuex.Store({
     tasks: [] as Task[],
     projects: [] as Project[],
     user: {} as User,
-    snapshot: {}
+    snapshot: {},
+    allUser: [] as User[],
   },
   getters:{
+    remaining(state) {
+      return state.tasks.filter(task => !task.complete).length
+    },
+    totalTask(state) {
+      return state.tasks.length
+    },
+    totalTaskDone(state){
+      return state.tasks.length - state.tasks.filter(task => !task.complete).length
+    },
+    totalTaskProgress(state){
+      return (state.tasks.length - state.tasks.filter(task => !task.complete).length) / state.tasks.length
+    },
+
     getTasks: async (state) => {
       state.tasks = await getTasks(state);
     },
@@ -42,6 +57,9 @@ export default new Vuex.Store({
             note: doc.data().note,
             project: doc.data().project,
             deadline: doc.data().deadline,
+            deadlineDate: doc.data().deadlineDate,
+            deadlineTime: doc.data().deadlineTime,
+            switchValue: doc.data().switchValue,
           })
         })
         state.tasks = tasks
@@ -119,7 +137,11 @@ async function getTasks(state: any): Promise<Task[]>{
       _createdAt: doc.data().dateTime,
       note: doc.data().note,
       project: doc.data().project,
-      deadline: doc.data().deadline,
+      deadline: doc.data().deadline.toDate(),
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+
     })
   }
   console.log(tasks);
@@ -148,3 +170,4 @@ async function getProjects(state: any): Promise<Project[]>{
   console.log(projects);
   return projects;
 }
+
