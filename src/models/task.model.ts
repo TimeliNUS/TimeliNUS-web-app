@@ -7,9 +7,12 @@ export interface Task {
   task: string;
   complete: boolean;
   _createdAt: firebase.firestore.Timestamp;
-  deadline: firebase.firestore.Timestamp;
+  deadline: Date | null;
   note: string;
   project: Project;
+  deadlineTime: string;
+  deadlineDate: string;
+  switchValue: boolean;
 }
 
 export interface Project {

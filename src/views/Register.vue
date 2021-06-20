@@ -33,21 +33,33 @@
               </div>
               <div>
                 <v-row>
-                  <v-col>
-                    <v-btn
-                      class="order-1 ma-2"
-                      outlined
-                      color="#ff9d66"
-                      @click="googleSignIn; addUser"
-                    >
-                      Sign up with Google
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn class="order-2 ma-2" outlined color="#ff9d66">
-                      Sign up with NUS Email
-                    </v-btn>
-                  </v-col>
+                  <v-row>
+                    <v-col col="3">
+                      <v-btn
+                          class=""
+                          outlined
+                          large
+                          color="#ff9d66"
+                          @click="googleSignIn"
+
+                      >
+                        <v-icon
+
+                            dark
+                            left
+                        >
+                          mdi-google
+                        </v-icon>
+                        Google
+                      </v-btn>
+                    </v-col>
+
+                    <v-col col="3">
+                      <v-btn class="" large outlined color="#ff9d66">
+                        NUS Email
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-row>
 
                 <br /><br />
@@ -66,6 +78,17 @@
                       <div class="error" v-if="error">
                         {{ error }}
                       </div>
+                      <div style="padding-bottom: 18px;">
+                        <v-text-field
+                            prepend-inner-icon="mdi-account"
+                            outlined
+                            type="text"
+                            placeholder="text"
+                            v-model="name"
+                            color="#ff9d66"
+                            hide-details="auto"
+                        />
+                      </div>
                       <div>
                         <v-text-field
                           prepend-inner-icon="email"
@@ -79,7 +102,7 @@
                       </div>
                       <div class="v-text-field">
                         <v-text-field
-                          prepend-inner-icon="email"
+                          prepend-inner-icon="mdi-lock"
                           outlined
                           type="password"
                           placeholder="Password"
@@ -119,6 +142,7 @@ export default {
     email: "",
     password: "",
     error: "",
+    name:"",
   }),
 
   methods: {
@@ -159,6 +183,7 @@ export default {
       if (this.email !== "") {
         db.collection('user').doc(this.$store.state.user.uid).set({
           email: this.email,
+          name: this.name,
           todo: [],
           project:[],
           created_at: Date.now(),
