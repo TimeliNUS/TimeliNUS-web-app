@@ -146,7 +146,7 @@ export default {
           .signInWithEmailAndPassword(this.email, this.password);
         console.log(val);
         console.log(firebase.auth().currentUser);
-        this.$store.dispatch("setUser", firebase.auth().currentUser)
+        // this.$store.dispatch("setUser", firebase.auth().currentUser)
         this.$router.replace({ name: "Secret" });
       } catch (err) {
         console.log(err);

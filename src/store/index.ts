@@ -137,8 +137,8 @@ async function getTasks(state: any): Promise<Task[]>{
       _createdAt: doc.data().dateTime,
       note: doc.data().note,
       project: doc.data().project,
-      deadline: doc.data().deadline.toDate(),
-      deadlineDate: doc.data().deadlineDate,
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+      deadlineDate: doc.data().deadlineDate ,
       deadlineTime: doc.data().deadlineTime,
       switchValue: doc.data().switchValue,
 
@@ -149,7 +149,9 @@ async function getTasks(state: any): Promise<Task[]>{
 }
 
 async function getProjects(state: any): Promise<Project[]>{
+  console.log(state);
   const documentSnapshot = await db.collection('user').doc(state.user.uid).get();
+  console.log(documentSnapshot.exists)
   const data = await documentSnapshot.get('project');
   const projects:Project[] = [];
   console.log(data);
@@ -162,9 +164,14 @@ async function getProjects(state: any): Promise<Project[]>{
       todos: doc.data().todos ?? "",
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
-      deadline: doc.data().deadline,
       progress: doc.data().progess,
       modCode: doc.data().modCode,
+      deadline: doc.data().deadline.toDate(),
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+      groupmates: doc.data().groupmates ?? "",
+
     })
   }
   console.log(projects);

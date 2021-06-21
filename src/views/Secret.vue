@@ -38,6 +38,7 @@
               <v-list-item-content>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item-content>
+
             </v-list-item>
           </v-list>
           <v-btn color="#ff9d66" depressed large type="submit" v-on:click="signOut">
@@ -61,7 +62,6 @@
           label="Person In Charge"
           multiple
           color="#ff9d66"
-
       >
         <template v-slot:selection="{ attrs, item, parent, selected }" color="#ff9d66">
           <v-chip
@@ -130,13 +130,18 @@
         >
           <v-list>
             <v-list-item-avatar
-                v-if="this.searchName"><v-img :src="this.searchAvatar"></v-img></v-list-item-avatar>
+                v-if="this.searchName"><v-img :src="this.searchAvatar"></v-img>
+            </v-list-item-avatar>
           {{this.searchName}}
           <br>
           {{this.searchEmail}}
           <br>
           {{this.searchId}}
+            <v-list-item-action>
+              <v-btn v-if="this.searchId"><v-icon>person_add</v-icon></v-btn>
+            </v-list-item-action>
           </v-list>
+
         </v-card>
       </div>
       Here would be a dashboard like this.
@@ -180,6 +185,7 @@ export default {
       ],
       search: "",
       users:[],
+      usersNew:[],
       searchName:"",
       searchEmail:"",
       searchId:"",
@@ -223,19 +229,7 @@ export default {
         console.log(err);
       }
     },
-    async getAllUser() {
-      db.collection("user").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if(typeof(doc.data().name) !== 'undefined' || doc.data().name !== null || doc.data().name !== 'undefined'){
-            this.users += doc.data().name
-          }
-          console.log(this.users)
 
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-        });
-      });
-    },
 
     async getMatchedUserbyEmail() {
       db.collection("user").where("email", '==' , this.search)

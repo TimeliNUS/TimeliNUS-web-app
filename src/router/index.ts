@@ -7,6 +7,7 @@ import Login from "../views/Login.vue";
 import Todo from "../views/Todo.vue";
 import Register from "../views/Register.vue";
 import firebase from "firebase";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -48,6 +49,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  store.dispatch('getTasks');
+  store.dispatch('getProjects');
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
   if (requiresAuth && !isAuthenticated) {

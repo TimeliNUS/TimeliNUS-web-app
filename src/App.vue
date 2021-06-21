@@ -38,7 +38,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 35px;
   height: 12px;
 }
 
@@ -50,10 +50,16 @@
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 12px;
-  border-radius: 12px;
+  border-radius: 20px;
   background: rgba(255,157,102,0.8);
   -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.5);
+  margin-right: 100px;
+  border: 9px transparent solid;
+  border-top: 10px transparent solid;
+  background-clip: padding-box;
+  height: 50px;
+  width: 15px;
+  border-bottom: 10px transparent solid;
 }
 ::-webkit-scrollbar-thumb:window-inactive {
   background: rgba(255,157,102,0.4);
