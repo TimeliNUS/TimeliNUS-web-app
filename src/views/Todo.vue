@@ -49,7 +49,8 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title style="margin-right:5px; margin-top:5px; margin-bottom:5px;">{{ item.title }}</v-list-item-title>
+                <v-list-item-title
+                    style="font-color:#4b4b4b; margin-right:5px; margin-top:5px; margin-bottom:5px;">{{ item.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -75,7 +76,7 @@
               <v-card-title style="padding-bottom:0px;">
                 <span style="color:white; font-size:28px; font-weight: bold;">Your Overall Todos Progress</span>
               </v-card-title>
-              <v-card-content style="color:white; display:flex; font-weight: bold; font-size: 36px; font-family:MuseoModerno, sans-serif;">
+              <v-card-text style="color:white; display:flex; font-weight: bold; font-size: 36px; font-family:MuseoModerno, sans-serif;">
                 <v-col col="12" md="6" style="padding-bottom:16px; display:flex; justify-content: flex-end">
                 <v-progress-circular
                     class="progress-circular v-progress-circular__underlay"
@@ -94,7 +95,7 @@
                   <span style="display:flex; font-family: DM Sans, sans-serif;
                   font-size: 18px; font-weight:bold;">Completed</span>
                 </v-col>
-              </v-card-content>
+              </v-card-text>
               </v-img>
             </v-card>
             </v-container>
@@ -103,13 +104,7 @@
 
           <div>
             <v-container>
-              <v-card outlined color="#FFE4CB" style="padding: 20px;" :class="`rounded-xl`">
-                <v-virtual-scroll
-                    :items="items"
-                    :bench="100"
-                    height="61vh"
-                    item-height="80"
-                >
+              <v-card outlined color="#FFE4CB" style="padding: 20px; overflow-y: scroll; max-height: 61vh" :class="`rounded-xl`">
                   <v-dialog v-model="dialog" persistent content-class="elevation-0" max-width="600px" :class="`rounded-lg`">
                     <template v-slot:activator="{ on, attrs }" :class="`rounded-xl`">
                       <v-card outlined color="white" style="margin-top: 10px;margin-left:16px; margin-right:16px; padding: 8px;" :class="`rounded-xl`">
@@ -153,15 +148,22 @@
                                 <v-col cols="12" :class="`rounded-xl`">
                                   <v-select
                                       :items="projects"
+                                      item-text="title"
+                                      item-value="id"
                                       label="Module Project*"
                                       required
                                       color="#ff9d66"
                                       v-model="myProject"
                                       :rules="[v => !!v || 'Project is required']"
-                                  ></v-select>
+                                  >
+
+                                  </v-select>
                                 </v-col>
                                 <v-col cols="12" align="left" :class="`rounded-xl`">
                                   <span style="color: rgb(113,113,113)">Person In Charge</span>
+                                  {{projects}}
+                                  {{myProject}}
+
                                   <br>
 
                                   <v-btn
@@ -186,10 +188,9 @@
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
-                                          v-model="myDeadline"
+                                          v-model="displayDeadline"
                                           label="Deadline"
                                           prepend-icon="mdi-calendar"
-                                          readonly
                                           hide-details
                                           v-bind="attrs"
                                           v-on="on"
@@ -197,15 +198,28 @@
                                       ></v-text-field>
                                     </template>
                                     <v-date-picker
+                                        :disabled="dateSwitchValue == 1"
                                         color="#ff9d66"
                                         v-model="myDeadline"
-                                        @input="menuAdd = false"
-                                    ></v-date-picker>
+                                        @input="menuAdd = false; changeDisplayDeadline();"
+                                    >
+                                      <div style="margin-left:10px; margin-top:-10px; padding-bottom: 10px;">
+                                      <v-switch
+                                          inset
+                                          hide-details
+                                          v-model="dateSwitchValue"
+                                          color="#ff9d66"
+                                          :label="`Someday`"
+                                          @change="changeDisplayDeadline()"
+                                      ></v-switch>
+                                      {{myDeadline}} {{dateSwitchValue}}
+                                      </div>
+                                    </v-date-picker>
                                   </v-menu>
                                   <v-row style="padding-top:5px;">
                                     <v-col cols="12" md="6" style="display:flex; align-items: center;">
                                       <v-switch
-
+                                          :disabled="dateSwitchValue == 1"
                                           inset
                                           hide-details
                                           v-model="switchValue"
@@ -272,8 +286,8 @@
                             <v-btn justify="center" color="#ff9d66" text @click="dialog = false; clearInfo()">
                               Cancel
                             </v-btn>
-                            <v-btn color="#ff9d66" :disabled="!valid || this.myTodo == '' || this.myProject =='' "
-                                   text @click="dialog = false;  checkTimeAdd();">
+                            <v-btn color="#ff9d66" :disabled="!valid || this.myTodo == '' || this.myProject ==null "
+                                  text @click="dialog = false;  checkTimeAdd();">
                               Save
                             </v-btn>
                           </v-card-actions>
@@ -282,9 +296,7 @@
                     </v-sheet>
                   </v-dialog>
                   <br>
-
-
-                  <div v-if="this.$store.getters.getTasks">
+                  <div v-if="length">
                     <div v-for="(task,index) in orderedTasks" :key="task.id">
                       <template>
                         <v-list-item style="display: block;">
@@ -293,21 +305,26 @@
 
                             <v-row style="margin:0px;">
                               <v-col cols="12" md="2" align="center" justify="center" class="centerAlign"
-                                     style="padding-top: 20px;padding-bottom: 20px;font-weight: bold; font-size: 20px; flex-direction: column">
-
+                                    style="padding-top: 20px;padding-bottom: 20px;font-weight: bold; font-size: 20px; flex-direction: column">
+                                <div v-if="task.deadline !==null">
                                 <span style="margin-left:3vw; " v-bind:class="{completed: task.complete}">{{
                                     task.deadline.toLocaleDateString("en-US", {
                                       month: 'short',
                                       day: "2-digit"
                                     })
                                   }}</span>
+                                </div>
+                                <div v-else>
+                                <span style="margin-left:3vw; " v-bind:class="{completed: task.complete}">
+                                  Someday
+                                </span>
+                                </div>
 
-
-                                  <span  class="centerAlign" style="margin-left:3vw;font-size: 14px; " v-bind:class="{completed: task.complete}">{{
+                                <div v-if="task.deadline !== null">
+                                <span  class="centerAlign" style="margin-left:3vw;font-size: 14px; " v-bind:class="{completed: task.complete}">{{
                                     task.deadline.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                                   }}</span>
-
-
+                                </div>
 
 
                               </v-col>
@@ -316,7 +333,7 @@
                                 </v-divider>
                               </v-col>
                               <v-col cols="12" md="5" align="left" class="leftAlign"
-                                     style="padding-top: 20px;padding-bottom: 20px;">
+                                    style="padding-top: 20px;padding-bottom: 20px;">
 
 
                                 <v-row style="margin:0px;">
@@ -496,7 +513,7 @@
                                           Close
                                         </v-btn>
                                         <v-btn color="#ff9d66" text :disabled="!valid "
-                                               @click="display[task.task] = false; checkEdit(task);">
+                                              @click="display[task.task] = false; checkEdit(task);">
 
                                           Update
                                         </v-btn>
@@ -520,7 +537,7 @@
                               </v-col>
 
                               <v-col cols="12" md="2" class="centerAlign" style="background-color: #ff9d66"
-                                     :class="`rounded-r-xl`">
+                                    :class="`rounded-r-xl`">
                                 <v-card outlined color="#ff9d66">
                                   <v-checkbox
                                       class=" centerAlign"
@@ -546,7 +563,6 @@
 
                     </div>
                   </div>
-                </v-virtual-scroll>
               </v-card>
             </v-container>
 
@@ -574,7 +590,6 @@ export default {
     ],
     dialogEdit: false,
     myDeadline: new Date().toISOString().substr(0, 10),
-    myDeadline2: new Date().toISOString().substr(0, 10),
     menu: [],
     modal: false,
     menu2: false,
@@ -586,15 +601,17 @@ export default {
     errors: "",
     complete: false,
     myNote: "",
-    myProject: "",
+    myProject: null,
     display: {},
     switchValue: false,
     myDeadlineTime: "00:00",
+    displayDeadline: "Deadline",
+    finalDeadline:  new Date().toISOString().substr(0, 10),
     menuEdit: {},
     valid: true,
     time: [],
     menuAdd: false,
-    styleObject: {background: 'red', border: '3px solid green'},
+    dateSwitchValue:false,
     navItems: [
       {title: 'Secret', href: "./secret", icon: 'dashboard'},
       {title: 'Todo', href: "./todo", icon: 'done'},
@@ -610,10 +627,9 @@ export default {
 
   computed: {
     items() {
-      return Array.from({length: 1}, (k, v) => v + 1)
+      return Array.from({length: this.length}, (k, v) => v + 1)
     },
     length() {
-      this.$store.getters.getTasks
       return this.$store.state.tasks.length
     },
     orderedTasks: function () {
@@ -632,13 +648,7 @@ export default {
       return this.$store.getters.totalTaskProgress
     }
   },
-  beforeCreate: function () {
-    this.$store.getters.getTasks
-  },
 
-  getProjectsForMenu: function () {
-    this.$store.getters.getProjects
-  },
 
   created() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -649,7 +659,12 @@ export default {
         this.loggedIn = false;
       }
     });
+    // this.$store.dispatch('getTasks');
+  },
 
+  mounted(){
+    console.log("hello")
+      this.$store.dispatch('getTasks');
 
   },
 
@@ -672,6 +687,7 @@ export default {
       this.myDeadlineTime = "00:00";
       this.myNote= "";
       this.switchValue = false;
+      this.displayDeadline= "";
     },
 
     validate () {
@@ -682,6 +698,13 @@ export default {
       if (this.switchValue == false) {
         this.myDeadlineTime = "00:00"
       }
+      if (this.displayDeadline == "Someday") {
+        this.finalDeadline = null
+      } else {
+        this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
+      }
+      console.log(this.finalDeadline)
+      console.log(this.displayDeadline)
       this.addTodo()
     },
 
@@ -707,9 +730,11 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const doc = await data[i];
         console.log(doc);
-        this.projects.push(doc.title)
+        this.projects.push({
+            title: doc.title,
+              id: doc.id});
 
-      }
+      };
       console.log(this.projects)
     },
 
@@ -726,11 +751,9 @@ export default {
     },
     async addTodo() {
       this.errors = "";
-      const projectFound = await db.collection("project").where("title", "==", this.myProject).get();
+      console.log(this.myProject)
 
-      if (this.myTodo !== "") {
-        console.log(new Date(this.myDeadline + "T" + this.myDeadlineTime + ":00Z"));
-        db.collection('todo').add({
+      const response = await db.collection('todo').add({
           task: this.myTodo,
           created_at: firebase.firestore.FieldValue.serverTimestamp(),
           complete: this.complete,
@@ -738,26 +761,16 @@ export default {
           deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
-          deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00")),
+          deadline: this.finalDeadline,
+          displayDeadline: this.displayDeadline,
           note: this.myNote,
-          project: this.myProject,
-        }).then((response) => {
-          if (response) {
-            db.collection('user').doc(this.$store.state.user.uid).update({todo: firebase.firestore.FieldValue.arrayUnion(response)})
-                .then((resp) => this.$store.dispatch('getTasks').then(
-                    db.collection('project').doc(projectFound.docs[0].id).update({todos: firebase.firestore.FieldValue.arrayUnion(response)})
-                    )
-                )
-                .catch((error) => console.log(error));
-            this.myTodo = '';
-          }
-        }).catch((error) => {
-              this.errors = error
-            }
-        )
-      } else {
-        this.errors = "Please enter your todo title"
-      }
+          project: db.collection("project").doc(this.myProject),
+        });
+          await db.collection('user').doc(this.$store.state.user.uid).update({todo: firebase.firestore.FieldValue.arrayUnion(response)});
+          await this.$store.dispatch('getTasks');
+          await db.collection('project').doc(this.myProject).update({todos: firebase.firestore.FieldValue.arrayUnion(response)})
+              .catch((error) => console.log(error));
+
       this.myTodo = ''
       this.myProject = ""
       this.myNote =""
@@ -819,6 +832,14 @@ export default {
       this.myDeadlineTime = "00:00"
       this.myDeadline= new Date().toISOString().substr(0, 10)
       this.switchValue = false
+    },
+
+    changeDisplayDeadline(){
+      if (this.dateSwitchValue == 1){
+        this.displayDeadline = "Someday"
+      } else {
+        this.displayDeadline = this.myDeadline
+      }
     },
 
   },
@@ -905,6 +926,7 @@ export default {
 
 .v-card {
   color: #ff9d66;
+  border: none;
 }
 
 .progress-circular >>> circle {

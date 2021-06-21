@@ -151,13 +151,11 @@ export default {
         await firebase
           .auth()
           .createUserWithEmailAndPassword(this.email, this.password).then((userCredential) => {
-
               const user = userCredential.user;
             console.log(firebase.auth().currentUser);
-            this.$store.getters.getProjects
             });
         // console.log(user);
-        this.$store.dispatch("setUser", firebase.auth().currentUser)
+        // this.$store.dispatch("setUser", firebase.auth().currentUser)
         this.addUser();
         this.$router.replace({ name: "Secret" });
       } catch (err) {

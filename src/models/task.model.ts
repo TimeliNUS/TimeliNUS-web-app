@@ -24,6 +24,10 @@ export interface Project {
   deadline: Date;
   progress: Number;
   modCode: string;
+  deadlineTime: string;
+  deadlineDate: string;
+  switchValue: boolean;
+  groupmates: [];
 }
 
 export interface User {
