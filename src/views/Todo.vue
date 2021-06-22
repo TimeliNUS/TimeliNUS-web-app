@@ -161,9 +161,7 @@
                                 </v-col>
                                 <v-col cols="12" align="left" :class="`rounded-xl`">
                                   <span style="color: rgb(113,113,113)">Person In Charge</span>
-                                  {{projects}}
-                                  {{myProject}}
-
+                                  
                                   <br>
 
                                   <v-btn
@@ -178,6 +176,8 @@
 
                                 <v-col cols="12" :class="`rounded-xl`">
                                   <v-menu
+                                      required
+                                    
                                       v-model="menuAdd"
                                       :close-on-content-click="false"
                                       :nudge-right="40"
@@ -188,10 +188,12 @@
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
+                                          required
+                                          :rules="[v => (!!v && v) !== 'Deadline' || 'Deadline is required']"
                                           v-model="displayDeadline"
-                                          label="Deadline"
+                                          label="Deadline*"
                                           prepend-icon="mdi-calendar"
-                                          hide-details
+                          
                                           v-bind="attrs"
                                           v-on="on"
                                           color="#ff9d66"
@@ -212,7 +214,7 @@
                                           :label="`Someday`"
                                           @change="changeDisplayDeadline()"
                                       ></v-switch>
-                                      {{myDeadline}} {{dateSwitchValue}}
+                                     
                                       </div>
                                     </v-date-picker>
                                   </v-menu>
@@ -242,7 +244,7 @@
                                       >
                                         <template v-slot:activator="{ on, attrs }">
                                           <v-text-field
-                                              :disabled="switchValue == 0"
+                                              :disabled="switchValue == 0  || dateSwitchValue == 1"
                                               v-model="myDeadlineTime"
                                               label="Time"
                                               color="#ff9d66"
@@ -286,7 +288,7 @@
                             <v-btn justify="center" color="#ff9d66" text @click="dialog = false; clearInfo()">
                               Cancel
                             </v-btn>
-                            <v-btn color="#ff9d66" :disabled="!valid || this.myTodo == '' || this.myProject ==null "
+                            <v-btn color="#ff9d66" :disabled="!valid || this.myTodo == '' || this.myProject ==null || this.displayDeadline == 'Deadline' "
                                   text @click="dialog = false;  checkTimeAdd();">
                               Save
                             </v-btn>
@@ -341,8 +343,8 @@
                                         v-bind:class="{completed: task.complete}">{{ task.task }}</span>
                                 </v-row>
                                 <v-row style="margin:0px;">
-
-                                  <span style="font-weight: normal;" v-bind:class="{completed: task.complete}">{{ task.project }}</span>
+                                  <span style="font-weight: normal;" v-bind:class="{completed: task.complete}">
+                                    {{ task.projectTitle }}</span>
                                 </v-row>
                                 <v-row style="margin:0px;">
                                   <span style="font-weight: lighter; font-size: 14px;" v-bind:class="{completed: task.complete}">{{ task.note }}</span>
@@ -393,8 +395,11 @@
                                               ></v-text-field>
                                             </v-col>
                                             <v-col cols="12">
+                                            
                                               <v-select
                                                   :items="projects"
+                                                  item-text="title"
+                                                  item-value="id"
                                                   label="Module Project*"
                                                   required
                                                   color="#ff9d66"
@@ -428,25 +433,37 @@
                                               >
                                                 <template v-slot:activator="{ on, attrs }">
                                                   <v-text-field
-                                                      v-model="myDeadline"
+                                                      :rules="[v => (!!v && v) !== 'Deadline' || 'Deadline is required']"
+                                                      v-model="displayDeadline"
                                                       label="Deadline"
                                                       prepend-icon="mdi-calendar"
                                                       readonly
                                                       color="#ff9d66"
-                                                      hide-details
                                                       v-bind="attrs"
                                                       v-on="on"
                                                   ></v-text-field>
                                                 </template>
                                                 <v-date-picker
+                                                    :disabled="dateSwitchValue == 1"
                                                     color="#ff9d66"
                                                     v-model="myDeadline"
-                                                    @input="menu[task.task] = false"
-                                                ></v-date-picker>
+                                                    @input="menu[task.task] = false; changeDisplayDeadline();"
+                                                >
+                                                  <v-switch
+                                                    inset
+                                                    hide-details
+                                                    v-model="dateSwitchValue"
+                                                    color="#ff9d66"
+                                                    :label="`Someday`"
+                                                    @change="changeDisplayDeadline()"
+                                                  ></v-switch>
+                                                  
+                                                </v-date-picker>
                                               </v-menu>
                                               <v-row style="padding-top:5px;">
                                                 <v-col cols="12" md="6" style="display:flex; align-items: center;">
                                                   <v-switch
+                                                      :disabled="dateSwitchValue == 1"
                                                       inset
                                                       hide-details
                                                       v-model="switchValue"
@@ -470,7 +487,7 @@
                                                   >
                                                     <template v-slot:activator="{ on, attrs }">
                                                       <v-text-field
-                                                          :disabled="switchValue == 0"
+                                                          :disabled="switchValue == 0 || dateSwitchValue == 1"
                                                           v-model="myDeadlineTime"
                                                           label="Time"
                                                           prepend-icon="mdi-clock-time-four-outline"
@@ -529,7 +546,7 @@
                               <v-col col="12" md="1" align="left" class="centerAlign">
 
                                 <v-list-item-action>
-                                  <v-btn color="#A5A5A5" icon @click="deleteTask(task.id)">
+                                  <v-btn color="#A5A5A5" icon @click="deleteTask(task)">
                                     <v-icon> mdi-trash-can-outline
                                     </v-icon>
                                   </v-btn>
@@ -635,6 +652,9 @@ export default {
     orderedTasks: function () {
       return _.orderBy(this.$store.state.tasks, ['complete','deadline'],['asc','asc'])
     },
+
+  
+  
     remaining(){
       return this.$store.getters.remaining
     },
@@ -663,19 +683,32 @@ export default {
   },
 
   mounted(){
-    console.log("hello")
       this.$store.dispatch('getTasks');
 
   },
 
   methods: {
+     async displayProject(project){
+      const doc = await db.collection("project").doc(project.id).get()
+      console.log(await doc.get("title"))
+    },
+
     fillInfo(task) {
       this.myTodo = task.task;
-      this.myProject = task.project;
+      console.log(task.project)
+      console.log(task.project.id)
+      this.myProject = task.project.id;
+      console.log(this.myProject)
+      this.oldMyProject = task.project.id;
       this.myDeadline = task.deadlineDate;
       this.myDeadlineTime = task.deadlineTime;
       this.myNote=task.note;
       this.switchValue = task.switchValue;
+      this.finalDeadline = task.deadline;
+      this.dateSwitchValue = task.dateSwitchValue;
+      this.displayDeadline = task.displayDeadline;
+      
+    
     },
     console: function(val){
       console.log(val);
@@ -685,9 +718,11 @@ export default {
       this.myProject = "";
       this.myDeadline = new Date().toISOString().substr(0, 10);
       this.myDeadlineTime = "00:00";
+      this.finalDeadline = new Date().toISOString().substr(0, 10)
       this.myNote= "";
       this.switchValue = false;
-      this.displayDeadline= "";
+      this.displayDeadline= "Deadline";
+      this.dateSwitchValue = false;
     },
 
     validate () {
@@ -703,6 +738,7 @@ export default {
       } else {
         this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
       }
+      console.log(this.myProject)
       console.log(this.finalDeadline)
       console.log(this.displayDeadline)
       this.addTodo()
@@ -714,11 +750,10 @@ export default {
         this.myDeadlineTime = "00:00"
         console.log(this.myDeadlineTime)
       }
-      if (this.myTodo == ""){
-        this.myTodo = task.task
-      }
-      if(this.myProject == ""){
-        this.myProject= task.project
+      if (this.displayDeadline == "Someday") {
+        this.finalDeadline = null
+      } else {
+        this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
       }
       this.editTask(task)
     },
@@ -760,6 +795,7 @@ export default {
           deadlineTime: this.myDeadlineTime,
           deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
+          dateSwitchValue: this.dateSwitchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
           deadline: this.finalDeadline,
           displayDeadline: this.displayDeadline,
@@ -777,66 +813,69 @@ export default {
       this.myDeadlineTime = "00:00"
       this.myDeadline= new Date().toISOString().substr(0, 10)
       this.switchValue = false
+      this.dateSwitchValue = false
+      this.displayDeadline="Deadline"
+      this.finalDeadline = new Date().toISOString().substr(0, 10)
     },
 
-    deleteTask: function (id) {
-      if (id) {
-        db.collection("user").doc(this.$store.state.user.uid).update({
-          todo: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(id))
-        }).then((response) => db.collection("todo").doc(id).delete().then(
-            this.$store.dispatch('getTasks'))
-            .catch(function (error) {
-              this.error = error
-            }))
-      } else {
-        this.error = 'Invalid ID'
-      }
+    async deleteTask(task) {
+        await db.collection("user").doc(this.$store.state.user.uid).update({
+          todo: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
+        await db.collection('project').doc(task.project.id)
+      .update({todos: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
+        await db.collection("todo").doc(task.id).delete()
+        this.$store.dispatch('getTasks')
+
     },
     completeTask: function (task) {
       db.collection("todo").doc(task.id).update({
         complete: task.complete,
       })
     },
-    editTask: function (task) {
-      this.errors = ""
-      if (this.myTodo !== "") {
-        db.collection("todo").doc(task.id).update({
+    async editTask(task) {
+      console.log(task.id)
+      console.log(this.dateSwitchValue)
+        const response = await db.collection("todo").doc(task.id).update({
           task: this.myTodo,
           created_at: firebase.firestore.FieldValue.serverTimestamp(),
           complete: this.complete,
           deadlineTime: this.myDeadlineTime,
           deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
+          dateSwitchValue: this.dateSwitchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
-          deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00")),
+          deadline: this.finalDeadline,
+          displayDeadline: this.displayDeadline,
           note: this.myNote,
-          project: this.myProject,
-        }).then((response) => {
-          if (response) {
-            this.myTodo = ''
-            this.myProject = ""
-          }
-        }).catch((error) => {
-          this.errors = error
-        }).then(
-            this.$store.dispatch('getTasks'))
-            .catch(function (error) {
-              this.error = error
-            })
-      } else {
-        this.errors = "Please enter your todo title"
-      }
-      this.myTodo = ''
-      this.myProject = ""
-      this.myNote =""
-      this.myDeadlineTime = "00:00"
-      this.myDeadline= new Date().toISOString().substr(0, 10)
-      this.switchValue = false
+          project: db.collection("project").doc(this.myProject)
+        });
+        console.log(response);
+        if (this.oldMyProject !== this.myProject){
+          await db.collection('project').doc(this.myProject)
+          .update({todos: firebase.firestore.FieldValue.arrayUnion(db.collection("todo").doc(task.id))})
+              .catch((error) => console.log(error))
+          await db.collection('project').doc(this.oldMyProject)
+          .update({todos: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
+              .catch((error) => console.log(error))
+        }
+        
+        this.$store.dispatch('getTasks')
+        this.myTodo = ''
+        this.myProject = ""
+        this.myNote =""
+        this.myDeadlineTime = "00:00"
+        this.myDeadline= new Date().toISOString().substr(0, 10)
+        this.switchValue = false
+        this.dateSwitchValue = false
+        this.displayDeadline="Deadline"
+        this.finalDeadline = new Date().toISOString().substr(0, 10)
     },
 
     changeDisplayDeadline(){
       if (this.dateSwitchValue == 1){
         this.displayDeadline = "Someday"
+        this.switchValue = false
+        this.myDeadlineTime = "00:00"
       } else {
         this.displayDeadline = this.myDeadline
       }
