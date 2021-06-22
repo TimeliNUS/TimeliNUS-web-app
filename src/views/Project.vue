@@ -115,7 +115,7 @@
                               <v-row>
                                 <v-col cols="12" :class="`rounded-xl`">
                                   <v-text-field
-                                      label="Todo Title*"
+                                      label="Project Title*"
                                       required
                                       :rules="nameRules"
                                       color="#ff9d66"
@@ -350,7 +350,7 @@
                                   <span style="font-weight: normal;">{{ project.modCode }}</span>
                                 </v-row>
                                 <v-row style="margin:0px;">
-                                  <span style="font-weight: lighter; font-size: 14px;">{{ project.groupmates }}</span>
+                                  <span style="font-weight: lighter; font-size: 14px;">{{ project.groupmatesName }}</span>
                                 </v-row>
 
                               </v-col>
@@ -646,7 +646,7 @@ export default {
     modCode: "",
     errors: "",
     nameRules: [
-      v => !!v || 'Todo title is required',
+      v => !!v || 'Project title is required',
     ],
     valid: true,
     display: {},
@@ -875,6 +875,28 @@ export default {
 
     async addGroupmates() {
       db.collection("user").where("email", '==', this.search)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(this.tempGroupmates)
+              this.tempGroupmates.push({
+                id: doc.id,
+                name: doc.data().name,
+                email: doc.data().email,
+                object: doc,
+                chipValue: true,
+                avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+              });
+              console.log(this.tempGroupmates)
+              console.log(doc.id, " => ", doc.data());
+            });
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error);
+          });
+
+      db.collection("user").where("name", '==', this.search)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {

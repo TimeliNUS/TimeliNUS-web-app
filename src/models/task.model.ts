@@ -10,9 +10,13 @@ export interface Task {
   deadline: Date | null;
   note: string;
   project: Project;
+  projectTitle:string;
   deadlineTime: string;
   deadlineDate: string;
   switchValue: boolean;
+  displayDeadline: string | Date;
+  dateSwitchValue: boolean;
+
 }
 
 export interface Project {
@@ -28,6 +32,7 @@ export interface Project {
   deadlineDate: string;
   switchValue: boolean;
   groupmates: [];
+  groupmatesName: string[];
 }
 
 export interface User {

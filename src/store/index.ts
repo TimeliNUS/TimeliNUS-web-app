@@ -56,10 +56,13 @@ export default new Vuex.Store({
             _createdAt: doc.data().dateTime,
             note: doc.data().note,
             project: doc.data().project,
+            projectTitle: doc.data().project.data().title,
             deadline: doc.data().deadline,
             deadlineDate: doc.data().deadlineDate,
             deadlineTime: doc.data().deadlineTime,
             switchValue: doc.data().switchValue,
+            dateSwitchValue: doc.data().dateSwitchValue,
+            displayDeadline: doc.data().displayDeadline,
           })
         })
         state.tasks = tasks
@@ -137,15 +140,26 @@ async function getTasks(state: any): Promise<Task[]>{
       _createdAt: doc.data().dateTime,
       note: doc.data().note,
       project: doc.data().project,
+      projectTitle: await getTaskProject(doc.data().project),
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
       deadlineDate: doc.data().deadlineDate ,
       deadlineTime: doc.data().deadlineTime,
       switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
 
     })
   }
   console.log(tasks);
   return tasks;
+}
+
+async function getTaskProject(project: any){
+  const docRef = await db.collection('project').doc(project.id).get()
+  console.log(docRef)
+  console.log(await docRef.get('title'))
+  return await docRef.get('title')
+
 }
 
 async function getProjects(state: any): Promise<Project[]>{
@@ -171,6 +185,7 @@ async function getProjects(state: any): Promise<Project[]>{
       deadlineTime: doc.data().deadlineTime,
       switchValue: doc.data().switchValue,
       groupmates: doc.data().groupmates ?? "",
+      groupmatesName: await getGroupmatesName(doc.data().groupmates),
 
     })
   }
@@ -178,3 +193,12 @@ async function getProjects(state: any): Promise<Project[]>{
   return projects;
 }
 
+async function getGroupmatesName(groupmates: any){
+  const groupmatesNameArray:string[] = [];
+  for(let i = 0; i < groupmates.length; i++){
+    const docRef = await db.collection('user').doc(groupmates[i].id).get();
+    groupmatesNameArray.push(docRef.get('name'))
+  }
+  return groupmatesNameArray
+
+}
