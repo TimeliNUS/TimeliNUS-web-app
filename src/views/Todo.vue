@@ -154,6 +154,7 @@
                                       required
                                       color="#ff9d66"
                                       v-model="myProject"
+                                      @input="renderGroupmates()"
                                       :rules="[v => !!v || 'Project is required']"
                                   >
 
@@ -161,17 +162,41 @@
                                 </v-col>
                                 <v-col cols="12" align="left" :class="`rounded-xl`">
                                   <span style="color: rgb(113,113,113)">Person In Charge</span>
+                                  <div v-if="tempGroupmates">
+                                  <v-combobox
+                                    :disabled="this.myProject == null"
+                                    item-text="name"
+                                    item-value="id"
+                                    v-model="groupmatesChips"
+                                    item-color="#ff9d66"
+                                    :items="tempGroupmates"
+                                    chips
+                                    clearable
+                                    label="Person In Charge"
+                                    multiple
+                                    color="#ff9d66"
+                                >
+                                  <template v-slot:selection="{ attrs, item, parent, selected }" color="#ff9d66">
+                                    <v-chip
+                                        class="ma-2"
+                                        color="#ff9d66"
+                                        text-color="white"
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        close
+                                        @click="parent.selectItem(item)"
+                                        @click:close="remove(item)"
+                                    >
+                                      <v-avatar left  class="white--text">
+                          <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
+                                        <v-img :src="item.avatar"></v-img>
+                                      </v-avatar>
+                                      <span>{{ item.name }}</span>
+                                    </v-chip>
+                                  </template>
+                                </v-combobox>
+                                  </div>
                                   
-                                  <br>
-
-                                  <v-btn
-                                      rounded
-                                      color="#ff9d66"
-                                      outlined
-                                      class="my-2 mr-2"
-                                  >
-                                    Rounded Button
-                                  </v-btn>
                                 </v-col>
 
                                 <v-col cols="12" :class="`rounded-xl`">
@@ -402,25 +427,50 @@
                                                   item-value="id"
                                                   label="Module Project*"
                                                   required
+                                                  @input="renderGroupmates"
                                                   color="#ff9d66"
                                                   v-model="myProject"
                                                   :rules="[v => !!v || 'Project is required']"
                                               ></v-select>
                                             </v-col>
-                                            <v-col cols="12" align="left">
+                                            <v-col cols="12" align="left" :class="`rounded-xl`">
                                               <span style="color: rgb(113,113,113)">Person In Charge</span>
-                                              <br>
-
-                                              <v-btn
-                                                  rounded
-                                                  color="#ff9d66"
-                                                  outlined
-                                                  class="my-2 mr-2"
-                                              >
-                                                Rounded Button
-                                              </v-btn>
+                                              <div v-if="tempGroupmates">
+                                              <v-combobox
+                                                :disabled="myProject == null"
+                                                item-text="name"
+                                                item-value="id"
+                                                v-model="groupmatesChips"
+                                                item-color="#ff9d66"
+                                                :items="tempGroupmates"
+                                                chips
+                                                clearable
+                                                label="Person In Charge"
+                                                multiple
+                                                color="#ff9d66"
+                                            >
+                                              <template v-slot:selection="{ attrs, item, parent, selected }" color="#ff9d66">
+                                                <v-chip
+                                                    class="ma-2"
+                                                    color="#ff9d66"
+                                                    text-color="white"
+                                                    v-bind="attrs"
+                                                    :input-value="selected"
+                                                    close
+                                                    @click="parent.selectItem(item)"
+                                                    @click:close="remove(item)"
+                                                >
+                                                  <v-avatar left  class="white--text">
+                                      <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
+                                                    <v-img :src="item.avatar"></v-img>
+                                                  </v-avatar>
+                                                  <span>{{ item.name }}</span>
+                                                </v-chip>
+                                              </template>
+                                            </v-combobox>
+                                              </div>
+                                              
                                             </v-col>
-
                                             <v-col cols="12">
                                               <v-menu
                                                   v-model="menu[task.task]"
@@ -435,7 +485,7 @@
                                                   <v-text-field
                                                       :rules="[v => (!!v && v) !== 'Deadline' || 'Deadline is required']"
                                                       v-model="displayDeadline"
-                                                      label="Deadline"
+                                                      label="Deadline*"
                                                       prepend-icon="mdi-calendar"
                                                       readonly
                                                       color="#ff9d66"
@@ -629,6 +679,7 @@ export default {
     time: [],
     menuAdd: false,
     dateSwitchValue:false,
+    tempGroupmates:[],
     navItems: [
       {title: 'Secret', href: "./secret", icon: 'dashboard'},
       {title: 'Todo', href: "./todo", icon: 'done'},
@@ -640,6 +691,11 @@ export default {
       task: "", // or pre-fill with other default value like `lorem`
 
     },
+    groupmatesChips: [],
+    oldGroupmatesChips: [],
+    varPIC:[],
+    varPICId: [],
+    groupmatesChipsId:[],
   }),
 
   computed: {
@@ -688,17 +744,14 @@ export default {
   },
 
   methods: {
-     async displayProject(project){
-      const doc = await db.collection("project").doc(project.id).get()
-      console.log(await doc.get("title"))
+     remove (item) {
+      this.groupmatesChips.splice(this.groupmatesChips.indexOf(item), 1)
+      this.groupmatesChips = [...this.groupmatesChips]
     },
 
-    fillInfo(task) {
+    async fillInfo(task) {
       this.myTodo = task.task;
-      console.log(task.project)
-      console.log(task.project.id)
       this.myProject = task.project.id;
-      console.log(this.myProject)
       this.oldMyProject = task.project.id;
       this.myDeadline = task.deadlineDate;
       this.myDeadlineTime = task.deadlineTime;
@@ -707,12 +760,46 @@ export default {
       this.finalDeadline = task.deadline;
       this.dateSwitchValue = task.dateSwitchValue;
       this.displayDeadline = task.displayDeadline;
-      
+      this.groupmatesChips = await this.getPIC(task.PIC);  
+      this.oldGroupmatesChips = await this.getPICId(task.PIC);
+      console.log(this.oldGroupmatesChips)    
     
     },
-    console: function(val){
-      console.log(val);
+    
+
+    async getPIC(PIC){
+      console.log(PIC)
+      for (let i = 0; i < PIC.length; i++) {
+      const docRef = await PIC[i].get()
+      this.varPIC.push({
+          id: docRef.id,
+          name: docRef.get('name'),
+          object: docRef,
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+          }
+        )
+      }
+      console.log(this.varPIC)
+      return this.varPIC
     },
+
+    async getPICId(PIC){
+      for (let i = 0; i < PIC.length; i++) {
+        
+      const docRef = await PIC[i].get()
+
+      this.varPICId.push(
+          docRef.id,
+          
+          
+        )
+      }
+   
+      return this.varPICId
+    },
+
+
+
     clearInfo() {
       this.myTodo = "";
       this.myProject = "";
@@ -723,6 +810,10 @@ export default {
       this.switchValue = false;
       this.displayDeadline= "Deadline";
       this.dateSwitchValue = false;
+      this.groupmatesChips = [];
+      this.varPIC = [];
+      this.varPICId = [];
+      this.oldGroupmatesChips = [];
     },
 
     validate () {
@@ -738,6 +829,7 @@ export default {
       } else {
         this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
       }
+     
       console.log(this.myProject)
       console.log(this.finalDeadline)
       console.log(this.displayDeadline)
@@ -799,9 +891,11 @@ export default {
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
           deadline: this.finalDeadline,
           displayDeadline: this.displayDeadline,
+          PIC: [],
           note: this.myNote,
           project: db.collection("project").doc(this.myProject),
         });
+          await this.addFinalPIC(response);
           await db.collection('user').doc(this.$store.state.user.uid).update({todo: firebase.firestore.FieldValue.arrayUnion(response)});
           await this.$store.dispatch('getTasks');
           await db.collection('project').doc(this.myProject).update({todos: firebase.firestore.FieldValue.arrayUnion(response)})
@@ -816,17 +910,20 @@ export default {
       this.dateSwitchValue = false
       this.displayDeadline="Deadline"
       this.finalDeadline = new Date().toISOString().substr(0, 10)
+      this.groupmatesChips = []
+      this.clearInfo()
     },
 
     async deleteTask(task) {
         await db.collection("user").doc(this.$store.state.user.uid).update({
           todo: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
-        await db.collection('project').doc(task.project.id)
+        await db.collection('project').doc(task.project)
       .update({todos: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
         await db.collection("todo").doc(task.id).delete()
         this.$store.dispatch('getTasks')
 
     },
+
     completeTask: function (task) {
       db.collection("todo").doc(task.id).update({
         complete: task.complete,
@@ -847,9 +944,10 @@ export default {
           deadline: this.finalDeadline,
           displayDeadline: this.displayDeadline,
           note: this.myNote,
-          project: db.collection("project").doc(this.myProject)
+          project: db.collection("project").doc(this.myProject),
+          PIC: [],
         });
-        console.log(response);
+        await this.addFinalPIC(task);
         if (this.oldMyProject !== this.myProject){
           await db.collection('project').doc(this.myProject)
           .update({todos: firebase.firestore.FieldValue.arrayUnion(db.collection("todo").doc(task.id))})
@@ -869,6 +967,9 @@ export default {
         this.dateSwitchValue = false
         this.displayDeadline="Deadline"
         this.finalDeadline = new Date().toISOString().substr(0, 10)
+        this.groupmatesChips = []
+        this.varPIC = []
+        this.varPICId = []
     },
 
     changeDisplayDeadline(){
@@ -881,6 +982,55 @@ export default {
       }
     },
 
+    async renderGroupmates(){
+      const docRef = await db.collection('project').doc(this.myProject).get()
+      const data = await docRef.get('groupmates')
+      for (let i = 0; i < data.length; i++) {
+        const currGroupmate = await data[i].get()
+        this.tempGroupmates.push({
+          id: currGroupmate.id,
+          name: currGroupmate.get('name'),
+          object: currGroupmate,
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+        })
+      }
+    
+      console.log(this.$store.state.user)
+      
+    },
+
+    async addFinalPIC(task){
+      this.groupmatesChipsId = [];
+      for (let i = 0; i < this.groupmatesChips.length; i++) {
+        
+        this.groupmatesChipsId.push(
+          this.groupmatesChips[i].id,
+        )
+      }
+      console.log(this.groupmatesChipsId)
+
+      for (let i = 0; i < this.groupmatesChipsId.length; i++) {
+        if ( this.oldGroupmatesChips.includes(this.groupmatesChipsId[i])) {
+          console.log('groupmate has already in charge the todo')
+        } else{
+          db.collection('user').doc(this.groupmatesChipsId[i]).update(
+            {todo: firebase.firestore.FieldValue.arrayUnion(db.collection("todo").doc(task.id))})
+        }
+      };
+      for (let i=0; i< this.oldGroupmatesChips.length; i++){
+      
+        if (this.groupmatesChipsId.includes(this.oldGroupmatesChips[i])){
+          console.log('this groupmate is still in charge of the todo')
+        } else {
+          console.log(this.oldGroupmatesChips[i])
+          db.collection('user').doc(this.oldGroupmatesChips[i]).update(
+            {todo: firebase.firestore.FieldValue.arrayRemove(db.collection("todo").doc(task.id))})
+        }
+      }
+      for (let i = 0; i < this.groupmatesChips.length; i++) {
+        db.collection('todo').doc(task.id).update({PIC: firebase.firestore.FieldValue.arrayUnion(db.collection('user').doc(this.groupmatesChips[i].id)) })
+      };
+    },
   },
 };
 
@@ -970,11 +1120,6 @@ export default {
 
 .progress-circular >>> circle {
   stroke-linecap: round;
-}
-
-.v-progress-circular__underlay{
-  stroke: rgb(255,255,0);
-  z-index:10;
 }
 
 .v-navigation-drawer__border{

@@ -63,6 +63,7 @@ export default new Vuex.Store({
             switchValue: doc.data().switchValue,
             dateSwitchValue: doc.data().dateSwitchValue,
             displayDeadline: doc.data().displayDeadline,
+            PIC: doc.data().PIC,
           })
         })
         state.tasks = tasks
@@ -147,6 +148,7 @@ async function getTasks(state: any): Promise<Task[]>{
       switchValue: doc.data().switchValue,
       dateSwitchValue: doc.data().dateSwitchValue,
       displayDeadline: doc.data().displayDeadline,
+      PIC: doc.data().PIC,
 
     })
   }
@@ -175,15 +177,17 @@ async function getProjects(state: any): Promise<Project[]>{
     projects.push({
       id: doc.id,
       meetings: doc.data().meetings,
-      todos: doc.data().todos ?? "",
+      todos: doc.data().todos ?? [],
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
-      progress: doc.data().progess,
+      progress: doc.data().progress,
       modCode: doc.data().modCode,
-      deadline: doc.data().deadline.toDate(),
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
       deadlineDate: doc.data().deadlineDate,
       deadlineTime: doc.data().deadlineTime,
       switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
 

@@ -92,7 +92,7 @@
                             outlined
                             v-bind="attrs"
                             v-on="on"
-                            @click="dialog = true; "
+                            @click="dialog = true; addCurrUserToTempGroupmates();"
                         >
                           <span style="color: #ff9d66; font-weight: bold"> + Add New Project</span>
                         </v-btn>
@@ -106,7 +106,7 @@
                             lazy-validation
                         >
                           <v-card-title :class="`rounded-xl`">
-                            <span class="headline">Add New Project</span>
+                            <span style="color: #ff9d66;" class="headline">Add New Project</span>
                           </v-card-title>
 
                           <v-card-text>
@@ -124,21 +124,26 @@
                                 </v-col>
                                 <v-col cols="12" :class="`rounded-xl`">
                                   <v-text-field
-                                      label="Module code"
+                                      label="Module code*"
                                       color="#ff9d66"
                                       v-model="modCode"
+                                      :rules="[v => !!v || 'Module Code is required']"
                                   >
                                   </v-text-field>
                                 </v-col>
                                 <v-col cols="12" align="left">
                                   <span>Groupmates</span>
+                                  <v-row>
                                   <div v-if="tempGroupmates.length !==0">
+                                    <v-row>
                                     <div v-for="(user,index) in tempGroupmates" :key="user.id">
+                                    
                                     <v-chip
                                         class="ma-2"
                                         color="#ff9d66"
                                         text-color="white"
                                         :input-value="user.id"
+                        
                                         v-if="user.chipValue"
                                         close
                                         @click:close="remove(user,index)"
@@ -149,7 +154,9 @@
                                       </v-avatar>
                                       <span>{{ user.name }}</span>
                                     </v-chip>
+                                      
                                   </div>
+                                  </v-row>
                                   </div>
                                   <v-dialog v-model="dialogPerson" persistent max-width="600px">
                                     <template v-slot:activator="{ on, attrs }">
@@ -157,6 +164,8 @@
                                       <v-btn
                                           v-bind="attrs"
                                           v-on="on"
+                                          outlined
+                                          color="#ff9d66"
                                           @click="dialogPerson = true">
                                         <v-icon>person_add</v-icon>
                                       </v-btn>
@@ -194,7 +203,8 @@
                                           <br>
                                           {{ searchId }}
                                           <v-list-item-action>
-                                            <v-btn v-if="searchId" @click="addGroupmates();">
+                                            <v-btn v-if="searchId" 
+                                            color="#ff9d66" outlined @click="addGroupmates();">
                                               <v-icon>person_add</v-icon>
                                             </v-btn>
                                           </v-list-item-action>
@@ -208,10 +218,13 @@
                                       </v-card>
                                     </v-card>
                                   </v-dialog>
+                                  </v-row>
                                 </v-col>
 
                                 <v-col cols="12" :class="`rounded-xl`">
                                   <v-menu
+                                      required
+                                    
                                       v-model="menuAdd"
                                       :close-on-content-click="false"
                                       :nudge-right="40"
@@ -222,25 +235,39 @@
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
-                                          v-model="myDeadline"
-                                          label="Deadline"
+                                          required
+                                          :rules="[v => (!!v && v) !== 'Deadline' || 'Deadline is required']"
+                                          v-model="displayDeadline"
+                                          label="Deadline*"
                                           prepend-icon="mdi-calendar"
-                                          readonly
-                                          hide-details
                                           v-bind="attrs"
                                           v-on="on"
                                           color="#ff9d66"
                                       ></v-text-field>
                                     </template>
                                     <v-date-picker
+                                        :disabled="dateSwitchValue == 1"
                                         color="#ff9d66"
                                         v-model="myDeadline"
-                                        @input="menuAdd = false"
-                                    ></v-date-picker>
+                                        @input="menuAdd = false; changeDisplayDeadline();"
+                                    >
+                                      <div style="margin-left:10px; margin-top:-10px; padding-bottom: 10px;">
+                                      <v-switch
+                                          inset
+                                          hide-details
+                                          v-model="dateSwitchValue"
+                                          color="#ff9d66"
+                                          :label="`Someday`"
+                                          @change="changeDisplayDeadline()"
+                                      ></v-switch>
+                                     
+                                      </div>
+                                    </v-date-picker>
                                   </v-menu>
                                   <v-row style="padding-top:5px;">
-                                    <v-col cols="12" md="6" style="display:flex; align-items: center;">
+                                    <v-col cols="12" md="6" style="display:flex;">
                                       <v-switch
+                                          :disabled="dateSwitchValue == 1"
                                           inset
                                           hide-details
                                           v-model="switchValue"
@@ -263,7 +290,7 @@
                                       >
                                         <template v-slot:activator="{ on, attrs }">
                                           <v-text-field
-                                              :disabled="switchValue == 0"
+                                              :disabled="switchValue == 0  || dateSwitchValue == 1"
                                               v-model="myDeadlineTime"
                                               label="Time"
                                               color="#ff9d66"
@@ -310,26 +337,33 @@
 
                   <div v-if="length">
                     <div v-for="(project,index) in this.$store.state.projects" :key="project.id">
-                      <template>
+                      <template >
                         <v-list-item style="display: block;">
-                          <v-card outlined color="white" style="margin: auto;" :class="`rounded-xl`"
+                          <v-card outlined class="v-card" color="white" style="margin: auto;" :class="`rounded-xl`"
                           >
 
                             <v-row style="margin:0px;">
                               <v-col cols="12" md="2" align="center" justify="center" class="centerAlign"
                                      style="padding-top: 20px;padding-bottom: 20px;font-weight: bold; font-size: 20px; flex-direction: column">
-
+                              <div v-if="project.deadline !== null">
                                 <span style="margin-left:3vw; ">{{
                                     project.deadline.toLocaleDateString("en-US", {
                                       month: 'short',
                                       day: "2-digit"
                                     })
                                   }}</span>
+                              </div>
+                              <div v-else>
+                                <span style="margin-left:3vw; ">
+                                  Someday
+                                </span>
+                                </div>
 
-
+                              <div v-if="project.deadline !== null">
                                 <span class="centerAlign" style="margin-left:3vw;font-size: 14px; ">{{
                                     project.deadline.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
                                   }}</span>
+                              </div>
 
 
                               </v-col>
@@ -403,6 +437,8 @@
                                                       label="Module code"
                                                       color="#ff9d66"
                                                       v-model="modCode"
+                                                      :rules="[v => !!v  || 'Module Code is required']"
+
                                                   >
                                                   </v-text-field>
                                                 </v-col>
@@ -410,6 +446,7 @@
                                                   <span>Groupmates</span>
                                                   <div  v-if="tempGroupmates.length !==0">
                                                     <div v-for="(user,index) in tempGroupmates" :key="user.id">
+                                                     <v-row>
                                                     <v-chip
                                                         class="ma-2"
                                                         color="#ff9d66"
@@ -425,15 +462,18 @@
                                                       </v-avatar>
                                                       <span>{{ user.name }}</span>
                                                     </v-chip>
+                                                     </v-row>
                                                     </div>
                                                   </div>
-                                                  <v-dialog v-model="dialogPerson" persistent max-width="600px">
+                                                  <v-dialog v-model="groupmateDialogEdit" persistent max-width="600px">
                                                     <template v-slot:activator="{ on, attrs }">
 
                                                       <v-btn
                                                           v-bind="attrs"
                                                           v-on="on"
-                                                          @click="dialogPerson = true">
+                                                          outlined
+                                                          color="#ff9d66"
+                                                          @click="groupmateDialogEdit = true">
                                                         <v-icon>person_add</v-icon>
                                                       </v-btn>
                                                     </template>
@@ -460,7 +500,7 @@
                                                           <br>
                                                           {{ searchId }}
                                                           <v-list-item-action>
-                                                            <v-btn v-if="searchId" @click="addGroupmates();">
+                                                            <v-btn v-if="searchId" outlined color="#ff9d66" @click="addGroupmates();">
                                                               <v-icon>person_add</v-icon>
                                                             </v-btn>
                                                           </v-list-item-action>
@@ -468,7 +508,7 @@
                                                         <v-card-actions>
                                                           <v-spacer></v-spacer>
                                                           <v-btn color="blue darken-1" text
-                                                                 @click="dialogPerson = false">
+                                                                 @click="groupmateDialogEdit = false; checkClosing()">
                                                             Close
                                                           </v-btn>
                                                         </v-card-actions>
@@ -478,81 +518,98 @@
                                                 </v-col>
 
                                                 <v-col cols="12">
+                                                  {{myDeadline}}
+                                                  {{myDeadlineTime}}
+                                                  {{dateSwitchValue}}
+                                                  {{switchValue}}
+                                                  {{displayDeadline}}
+                                              <v-menu
+                                                  v-model="menu[project.title]"
+                                                  :close-on-content-click="false"
+                                                  :nudge-right="40"
+                                                  transition="scale-transition"
+                                                  offset-y
+                                                  color="#ff9d66"
+                                                  min-width="auto"
+                                              >
+                                                <template v-slot:activator="{ on, attrs }">
+                                                  <v-text-field
+                                                      :rules="[v => (!!v && v) !== 'Deadline' || 'Deadline is required']"
+                                                      v-model="displayDeadline"
+                                                      label="Deadline*"
+                                                      prepend-icon="mdi-calendar"
+                                                      readonly
+                                                      color="#ff9d66"
+                                                      v-bind="attrs"
+                                                      v-on="on"
+                                                  ></v-text-field>
+                                                </template>
+                                                <v-date-picker
+                                                    :disabled="dateSwitchValue == 1"
+                                                    color="#ff9d66"
+                                                    v-model="myDeadline"
+                                                    @input="menu[project.title] = false; changeDisplayDeadline();"
+                                                >
+                                                  <v-switch
+                                                    inset
+                                                    hide-details
+                                                    v-model="dateSwitchValue"
+                                                    color="#ff9d66"
+                                                    :label="`Someday`"
+                                                    @change="changeDisplayDeadline()"
+                                                  ></v-switch>
+                                                  
+                                                </v-date-picker>
+                                              </v-menu>
+                                              <v-row style="padding-top:5px;">
+                                                <v-col cols="12" md="6" style="display:flex; align-items: center;">
+                                                  <v-switch
+                                                      :disabled="dateSwitchValue == 1"
+                                                      inset
+                                                      hide-details
+                                                      v-model="switchValue"
+                                                      color="#ff9d66"
+                                                      :label="`Include Time`"
+                                                  ></v-switch>
+                                                </v-col>
+                                                <v-col cols="12" md="6">
                                                   <v-menu
-                                                      v-model="menu[project.title]"
+                                                      :ref="'timeMenu'+index"
+                                                      v-model="time[project.title]"
                                                       :close-on-content-click="false"
                                                       :nudge-right="40"
+                                                      :return-value.sync="myDeadlineTime"
                                                       transition="scale-transition"
                                                       offset-y
+                                                      style=" z-index:20"
+                                                      max-width="290px"
                                                       color="#ff9d66"
-                                                      min-width="auto"
+                                                      min-width="290px"
                                                   >
                                                     <template v-slot:activator="{ on, attrs }">
                                                       <v-text-field
-                                                          v-model="myDeadline"
-                                                          label="Deadline"
-                                                          prepend-icon="mdi-calendar"
+                                                          :disabled="switchValue == 0 || dateSwitchValue == 1"
+                                                          v-model="myDeadlineTime"
+                                                          label="Time"
+                                                          prepend-icon="mdi-clock-time-four-outline"
                                                           readonly
                                                           color="#ff9d66"
-                                                          hide-details
                                                           v-bind="attrs"
                                                           v-on="on"
                                                       ></v-text-field>
                                                     </template>
-                                                    <v-date-picker
+                                                    <v-time-picker
+                                                        scrollable
+                                                        v-model="myDeadlineTime"
                                                         color="#ff9d66"
-                                                        v-model="myDeadline"
-                                                        @input="menu[project.title] = false"
-                                                    ></v-date-picker>
+                                                        full-width
+                                                        format="24hr"
+                                                        @click:minute="y = 'timeMenu'+index.toString(); a = $refs[y]; a[0].save(myDeadlineTime); time[project.title] = false">
+                                                    </v-time-picker>
                                                   </v-menu>
-                                                  <v-row style="padding-top:5px;">
-                                                    <v-col cols="12" md="6" style="display:flex; align-items: center;">
-                                                      <v-switch
-                                                          inset
-                                                          hide-details
-                                                          v-model="switchValue"
-                                                          color="#ff9d66"
-                                                          :label="`Include Time`"
-                                                      ></v-switch>
-                                                    </v-col>
-                                                    <v-col cols="12" md="6">
-                                                      <v-menu
-                                                          :ref="'timeMenu'+index"
-                                                          v-model="time[project.title]"
-                                                          :close-on-content-click="false"
-                                                          :nudge-right="40"
-                                                          :return-value.sync="myDeadlineTime"
-                                                          transition="scale-transition"
-                                                          offset-y
-                                                          style=" z-index:20"
-                                                          max-width="290px"
-                                                          color="#ff9d66"
-                                                          min-width="290px"
-                                                      >
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                          <v-text-field
-                                                              :disabled="switchValue == 0"
-                                                              v-model="myDeadlineTime"
-                                                              label="Time"
-                                                              prepend-icon="mdi-clock-time-four-outline"
-                                                              readonly
-                                                              color="#ff9d66"
-                                                              v-bind="attrs"
-                                                              v-on="on"
-                                                          ></v-text-field>
-                                                        </template>
-                                                        <v-time-picker
-                                                            scrollable
-                                                            v-model="myDeadlineTime"
-                                                            color="#ff9d66"
-                                                            full-width
-                                                            format="24hr"
-                                                            @click:minute="y = 'timeMenu'+index.toString(); a = $refs[y]; a[0].save(myDeadlineTime); time[project.title] = false">
-                                                        </v-time-picker>
-                                                      </v-menu>
-                                                    </v-col>
-                                                  </v-row>
                                                 </v-col>
+                                              </v-row>
+                                            </v-col>
 
                                               </v-row>
                                             </v-container>
@@ -582,7 +639,7 @@
                               <v-col col="12" md="1" align="left" class="centerAlign">
 
                                 <v-list-item-action>
-                                  <v-btn color="#A5A5A5" icon @click="deleteProject(project.id)">
+                                  <v-btn color="#A5A5A5" icon @click="deleteProject(project)">
                                     <v-icon> mdi-trash-can-outline
                                     </v-icon>
                                   </v-btn>
@@ -625,6 +682,7 @@
 <script>
 import firebase from "firebase";
 import {db} from "../main.ts"
+import _ from 'lodash';
 
 export default {
   name: "Project.vue",
@@ -635,7 +693,7 @@ export default {
     myDeadline: new Date().toISOString().substr(0, 10),
     myDeadline2: new Date().toISOString().substr(0, 10),
     title: "",
-    menu: false,
+    menu: {},
     modal: false,
     switchValue: false,
     menu2: false,
@@ -648,22 +706,32 @@ export default {
     nameRules: [
       v => !!v || 'Project title is required',
     ],
-    valid: true,
     display: {},
     menuEdit: {},
     myDeadlineTime: "00:00",
     search: "",
     users: [],
     usersNew: [],
+    groupmateDialog: [],
     searchName: "",
     searchEmail: "",
     searchId: "",
+    displayDeadline: "Deadline",
     tempGroupmates: [],
+    varGroupmates:[],
+    varGroupmatesId: [],
     finalGroupmates: [],
+    finalDeadline:  new Date().toISOString().substr(0, 10),
+    dateSwitchValue: false,
+    valid: true,
     time: [],
     menuAdd: false,
     tempUser: null,
     chips: [],
+    todos: [],
+    groupmateDialogEdit:false,
+    progress: 0,
+    oldGroupmates: [],
     searchAvatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
 
     navItems: [
@@ -706,7 +774,22 @@ export default {
 
 
   methods: {
-    checkEdit(project) {
+    checkClosing(){
+      console.log("checkClosing")
+    },
+    async addCurrUserToTempGroupmates(){
+      const docRef = await db.collection('user').doc(this.$store.state.user.uid).get()
+      this.tempGroupmates.push({
+        id: docRef.id,
+        name: docRef.get('name'),
+        email: docRef.get('email'),
+        object: docRef,
+        chipValue:true,
+        avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+      })
+      console.log(this.tempGroupmates)
+    },
+    async checkEdit(project) {
       if (this.switchValue == false) {
         console.log(this.myDeadlineTime)
         this.myDeadlineTime = "00:00"
@@ -718,23 +801,49 @@ export default {
       if (this.modCode == "") {
         this.modCode = project.modCode
       }
+       if (this.displayDeadline == "Someday") {
+        this.finalDeadline = null
+      } else {
+        this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
+      }
+      await this.passGroupmates();
       this.editProject(project)
     },
 
-    fillInfo(project) {
+    async fillInfo(project) {
       this.title = project.title;
       this.modCode = project.modCode;
       this.myDeadline = project.deadlineDate;
       this.myDeadlineTime = project.deadlineTime;
       this.switchValue = project.switchValue;
+      this.finalDeadline = project.deadline;
+      this.dateSwitchValue = project.dateSwitchValue;
+      this.displayDeadline = project.displayDeadline;
+      this.tempGroupmates = await this.getGroupmates(project.groupmates);
+      this.oldGroupmates = await this.getGroupmatesId(project.groupmates);
+      this.progress = project.progress;
+      this.todos = project.todos;
+      console.log(this.varGroupmates)
+      console.log(this.tempGroupmates)
+      this.varGroupmates = [];
     },
     async checkTimeAdd() {
       if (this.switchValue == false) {
         this.myDeadlineTime = "00:00"
       }
+      if (this.displayDeadline == "Someday") {
+        this.finalDeadline = null
+      } else {
+        this.finalDeadline = firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00"));
+      }
       await this.passGroupmates();
       this.addProject();
     },
+
+    validate () {
+      this.$refs.form.validate()
+    },
+
     clearInfo() {
       this.title = "";
       this.modCode = "";
@@ -742,6 +851,9 @@ export default {
       this.finalGroupmates = [];
       this.myDeadlineTime = "00:00";
       this.switchValue = false;
+      this.finalDeadline = new Date().toISOString().substr(0, 10)
+      this.displayDeadline= "Deadline";
+      this.dateSwitchValue = false;
     },
     async signOut() {
       try {
@@ -753,31 +865,32 @@ export default {
         console.log(err);
       }
     },
+    async fetchUserID(){
+      this.$store.state.user.uid
+    },
     async addProject() {
       this.errors = ""
-
-      if (this.title !== "") {
         const response = await db.collection('project').add({
           created_at: firebase.firestore.FieldValue.serverTimestamp(),
           title: this.title,
           todos: [],
+          progress: 0,
           deadlineTime: this.myDeadlineTime,
           deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
+          dateSwitchValue: this.dateSwitchValue,
+          deadline: this.finalDeadline,
+          displayDeadline: this.displayDeadline,
           groupmates: [],
-          deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00")),
           modCode: this.modCode,
-        }).catch((error) => console.log(error));
-        console.log(response)
-        if (response) {
-          console.log(response);
+        });
           await this.addGroupmatesToProject(response);
           await this.addForGroupmates(response);
           await db.collection('user').doc(this.$store.state.user.uid)
                   .update({project: firebase.firestore.FieldValue.arrayUnion(response)})
           await this.$store.dispatch('getProjects')
-        }
-      }
+        
+      
       this.title = ''
       this.modCode = ""
       this.myDeadlineTime = "00:00"
@@ -785,53 +898,47 @@ export default {
       this.switchValue = false
       this.finalGroupmates = []
       this.tempGroupmates = []
+      this.dateSwitchValue = false
+      this.displayDeadline="Deadline"
+      this.finalDeadline = new Date().toISOString().substr(0, 10)
     },
 
-    deleteProject: function (id) {
-      if (id) {
-        db.collection("user").doc(this.$store.state.user.uid).update({
-          project: firebase.firestore.FieldValue.arrayRemove(db.collection("project").doc(id))
-        }).then((response) => db.collection("project").doc(id).delete().then(
-            this.$store.dispatch('getProjects'))
-            .catch(function (error) {
-              this.error = error
-            }))
-      } else {
-        this.error = 'Invalid ID'
-      }
+    async deleteProject(project) {
+        await db.collection("user").doc(this.$store.state.user.uid).update({
+          project: firebase.firestore.FieldValue.arrayRemove(db.collection("project").doc(project.id))})
+        this.$store.dispatch('getProjects')
+            
     },
 
-    editProject: function (project) {
+    async editProject(project) {
       this.errors = ""
-      if (this.title !== "") {
-        db.collection("project").doc(project.id).update({
+      const response = await db.collection("project").doc(project.id).update({
           title: this.title,
+          progress: this.progress,
           created_at: firebase.firestore.FieldValue.serverTimestamp(),
           deadlineTime: this.myDeadlineTime,
           deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
-          groupmates: this.finalGroupmates,
-          deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline + "T" + (this.myDeadlineTime) + ":00+08:00")),
-        }).then((response) => {
-          if (response) {
-            this.title = ''
-          }
-        }).catch((error) => {
-          this.errors = error
-        }).then(
-            this.$store.dispatch('getProjects'))
-            .catch(function (error) {
-              this.error = error
-            })
-      } else {
-        this.errors = "Please enter your todo title"
-      }
+          groupmates: [],
+          dateSwitchValue: this.dateSwitchValue,
+          deadline: this.finalDeadline,
+          displayDeadline: this.displayDeadline,
+          modCode: this.modCode,
+          todos: this.todos,
+      })
+      await this.addGroupmatesToProject(project);
+      await this.addForGroupmates(project);
+      this.$store.dispatch('getProjects')
       this.title = ''
       this.modCode = ""
       this.myDeadlineTime = "00:00"
       this.myDeadline = new Date().toISOString().substr(0, 10)
       this.switchValue = false
       this.finalGroupmates = []
+      this.tempGroupmates = []
+      this.dateSwitchValue = false
+      this.displayDeadline="Deadline"
+      this.finalDeadline = new Date().toISOString().substr(0, 10)
     },
 
     async getMatchedUserbyEmail() {
@@ -874,6 +981,7 @@ export default {
 
 
     async addGroupmates() {
+      
       db.collection("user").where("email", '==', this.search)
           .get()
           .then((querySnapshot) => {
@@ -919,11 +1027,14 @@ export default {
           });
     },
 
-    async addForGroupmates(response) {
+    async addForGroupmates(project) {
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        console.log(this.finalGroupmates[i])
+        if (this.oldGroupmates.includes(this.finalGroupmates[i])) {
+          console.log('groupmate already has the project')
+        } else{
         db.collection('user').doc(this.finalGroupmates[i])
-            .update({project: firebase.firestore.FieldValue.arrayUnion(response)})
+            .update({project: firebase.firestore.FieldValue.arrayUnion(db.collection('project').doc(project.id))})
+        }
       }
       console.log("check")
     },
@@ -937,6 +1048,7 @@ export default {
       }
       console.log(this.tempGroupmates)
       console.log(this.finalGroupmates)
+    
       this.searchId = ""
       this.searchEmail = ""
       this.searchName = ""
@@ -944,10 +1056,10 @@ export default {
       this.tempGroupmates = []
     },
 
-    async addGroupmatesToProject(response){
-      console.log(response);
+    async addGroupmatesToProject(project){
+      console.log(project);
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        db.collection('project').doc(response.id)
+        db.collection('project').doc(project.id)
             .update({groupmates: firebase.firestore.FieldValue
                   .arrayUnion(db.collection('user').doc(this.finalGroupmates[i]))})
       }
@@ -976,11 +1088,73 @@ export default {
         this.searchEmail = "";
       }
     },
+
+    changeDisplayDeadline(){
+      if (this.dateSwitchValue == 1){
+        this.displayDeadline = "Someday"
+        this.switchValue = false
+        this.myDeadlineTime = "00:00"
+      } else {
+        this.displayDeadline = this.myDeadline
+      }
+    },
+
+    async getGroupmates(groupmates){
+      for (let i = 0; i < groupmates.length; i++) {
+        console.log(groupmates[i])
+        console.log(groupmates[0])
+        console.log(groupmates.length)
+      
+      console.log(this.tempGroupmates)
+      const docRef = await groupmates[i].get()
+
+      console.log(docRef)
+      console.log(docRef.id)
+      console.log(docRef.get('name'))
+      console.log(docRef.get('email'))
+      this.varGroupmates.push({
+          id: docRef.id,
+          name: docRef.get('name'),
+          email: docRef.get('email'),
+          object: docRef,
+          chipValue: true,
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+          }
+        )
+      }
+      console.log(this.varGroupmates)
+      return this.varGroupmates
+    },
+
+    async getGroupmatesId(groupmates){
+      for (let i = 0; i < groupmates.length; i++) {
+        
+      const docRef = await groupmates[i].get()
+
+      
+      this.varGroupmatesId.push({
+          id: docRef.id,
+          
+          }
+        )
+      }
+   
+      return this.varGroupmatesId
+    },
+
   },
 };
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+.v-card {
+  color: #ff9d66;
+  border: none;
+
+}
+
 .todo-item {
   margin-bottom: 12px;
   justify-content: space-between;
@@ -988,14 +1162,7 @@ export default {
   //display:flex;
 }
 
-.remove-item {
-  cursor: pointer;
-  margin-left: 14px;
 
-  &:hover {
-    color: black;
-  }
-}
 
 .completed {
   text-decoration: line-through;
@@ -1012,8 +1179,97 @@ export default {
   margin-bottom: 14px;
 }
 
-.v-card {
-  border-left: 5px solid red;
-  color: orange;
+
+
+
+.v-input--selection-controls {
+  margin-top: 0px;
+  padding-top: 0px;
 }
+
+.elevation-0 div {
+  box-shadow: none !important;
+}
+
+.checkboxCol {
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centerAlign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftAlign {
+  /*display: flex;*/
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.input-group--disabled.checkbox .input-group__input {
+  color: white !important;
+  outline: 1px solid #1e5180
+}
+
+.completed {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.extra-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  padding-top: 14px;
+  margin-bottom: 14px;
+}
+
+.theme--dark {
+  color: #ffffff;
+}
+
+.theme--light.v-checkbox {
+  color: #ffffff;
+}
+
+
+
+.progress-circular >>> circle {
+  stroke-linecap: round;
+}
+
+
+.v-navigation-drawer__border{
+  background-color: rgba(255,255,255,1);
+  border-color: white;
+  color:white;
+}
+
+.v-list--rounded .v-list-item, .v-list--rounded .v-list-item::before, .v-list--rounded .v-list-item > .v-ripple__container {
+  border-radius: 20px !important;
+}
+
+.v-navigation-drawer > div{
+  display: flex;
+  flex-direction: column;
+}
+
+.center-me {
+  transform: translate(-50%, 0);
+}
+
+.theme--light.v-card{
+  color:#ff9d66
+}
+
+</style>
+<style lang="sass">
+@import './src/sass/variables.sass'
+
+$progress-circular-underlay-stroke: #FFD5A5 !default
 </style>
