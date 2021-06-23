@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Secret from "../views/Secret.vue";
-import Project from "../views/Project.vue"
+import Project from "../views/Project.vue";
 import Login from "../views/Login.vue";
 import Todo from "../views/Todo.vue";
 import Register from "../views/Register.vue";
@@ -49,8 +49,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.dispatch('getTasks');
-  store.dispatch('getProjects');
+  store.dispatch("getTasks");
+  store.dispatch("getProjects");
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
   if (requiresAuth && !isAuthenticated) {
