@@ -1040,7 +1040,14 @@ export default {
       return this.$store.getters.totalTaskDone;
     },
     totalTaskProgress() {
-      return this.$store.getters.totalTaskProgress;
+      const progress = this.$store.getters.totalTaskProgress;
+      console.log(progress)
+      if (progress == null || progress == undefined ||  isNaN(progress) ){
+        return 0
+      } else {
+        return progress;
+
+      }
     },
   },
 

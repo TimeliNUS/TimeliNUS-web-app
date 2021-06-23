@@ -185,7 +185,7 @@
                                 </v-text-field>
                               </v-col>
                               <v-col cols="12" align="left">
-                                <span>Groupmates</span>
+                                <span style="padding-bottom:10px;">Groupmates</span>
                                 <v-row>
                                   <div v-if="tempGroupmates.length !== 0">
                                     <v-row>
@@ -194,7 +194,7 @@
                                         :key="user.id"
                                       >
                                         <v-chip
-                                          class="ma-2"
+                                          class="ma-4"
                                           color="#ff9d66"
                                           text-color="white"
                                           :input-value="user.id"
@@ -1152,7 +1152,7 @@
               </div>
             </v-col>
           </v-row>
-          <div v-if="currTodos.length !== 0">
+          <div v-if="currTodos.length !== 0 || currProject != null">
             <v-container :class="`rounded-xl`">
               <v-card
                 outlined
@@ -1181,17 +1181,17 @@
                     <v-tab> Meetings </v-tab>
                     <v-tab> Todos </v-tab>
                   </v-tabs>
-                  <v-tabs-items v-model="tab">
-                    <v-tab-item>
-                      <v-container style="background-color: #ffe4cb">
+                  <v-tabs-items v-model="tab" style="background-color:#ff9d66;">
+                    <v-tab-item style="background-color:#ff9d66;">
+                      <v-container style="background-color: #ffe4cb; border-radius:24px;" :class="`rounded-xl`">
                       <v-card color="#FFE4CB" outlined :class="`rounded-xl`" style="padding: 10px; overflow-y: scroll">
                         <v-card-title>Meetings</v-card-title>
 
                       </v-card>
                       </v-container>
                     </v-tab-item>
-                    <v-tab-item>
-                      <v-container style="background-color: #ffe4cb">
+                    <v-tab-item style="background-color:#ff9d66;">
+                      <v-container style="background-color: #ffe4cb; border-radius:24px;" :class="`rounded-xl`">
                         <v-card
                           outlined
                           style="padding: 10px; overflow-y: scroll"
@@ -1311,6 +1311,7 @@
                                           >
                                         </v-row>
 
+                                      <div v-if="todo.note">
                                         <v-row style="margin: 0px">
                                           <span
                                             style="
@@ -1323,6 +1324,7 @@
                                             >{{ todo.note }}</span
                                           >
                                         </v-row>
+                                      </div>
                                       </v-col>
                                       <!--  -->
                                       <v-col
@@ -2911,7 +2913,10 @@ export default {
       db.collection("todo").doc(task.id).update({
         complete: task.complete,
       });
+      this.$store.dispatch("getProjects");
       this.$store.dispatch("getTasks");
+      
+
     },
     async editTask(task) {
       console.log(task.id);
