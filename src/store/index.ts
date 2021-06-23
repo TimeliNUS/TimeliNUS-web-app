@@ -180,7 +180,7 @@ async function getProjects(state: any): Promise<Project[]>{
       todos: doc.data().todos ?? [],
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
-      progress: doc.data().progress,
+      progress: await getProjectProgress(doc.data().todos),
       modCode: doc.data().modCode,
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
       deadlineDate: doc.data().deadlineDate,
@@ -205,4 +205,26 @@ async function getGroupmatesName(groupmates: any){
   }
   return groupmatesNameArray
 
+}
+
+async function getProjectProgress(todos: any){
+  let counterCompleted = 0
+  let counterIncompleted = 0
+    if (todos == null || todos.length == 0){
+      return 0
+    } else {
+      for (let i = 0; i < todos.length; i++) {
+        const docRef = await db.collection('todo').doc(todos[i].id).get()
+        console.log(docRef.get('complete'))
+        if (docRef.get('complete') == false ){
+          counterIncompleted += 1
+        } else {
+          counterCompleted += 1
+        }
+      }
+      console.log(counterCompleted)
+      console.log(counterIncompleted)
+      return counterCompleted / (counterIncompleted + counterCompleted)
+
+    }
 }
