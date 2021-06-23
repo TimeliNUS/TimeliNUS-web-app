@@ -16,6 +16,7 @@ export interface Task {
   switchValue: boolean;
   displayDeadline: string | Date;
   dateSwitchValue: boolean;
+  PIC: User;
 
 }
 
@@ -24,8 +25,8 @@ export interface Project {
   title: string;
   todos: [];
   meetings: [];
-  _createdAt: Date;
-  deadline: Date;
+  _createdAt: firebase.firestore.Timestamp;
+  deadline: Date | null;
   progress: Number;
   modCode: string;
   deadlineTime: string;
@@ -33,6 +34,8 @@ export interface Project {
   switchValue: boolean;
   groupmates: [];
   groupmatesName: string[];
+  displayDeadline: string | Date;
+  dateSwitchValue: boolean;
 }
 
 export interface User {
