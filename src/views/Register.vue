@@ -36,20 +36,13 @@
                   <v-row>
                     <v-col col="3">
                       <v-btn
-                          class=""
-                          outlined
-                          large
-                          color="#ff9d66"
-                          @click="googleSignIn"
-
+                        class=""
+                        outlined
+                        large
+                        color="#ff9d66"
+                        @click="googleSignIn"
                       >
-                        <v-icon
-
-                            dark
-                            left
-                        >
-                          mdi-google
-                        </v-icon>
+                        <v-icon dark left> mdi-google </v-icon>
                         Google
                       </v-btn>
                     </v-col>
@@ -78,15 +71,15 @@
                       <div class="error" v-if="error">
                         {{ error }}
                       </div>
-                      <div style="padding-bottom: 18px;">
+                      <div style="padding-bottom: 18px">
                         <v-text-field
-                            prepend-inner-icon="mdi-account"
-                            outlined
-                            type="text"
-                            placeholder="text"
-                            v-model="name"
-                            color="#ff9d66"
-                            hide-details="auto"
+                          prepend-inner-icon="mdi-account"
+                          outlined
+                          type="text"
+                          placeholder="text"
+                          v-model="name"
+                          color="#ff9d66"
+                          hide-details="auto"
                         />
                       </div>
                       <div>
@@ -133,16 +126,15 @@
 </template>
 <script>
 import firebase from "firebase";
-import {db} from "../main.ts"
+import { db } from "../main.ts";
 
 export default {
-
   data: () => ({
     alignments: ["start", "center", "end"],
     email: "",
     password: "",
     error: "",
-    name:"",
+    name: "",
   }),
 
   methods: {
@@ -150,10 +142,11 @@ export default {
       try {
         await firebase
           .auth()
-          .createUserWithEmailAndPassword(this.email, this.password).then((userCredential) => {
-              const user = userCredential.user;
+          .createUserWithEmailAndPassword(this.email, this.password)
+          .then((userCredential) => {
+            const user = userCredential.user;
             console.log(firebase.auth().currentUser);
-            });
+          });
         // console.log(user);
         // this.$store.dispatch("setUser", firebase.auth().currentUser)
         this.addUser();
@@ -179,25 +172,28 @@ export default {
 
     addUser() {
       if (this.email !== "") {
-        db.collection('user').doc(this.$store.state.user.uid).set({
-          email: this.email,
-          name: this.name,
-          todo: [],
-          project:[],
-          created_at: Date.now(),
-        }).then((response) => {
-          if (response) {
-            this.email = ''
-          }
-        }).catch((error) => {
-          this.errors = error
-        })
+        db.collection("user")
+          .doc(this.$store.state.user.uid)
+          .set({
+            email: this.email,
+            name: this.name,
+            todo: [],
+            project: [],
+            created_at: Date.now(),
+          })
+          .then((response) => {
+            if (response) {
+              this.email = "";
+            }
+          })
+          .catch((error) => {
+            this.errors = error;
+          });
       } else {
-        this.errors = "Please enter your email"
+        this.errors = "Please enter your email";
       }
-      this.email = ''
-      this.password= ""
-
+      this.email = "";
+      this.password = "";
     },
   },
 };

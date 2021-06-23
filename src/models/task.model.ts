@@ -10,14 +10,13 @@ export interface Task {
   deadline: Date | null;
   note: string;
   project: Project;
-  projectTitle:string;
+  projectTitle: string;
   deadlineTime: string;
   deadlineDate: string;
   switchValue: boolean;
   displayDeadline: string | Date;
   dateSwitchValue: boolean;
   PIC: User;
-
 }
 
 export interface Project {
@@ -27,7 +26,7 @@ export interface Project {
   meetings: [];
   _createdAt: firebase.firestore.Timestamp;
   deadline: Date | null;
-  progress: Number;
+  progress: number;
   modCode: string;
   deadlineTime: string;
   deadlineDate: string;

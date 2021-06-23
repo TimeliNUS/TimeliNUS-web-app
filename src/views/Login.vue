@@ -1,8 +1,7 @@
 <template>
   <div class="background centerAlign">
     <v-container class="align-center mb-6 fill-height centerAlign">
-      <v-card class="test" >
-
+      <v-card class="test">
         <v-row class="test">
           <v-col
             align="center"
@@ -16,11 +15,10 @@
                 class="image-container"
                 alt=""
               ></v-img>
-              <br>
-              <br>
-              <br>
-              <br>
-
+              <br />
+              <br />
+              <br />
+              <br />
             </div>
           </v-col>
 
@@ -34,8 +32,7 @@
                     >Register</router-link
                   >
                 </p>
-                <br>
-
+                <br />
               </div>
               <div>
                 <v-row>
@@ -46,16 +43,9 @@
                       large
                       color="#ff9d66"
                       @click="googleSignIn"
-
                     >
-                      <v-icon
-
-                          dark
-                          left
-                      >
-                        mdi-google
-                      </v-icon>
-                       Google
+                      <v-icon dark left> mdi-google </v-icon>
+                      Google
                     </v-btn>
                   </v-col>
 
@@ -222,10 +212,6 @@ export default {
   text-align: left;
   padding-left: 5%;
   padding-top: 5%;
-
-
-
-
 }
 
 .divider {
