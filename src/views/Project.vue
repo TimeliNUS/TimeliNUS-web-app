@@ -1199,7 +1199,7 @@
                           :class="`rounded-xl`"
                         >
                           <v-card-title>Your Todo</v-card-title>
-                          <div v-if="this.currTodos">
+                          <div v-if="currTodos">
                             <div
                               v-for="(todo, index) in orderedTasks"
                               :key="todo.id"
@@ -1797,6 +1797,9 @@
                 </v-card>
               </v-card>
             </v-container>
+          </div>
+          <div v-else height="61vh" style="padding:20vh; display:flex' align-items: center; justify-content: center">
+            <span style="font-weight: bold; font-size: 24px;">You have not selected any project yet.</span>
           </div>
 
           <!-- Original Project Display -->
