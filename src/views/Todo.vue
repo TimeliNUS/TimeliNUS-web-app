@@ -1080,6 +1080,7 @@ export default {
       this.myDeadline = task.deadlineDate;
       this.myDeadlineTime = task.deadlineTime;
       this.myNote = task.note;
+      this.complete = task.complete;
       this.switchValue = task.switchValue;
       this.finalDeadline = task.deadline;
       this.dateSwitchValue = task.dateSwitchValue;
