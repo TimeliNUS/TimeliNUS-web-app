@@ -16,6 +16,7 @@ export default new Vuex.Store({
     user: {} as User,
     snapshot: {},
     allUser: [] as User[],
+    projectInvitations: [] as Project[],
   },
   getters: {
     remaining(state) {
@@ -47,6 +48,10 @@ export default new Vuex.Store({
 
     getProjects: async (state) => {
       state.projects = await getProjects(state);
+    },
+
+    getProjectInvitations: async (state) => {
+      state.projectInvitations = await getProjectInvitations(state);
     },
   },
   mutations: {
@@ -92,6 +97,11 @@ export default new Vuex.Store({
       state.projects = projects;
       console.log(state.projects);
     },
+
+    getProjectInvitations: (state, { projectInvitations }) => {
+      state.projectInvitations = projectInvitations;
+      console.log(state.projectInvitations)
+    },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
     //     let user:User;
@@ -125,6 +135,13 @@ export default new Vuex.Store({
       context.commit("getProjects", { projects });
     },
 
+    getProjectInvitations: async (context, payload) => {
+      console.log("start");
+      const projectInvitations = await getProjectInvitations(context.state);
+      console.log(projectInvitations);
+      context.commit("getProjectInvitations", { projectInvitations });
+    },
+
     setUser: (context, user) => {
       context.commit("setUser", { user });
     },
@@ -144,6 +161,7 @@ async function getTasks(state: any): Promise<Task[]> {
   console.log(state.user.uid);
   for (let i = 0; i < data.length; i++) {
     const doc = await data[i].get();
+    console.log(doc.data())
     tasks.push({
       id: doc.id,
       task: doc.data().task ?? "",
@@ -165,11 +183,52 @@ async function getTasks(state: any): Promise<Task[]> {
   return tasks;
 }
 
+async function getProjectInvitations(state: any): Promise<Project[]> {
+  const documentSnapshot = await db
+    .collection("user")
+    .doc(state.user.uid)
+    .get();
+  console.log(documentSnapshot);
+  const data = await documentSnapshot.get("project_invited");
+  const projectInvitations: Project[] = [];
+  for (let i = 0; i < data.length; i++) {
+    const doc = await data[i].get();
+    console.log(doc.data().creator)
+    projectInvitations.push({
+      id: doc.id,
+      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
+      meetings: doc.data().meetings,
+      todos: doc.data().todos ?? [],
+      _createdAt: doc.data().dateTime,
+      title: doc.data().title,
+      progress: await getProjectProgress(doc.data().todos),
+      modCode: doc.data().modCode,
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
+      groupmates: doc.data().groupmates ?? "",
+      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+
+    });
+  }
+  console.log(projectInvitations)
+  return projectInvitations
+}
+
 async function getTaskProject(project: any) {
   const docRef = await db.collection("project").doc(project.id).get();
   console.log(docRef);
   console.log(await docRef.get("title"));
   return await docRef.get("title");
+}
+
+async function getCreator(creator: any){
+  console.log(creator)
+  const docRef = await creator.get();
+  return docRef.get('name');
 }
 
 async function getProjects(state: any): Promise<Project[]> {
@@ -187,6 +246,7 @@ async function getProjects(state: any): Promise<Project[]> {
     const doc = await data[i].get();
     projects.push({
       id: doc.id,
+      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
       meetings: doc.data().meetings,
       todos: doc.data().todos ?? [],
       _createdAt: doc.data().dateTime,
