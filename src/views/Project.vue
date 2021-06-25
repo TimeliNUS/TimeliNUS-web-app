@@ -865,22 +865,25 @@
                                                   </v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" align="left">
-                                                  <span style="padding: 5px;">Groupmates</span>
+                                                  <span style="">Groupmates</span>
+                                                  <br>
+                                                   <v-row style="padding-top:12px; padding-right:12px; padding-left:12px;">
+
                                                   <div
                                                     v-if="
                                                       tempGroupmates.length !==
                                                       0
                                                     "
                                                   >
+                                                  <v-row>
                                                     <div
                                                       v-for="(
                                                         user, index
                                                       ) in tempGroupmates"
                                                       :key="user.id"
                                                     >
-                                                      <v-row>
                                                         <v-chip
-                                                          class="ma-2"
+                                                          style="margin-top: 16px; margin-left:12px; margin-right:12px;"
                                                           color="#ff9d66"
                                                           text-color="white"
                                                           :input-value="user.id"
@@ -903,9 +906,15 @@
                                                             user.name
                                                           }}</span>
                                                         </v-chip>
-                                                      </v-row>
                                                     </div>
+                                                  </v-row>
                                                   </div>
+                                                   </v-row>
+                                                   <br>
+                                                   <br>
+                                                   
+                                                  <v-row>
+                                                  <div>
                                                   <v-dialog
                                                     v-model="
                                                       groupmateDialogEdit
@@ -923,6 +932,7 @@
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         outlined
+                                                        style="margin-left:12px; margin-top:5px;"
                                                         color="#ff9d66"
                                                         @click="
                                                           groupmateDialogEdit = true
@@ -933,10 +943,12 @@
                                                         >
                                                       </v-btn>
                                                     </template>
-                                                    <v-card>
+                                                    <v-card style="padding: 20px;">
                                                       <v-card-actions>
                                                         <v-text-field
                                                           v-model="search"
+                                                          color="#ff9d66"
+                                                          label="Search your groupmates by entering their username or email"
                                                           @input="
                                                             getMatchedUserbyEmail();
                                                             getMatchedUserbyName();
@@ -946,6 +958,7 @@
                                                         </v-text-field>
                                                       </v-card-actions>
                                                       <v-card
+
                                                         max-width="450"
                                                         class="mx-auto"
                                                         outlined
@@ -964,9 +977,10 @@
                                                           <br />
                                                           {{ searchEmail }}
                                                           <br />
-                                                          {{ searchId }}
+                                                          
                                                           <v-list-item-action>
                                                             <v-btn
+                                                              :disabled="checkAdd(searchId)"
                                                               v-if="searchId"
                                                               outlined
                                                               color="#ff9d66"
@@ -983,7 +997,7 @@
                                                         <v-card-actions>
                                                           <v-spacer></v-spacer>
                                                           <v-btn
-                                                            color="blue darken-1"
+                                                            color="#ff9d66"
                                                             text
                                                             @click="
                                                               groupmateDialogEdit = false;
@@ -996,14 +1010,12 @@
                                                       </v-card>
                                                     </v-card>
                                                   </v-dialog>
+                                                  </div>
+                                                  </v-row>
                                                   </v-col>
 
                                                 <v-col cols="12">
-                                                  {{ myDeadline }}
-                                                  {{ myDeadlineTime }}
-                                                  {{ dateSwitchValue }}
-                                                  {{ switchValue }}
-                                                  {{ displayDeadline }}
+                                                  
                                                   <v-menu
                                                     v-model="
                                                       menu[project.title]
