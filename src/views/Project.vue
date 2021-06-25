@@ -3526,7 +3526,7 @@ export default {
 
     async addForGroupmates(project) {
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        if (this.oldGroupmates.includes(this.finalGroupmates[i]) && this.finalGroupmates[i] !== this.$store.state.user.uid) {
+        if (this.oldGroupmates.includes(this.finalGroupmates[i]) || this.finalGroupmates[i] === this.$store.state.user.uid) {
           console.log("groupmate already has the project");
         } else {
           db.collection("user")
@@ -3685,14 +3685,17 @@ export default {
 
     async acceptProject(projectInvitation){
         await db.collection('user').doc(this.$store.state.user.uid).update({
+          project_invited: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("project").doc(projectInvitation.id)
+        )})
+        this.$store.dispatch('getProjectInvitations')
+        await db.collection('user').doc(this.$store.state.user.uid).update({
           project: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("project").doc(projectInvitation.id)
         )})
         this.$store.dispatch('getProjects')
-        await db.collection('user').doc(this.$store.state.user.uid).update({
-          project_invited: firebase.firestore.FieldValue.arrayRemove(
-                db.collection("project").doc(projectInvitation.id)
-        )})
+        
+
         await db.collection('project').doc(projectInvitation).update({
           groupmates: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.$store.state.user.uid)
@@ -3701,7 +3704,6 @@ export default {
           groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
-        this.$store.dispatch('getProjectInvitations')
     },
 
     async declineProject(projectInvitation){
