@@ -185,8 +185,9 @@
                                 </v-text-field>
                               </v-col>
                               <v-col cols="12" align="left">
-                                <span style="padding-bottom:10px;">Groupmates</span>
-                                <v-row>
+                                <span style="">Groupmates</span>
+                                <br>
+                                <v-row style="padding-top:12px; padding-right:12px; padding-left:12px;">
                                   <div v-if="tempGroupmates.length !== 0">
                                     <v-row>
                                       <div
@@ -194,7 +195,8 @@
                                         :key="user.id"
                                       >
                                         <v-chip
-                                          class="ma-4"
+                                          
+                                          style="margin-top: 16px; margin-left:12px; margin-right:12px;"
                                           color="#ff9d66"
                                           text-color="white"
                                           :input-value="user.id"
@@ -211,6 +213,11 @@
                                       </div>
                                     </v-row>
                                   </div>
+                                   </v-row>
+                                  <br>
+                                  <br>
+                                  <v-row>
+                                  <div>
                                   <v-dialog
                                     v-model="dialogPerson"
                                     persistent
@@ -221,16 +228,19 @@
                                         v-bind="attrs"
                                         v-on="on"
                                         outlined
+                                        style="margin-left:12px; margin-top:5px;"
                                         color="#ff9d66"
                                         @click="dialogPerson = true"
                                       >
                                         <v-icon>person_add</v-icon>
                                       </v-btn>
                                     </template>
-                                    <v-card>
+                                    <v-card style="padding:20px;">
                                       <v-card-actions>
                                         <v-text-field
                                           v-model="search"
+                                          color="#ff9d66"
+                                          label="Search your groupmates by entering their username or email"
                                           @input="
                                             getMatchedUserbyEmail();
                                             getMatchedUserbyName();
@@ -238,18 +248,9 @@
                                           "
                                         >
                                         </v-text-field>
-                                        {{ search }}
+                                       
                                       </v-card-actions>
-                                      <v-card-text>
-                                        <div
-                                          v-for="user in this.users"
-                                          :key="user.id"
-                                        >
-                                          {{ user.id }}
-                                          {{ user.name }}
-                                          {{ user.email }}
-                                        </div>
-                                      </v-card-text>
+                                      
                                       <v-card
                                         max-width="450"
                                         class="mx-auto"
@@ -259,13 +260,14 @@
                                           <v-list-item-avatar v-if="searchName">
                                             <v-img :src="searchAvatar"></v-img>
                                           </v-list-item-avatar>
+                                          <br/>
                                           {{ searchName }}
                                           <br />
                                           {{ searchEmail }}
-                                          <br />
-                                          {{ searchId }}
+                                        <br/>
                                           <v-list-item-action>
                                             <v-btn
+                                              :disabled="checkAdd(searchId)"
                                               v-if="searchId"
                                               color="#ff9d66"
                                               outlined
@@ -278,7 +280,7 @@
                                         <v-card-actions>
                                           <v-spacer></v-spacer>
                                           <v-btn
-                                            color="blue darken-1"
+                                            color="#ff9d66"
                                             text
                                             @click="dialogPerson = false"
                                           >
@@ -288,6 +290,7 @@
                                       </v-card>
                                     </v-card>
                                   </v-dialog>
+                                  </div>
                                 </v-row>
                               </v-col>
 
@@ -595,6 +598,7 @@
                 <v-container
                   style="margin-right: auto; margin-left: auto; display: flex"
                   max-width="51vw"
+                  
                   min-width="51vw"
                   
                 >
@@ -3577,6 +3581,17 @@ export default {
       }
     },
 
+    checkAdd(searchID){
+      for (let i=0; i< this.tempGroupmates.length;i++){
+        if (this.tempGroupmates[i].id === searchID){
+          return true
+        } else if (searchID == this.$store.state.user.uid){
+          return true
+        }
+      }
+      return false
+    },
+
     async remove(user, index) {
       this.chips.splice(this.chips.indexOf(user), 1);
       this.chips = [...this.chips];
@@ -3696,11 +3711,11 @@ export default {
         this.$store.dispatch('getProjects')
         
 
-        await db.collection('project').doc(projectInvitation).update({
+        await db.collection('project').doc(projectInvitation.id).update({
           groupmates: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
-        await db.collection('project').doc(projectInvitation).update({
+        await db.collection('project').doc(projectInvitation.id).update({
           groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
@@ -3712,11 +3727,11 @@ export default {
                 db.collection("project").doc(projectInvitation.id)
         )})
         this.$store.dispatch('getProjectInvitations')
-        await db.collection('project').doc(projectInvitation).update({
+        await db.collection('project').doc(projectInvitation.id).update({
           groupmates_declined: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
-        await db.collection('project').doc(projectInvitation).update({
+        await db.collection('project').doc(projectInvitation.id).update({
           groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
