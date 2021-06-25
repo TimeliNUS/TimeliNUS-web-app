@@ -1088,6 +1088,7 @@ export default {
       this.groupmatesChips = await this.getPIC(task.PIC);
       this.oldGroupmatesChips = await this.getPICId(task.PIC);
       console.log(this.oldGroupmatesChips);
+      console.log(this.complete)
     },
 
     async getPIC(PIC) {
@@ -1218,14 +1219,17 @@ export default {
         .collection("user")
         .doc(this.$store.state.user.uid)
         .update({ todo: firebase.firestore.FieldValue.arrayUnion(response) });
-      await this.$store.dispatch("getTasks");
-      await this.$store.dispatch("getProjects");
 
       await db
         .collection("project")
         .doc(this.myProject)
         .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
         .catch((error) => console.log(error));
+
+      
+      await this.$store.dispatch("getProjects");
+      await this.$store.dispatch("getTasks");
+
 
       this.myTodo = "";
       this.myProject = "";
@@ -1269,6 +1273,7 @@ export default {
         complete: task.complete,
       });
     },
+
     async editTask(task) {
       console.log(task.id);
       console.log(this.dateSwitchValue);

@@ -447,10 +447,11 @@
               >
                 <v-container :class="`rounded-lg`" style="padding-top: 20px !important; padding:0px;">
                   <v-card
-                    style="padding: 8px ; padding-top: 20px !important;"
+                    style="padding: 8px ; padding-top: 20px !important; padding-bottom:12px;!important"
                     color="#ff9d66"
                     outlined
-                    :class="`rounded-lg`"
+                    :class="`rounded-xl`"
+                    min-height="30vh"
                   >
                     <span
                       style="
@@ -462,9 +463,27 @@
                         
                         font-weight: bold;
                       "
-                      >Project Invitation</span
+                      >Project Invitations</span
                     >
-                    <v-card outlined color="white">
+                    <div v-if="this.$store.state.projectInvitations.length !== 0"  style="display: flex; flex-direction: row; justify-content:center !important">
+                    <v-slide-group
+                          v-model="projectInvitationSlide"
+                          style="display: flex; flex-direction: row; justify-content:center !important"
+                          active-class="success"
+                          show-arrows
+                          center-active
+                         
+                        >
+                        <v-slide-item
+                            v-for="(projectInvitation) in this.$store.state.projectInvitations"
+                            :key="projectInvitation.id"
+                            style="display:flex; justify-content:center !important"
+
+                          >
+                    
+                    <v-card outlined color="white" class="ma-2"
+                              width="280" :class="`rounded-xl`"
+                              style="padding: 10px; padding-left:10px;">
                       <v-col
                                   col="12"
                                   md="12"
@@ -479,13 +498,13 @@
                                       padding-right: 3px !important;
                                     "
                                   >
-                                    Project ModCode
+                                    {{projectInvitation.modCode}}
                                   </v-card-text>
                                   <v-card-title
                                     style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
                                  padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
                                   >
-                                    Project Title
+                                    {{projectInvitation.title}}
                                   </v-card-title>
                                   <v-card-text
                                     style="
@@ -493,13 +512,30 @@
                                       padding: 2px !important;
                                     "
                                   >
-                                    <div >
+                                    <div v-if="projectInvitation.deadline !== null">
                                       <span style="">
                                         <v-icon color="#ff9d66" width="20px;"
                                           >calendar_today</v-icon
                                         >
-                                        Project Deadline</span
+                                        {{
+                                          projectInvitation.deadline.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }}</span
                                       >
+                                    </div>
+                                    <div v-else>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;">
+                                          calendar_today</v-icon
+                                        >
+                                        Someday
+                                      </span>
                                     </div>
                                     
                                   </v-card-text>
@@ -513,13 +549,42 @@
                                       <span color="#999999">
                                         <v-icon color="#999999">mdi-account</v-icon>
 
-                                        Created by Jin Zhao
+                                        {{projectInvitation.creator}}
                                       </span>
                                     </div>
                                   </v-card-text>
+                                  <v-card-actions  style="padding: 0px; !important" >
+                                    <v-row
+                                    style="padding-top: 20px!important; "
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-btn text small color="#ff9d66" @click="acceptProject(projectInvitation)">
+                                        Accept
+                                      </v-btn>
+                                      <v-btn
+                                      small
+                                        text
+                                        color="#999999"
+                                        @click="declineProject(projectInvitation)"
+                                      >
+                                        Decline
+                                      </v-btn>
+                                      
+                                    </v-row>`
+                                  </v-card-actions>
                                   
                         </v-col>
                     </v-card>
+                        </v-slide-item>
+                    </v-slide-group>
+                    
+                  
+                    </div>
+                    <div v-else style="padding-top:9vh; padding-bottom:9vh; display:flex; align-items: center; justify-content: center" >
+                      <span style="font-weight:bold; color:white;" >You do not have any project invitation.</span>
+                    </div>
+                    
                   </v-card>
                 </v-container>
               </div>
@@ -529,11 +594,17 @@
               <div style="display: flex">
                 <v-container
                   style="margin-right: auto; margin-left: auto; display: flex"
+                  max-width="51vw"
+                  min-width="51vw"
+                  
                 >
                   <v-card
+                    max-width="51vw"
+                    min-width="51vw"
+                    
                     outlined
                     color="#FFE4CB"
-                    style="padding: 8px; display: flex; flex-direction: column"
+                    style="padding: 14px; display: flex; flex-direction: column"
                     :class="`rounded-xl`"
                   >
                     <div
@@ -551,8 +622,9 @@
                         "
                         >Overview</span
                       >
-                      <span
-                        style="
+                      
+                      <v-btn align="right" outlined 
+                            style="
                           margin-top: 10px;
                           color: #4b4b4b;
                           font-size: 16px;
@@ -561,9 +633,9 @@
                           font-weight: bold;
                           margin-right: 3vw;
 
-                        "
-                        >Click any project to see more details</span
-                      >
+                        ">
+                        Table View
+                      </v-btn>
                     </div>
 
                     <div
@@ -584,7 +656,7 @@
                           show-arrows
                         >
                           <v-slide-item
-                            v-for="project in this.$store.state.projects"
+                            v-for="(project,index) in this.$store.state.projects"
                             :key="project.id"
                             v-slot="{ active, toggle }"
                           >
@@ -789,7 +861,7 @@
                                                   </v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" align="left">
-                                                  <span>Groupmates</span>
+                                                  <span style="padding: 5px;">Groupmates</span>
                                                   <div
                                                     v-if="
                                                       tempGroupmates.length !==
@@ -1147,6 +1219,25 @@
                         </v-slide-group>
                       </v-sheet>
                     </div>
+                    <div v-else style="padding:80px; display:flex' align-items: center; justify-content: center">
+                       <span style="font-color: #999999; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
+                    </div>
+                    <div>
+                      <span
+                        style="
+                          margin-top: 10px;
+                          color: #4b4b4b;
+                          font-size: 16px;
+                          display: flex;
+                          align-items: center;
+                          font-weight: light;
+                          margin-right: 3vw;
+                          justify-content: flex-end;
+
+                        "
+                        >Click any project to see more details</span
+                      >
+                    </div>
                   </v-card>
                 </v-container>
               </div>
@@ -1157,7 +1248,7 @@
               <v-card
                 outlined
                 color="#FFE4CB"
-                style="padding: 20px; overflow-y: scroll; max-height: 61vh"
+                style="padding: 20px; max-height: 61vh; overflow-y: scroll; "
                 :class="`rounded-xl`"
               >
                 <span style="color:#ff9d66; font-weight:bold; padding: 10px; font-size: 20px; display:flex; justify-content:flex-start;"> 
@@ -1194,7 +1285,7 @@
                       <v-container style="background-color: #ffe4cb; border-radius:24px;" :class="`rounded-xl`">
                         <v-card
                           outlined
-                          style="padding: 10px; overflow-y: scroll"
+                          style="padding: 10px;"
                           color="#FFE4CB"
                           :class="`rounded-xl`"
                         >
@@ -1234,13 +1325,10 @@
                                               completed: todo.complete,
                                             }"
                                             >{{
-                                              todo.finalDeadline.toLocaleDateString(
-                                                "en-US",
-                                                {
-                                                  month: "short",
-                                                  day: "2-digit",
-                                                }
-                                              )
+                                              todo.finalDeadline.toLocaleDateString("en-US", {
+                                                month: "short",
+                                                day: "2-digit",
+                                              })
                                             }}</span
                                           >
                                         </div>
@@ -1266,14 +1354,12 @@
                                               completed: todo.complete,
                                             }"
                                             >{{
-                                              todo.finalDeadline.toLocaleTimeString(
-                                                [],
-                                                {
+                                              todo.finalDeadline.toLocaleTimeString([], {
                                                   hour: "2-digit",
                                                   minute: "2-digit",
-                                                }
-                                              )
-                                            }}</span
+                                                })
+                                              }}
+                                            </span
                                           >
                                         </div>
                                       </v-col>
@@ -1350,7 +1436,7 @@
                                                 v-on="on"
                                                 icon
                                                 @click="
-                                                  fillTaskInfo(todo);
+                                                  fillTodoInfo(todo);
                                                   getProjectMenu();
                                                 "
                                               >
@@ -1564,7 +1650,7 @@
                                                                 Taskmenu[
                                                                   todo.title
                                                                 ] = false;
-                                                                changeDisplayDeadline();
+                                                                changeTaskDisplayDeadline();
                                                               "
                                                             >
                                                               <v-switch
@@ -1576,7 +1662,7 @@
                                                                 color="#ff9d66"
                                                                 :label="`Someday`"
                                                                 @change="
-                                                                  changeDisplayDeadline()
+                                                                  changeTaskDisplayDeadline()
                                                                 "
                                                               ></v-switch>
                                                             </v-date-picker>
@@ -1798,7 +1884,7 @@
               </v-card>
             </v-container>
           </div>
-          <div v-else height="61vh" style="padding:20vh; display:flex' align-items: center; justify-content: center">
+          <div v-else height="61vh" style="padding:20vh; display:flex; align-items: center; justify-content: center">
             <span style="font-weight: bold; font-size: 24px;">You have not selected any project yet.</span>
           </div>
 
@@ -2735,6 +2821,7 @@ export default {
     menuEdit: {},
     tab: null,
     projectSlide: null,
+    projectInvitationSlide: null,
     myDeadlineTime: "00:00",
     search: "",
     users: [],
@@ -2786,6 +2873,8 @@ export default {
     projects: [],
     varPIC: [],
     varPICId: [],
+    currProjectObject: null,
+    projectInvitations: [],
   }),
 
   created() {
@@ -2801,13 +2890,16 @@ export default {
     this.currTodos = []
   },
 
-  mounted() {
+  async mounted() {
     console.log("hello");
-    this.$store.dispatch("getProjects");
+    await this.$store.dispatch("getProjects");
+    await this.$store.dispatch("getProjectInvitations");
+    console.log(this.$store.state.projectInvitations)
     this.remainingTodo();
     this.currTodos = []
     console.log(this.currTodos)
   },
+
   computed: {
     items() {
       return Array.from({ length: 1 }, (k, v) => v + 1);
@@ -2818,10 +2910,11 @@ export default {
     orderedTasks: function () {
       return _.orderBy(
         this.currTodos,
-        ["complete", "deadline"],
+        ["complete", "finalDeadline"],
         ["asc", "asc"]
       );
     },
+    
   },
 
   // beforeMount(){
@@ -2830,8 +2923,10 @@ export default {
 
   methods: {
     assignCurrProject(project){
+      this.currProjectObject = project
       this.currProject = project.modCode + " " + project.title 
     },
+
     checkTodoEdit(task) {
       if (this.TaskswitchValue == false) {
         this.TaskmyDeadlineTime = "00:00";
@@ -2841,7 +2936,7 @@ export default {
       } else {
         this.TaskfinalDeadline = firebase.firestore.Timestamp.fromDate(
           new Date(
-            this.TaskmyDeadline + "T" + this.TaslmyDeadlineTime + ":00+08:00"
+            this.TaskmyDeadline + "T" + this.TaskmyDeadlineTime + ":00+08:00"
           )
         );
       }
@@ -2867,31 +2962,80 @@ export default {
       console.log(this.$store.state.user);
     },
     async getPIC(PIC) {
+      this.TaskvarPIC = []
       console.log(PIC);
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
-        this.varPIC.push({
+        this.TaskvarPIC.push({
           id: docRef.id,
           name: docRef.get("name"),
           object: docRef,
           avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         });
       }
-      console.log(this.varPIC);
-      return this.varPIC;
+      console.log(this.TaskvarPIC);
+      return this.TaskvarPIC;
     },
 
     async getPICId(PIC) {
+      this.TaskvarPICId = []
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
 
-        this.varPICId.push(docRef.id);
+        this.TaskvarPICId.push(docRef.id);
       }
 
-      return this.varPICId;
+      return this.TaskvarPICId;
+    },
+
+    async addFinalPIC(task) {
+      this.TaskgroupmatesChipsId = [];
+      for (let i = 0; i < this.TaskgroupmatesChips.length; i++) {
+        this.TaskgroupmatesChipsId.push(this.TaskgroupmatesChips[i].id);
+      }
+      console.log(this.TaskgroupmatesChipsId);
+
+      for (let i = 0; i < this.TaskgroupmatesChipsId.length; i++) {
+        if (this.TaskoldGroupmatesChips.includes(this.TaskgroupmatesChipsId[i])) {
+          console.log("groupmate has already in charge the todo");
+        } else {
+          db.collection("user")
+            .doc(this.TaskgroupmatesChipsId[i])
+            .update({
+              todo: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("todo").doc(task.id)
+              ),
+            });
+        }
+      }
+      for (let i = 0; i < this.TaskoldGroupmatesChips.length; i++) {
+        if (this.TaskgroupmatesChipsId.includes(this.TaskoldGroupmatesChips[i])) {
+          console.log("this groupmate is still in charge of the todo");
+        } else {
+          console.log(this.TaskoldGroupmatesChips[i]);
+          db.collection("user")
+            .doc(this.TaskoldGroupmatesChips[i])
+            .update({
+              todo: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("todo").doc(task.id)
+              ),
+            });
+        }
+      }
+      for (let i = 0; i < this.TaskgroupmatesChips.length; i++) {
+        db.collection("todo")
+          .doc(task.id)
+          .update({
+            PIC: firebase.firestore.FieldValue.arrayUnion(
+              db.collection("user").doc(this.TaskgroupmatesChips[i].id)
+            ),
+          });
+      }
     },
 
     async deleteTask(task) {
+      console.log(task)
+      console.log(this.$store.state.user.uid)
       await db
         .collection("user")
         .doc(this.$store.state.user.uid)
@@ -2902,14 +3046,17 @@ export default {
         });
       await db
         .collection("project")
-        .doc(task.project.id)
+        .doc(task.project)
         .update({
           todos: firebase.firestore.FieldValue.arrayRemove(
             db.collection("todo").doc(task.id)
           ),
         });
+      this.EditpassCurrSelectedProject(task.project)
       await db.collection("todo").doc(task.id).delete();
       this.$store.dispatch("getTasks");
+      this.$store.dispatch("getProjects")
+
     },
 
     completeTask: function (task) {
@@ -2918,6 +3065,7 @@ export default {
       });
       this.$store.dispatch("getProjects");
       this.$store.dispatch("getTasks");
+      
       
 
     },
@@ -2965,8 +3113,13 @@ export default {
       }
 
       this.$store.dispatch("getTasks");
+      this.$store.dispatch("getProjects");
+      console.log(this.TaskmyProject)
+      console.log(this.TaskoldMyProject)
+      this.EditpassCurrSelectedProject(this.TaskoldMyProject)
+      this.currProject
       this.TaskmyTodo = "";
-      this.TaskmyProject = "";
+      this.TaskmyProject = null;
       this.TaskmyNote = "";
       this.TaskmyDeadlineTime = "00:00";
       this.TaskmyDeadline = new Date().toISOString().substr(0, 10);
@@ -2975,8 +3128,8 @@ export default {
       this.TaskdisplayDeadline = "Deadline";
       this.TaskfinalDeadline = new Date().toISOString().substr(0, 10);
       this.TaskgroupmatesChips = [];
-      this.varPIC = [];
-      this.varPICId = [];
+      this.TaskvarPIC = [];
+      this.TaskvarPICId = [];
     },
     async getProjectMenu() {
       let data = await this.$store.getters.getProjects;
@@ -3009,21 +3162,29 @@ export default {
     },
 
     async fillTodoInfo(task) {
-      this.TaskmyTodo = task.task;
-      this.TaskmyProject = task.project.id;
-      this.TaskoldMyProject = task.project.id;
-      this.TaskmyDeadline = task.deadlineDate;
-      this.TaskmyDeadlineTime = task.deadlineTime;
+      console.log(task)
+      console.log(task.task)
+      console.log(task.PIC)
+      this.Taskcomplete = task.complete;
+      this.TaskmyTodo = task.title;
+      this.TaskmyProject = task.project;
+      this.TaskoldMyProject = task.oldProject;
+      this.TaskmyDeadline = task.TaskmyDeadline;
+      this.TaskmyDeadlineTime = task.TaskmyDeadlineTime;
       this.TaskmyNote = task.note;
-      this.TaskswitchValue = task.switchValue;
-      this.TaskfinalDeadline = task.deadline;
-      this.TaskdateSwitchValue = task.dateSwitchValue;
-      this.TaskdisplayDeadline = task.displayDeadline;
-      this.TaskgroupmatesChips = await this.getPIC(task.PIC);
-      this.TaskoldGroupmatesChips = await this.getPICId(task.PIC);
+      this.TaskswitchValue = task.TaskswitchValue;
+      this.TaskfinalDeadline = task.finalDeadline;
+      this.TaskdateSwitchValue = task.TaskdateSwitchValue;
+      this.TaskdisplayDeadline = task.TaskdisplayDeadline;
+      this.TaskgroupmatesChips = task.TaskgroupmatesChips;
+      this.TaskoldGroupmatesChips = task.TaskoldGroupmatesChips;
+      console.log(task.PIC)
       console.log(this.oldGroupmatesChips);
+      console.log(this.TaskmyTodo)
     },
     async passCurrSelectedProject(project) {
+      
+      console.log(project)
       this.currTodos = []
       const todos = project.todos;
       for (let i = 0; i < todos.length; i++) {
@@ -3033,7 +3194,7 @@ export default {
           title: data.get("task"),
           complete: data.get("complete"),
           note: data.get("note"),
-          finalDeadline: data.get("deadline"),
+          finalDeadline: data.get("deadline") ? data.get("deadline").toDate() : null,
           project: data.get("project").id,
           oldProject: data.get("project").id,
           TaskmyDeadline: data.get("deadlineDate"),
@@ -3043,8 +3204,41 @@ export default {
           TaskdisplayDeadline: data.get("displayDeadline"),
           TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
           TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-        });
+          
+        })
+        console.log(data.get("deadline"));
       }
+     
+      console.log(this.currTodos);
+    },
+
+ async EditpassCurrSelectedProject(projectID) {
+      console.log(projectID)
+      this.currTodos = []
+      const docRef = await db.collection('project').doc(projectID).get();
+      const todos = await docRef.get('todos');
+      for (let i = 0; i < todos.length; i++) {
+        const data = await db.collection("todo").doc(todos[i].id).get();
+        this.currTodos.push({
+          id: data.id,
+          title: data.get("task"),
+          complete: data.get("complete"),
+          note: data.get("note"),
+          finalDeadline: data.get("deadline") ? data.get("deadline").toDate() : null,
+          project: data.get("project").id,
+          oldProject: data.get("project").id,
+          TaskmyDeadline: data.get("deadlineDate"),
+          TaskmyDeadlineTime: data.get("deadlineTime"),
+          TaskswitchValue: data.get("switchValue"),
+          TaskdateSwitchValue: data.get("dateSwitchValue"),
+          TaskdisplayDeadline: data.get("displayDeadline"),
+          TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+          TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          
+        })
+        console.log(data.get("deadline"));
+      }
+     
       console.log(this.currTodos);
     },
 
@@ -3150,6 +3344,7 @@ export default {
       this.errors = "";
       const response = await db.collection("project").add({
         created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        creator: db.collection('user').doc(this.$store.state.user.uid),
         title: this.title,
         todos: [],
         progress: 0,
@@ -3160,6 +3355,8 @@ export default {
         deadline: this.finalDeadline,
         displayDeadline: this.displayDeadline,
         groupmates: [],
+        groupmates_invited: [],
+        groupmates_declined: [],
         modCode: this.modCode,
       });
       await this.addGroupmatesToProject(response);
@@ -3193,6 +3390,12 @@ export default {
             db.collection("project").doc(project.id)
           ),
         });
+      for (let i = 0; i < project.todos.length; i++) {
+        await db.collection('user').doc(this.$store.state.user.uid)
+        .update({todo: firebase.firestore.FieldValue.arrayRemove( db.collection("todo").doc(project.todos[i].id))})
+      }
+      this.currTodos = [];
+      this.currProject = null;
       this.$store.dispatch("getProjects");
     },
 
@@ -3212,9 +3415,16 @@ export default {
         modCode: this.modCode,
         todos: this.todos,
       });
-      await this.addGroupmatesToProject(project);
-      await this.addForGroupmates(project);
+      
+      console.log(this.currProjectObject.id)
+      console.log(project.id)
+      
+      console.log(this.currProject)
       this.$store.dispatch("getProjects");
+      if (project.id == this.currProjectObject.id){
+      
+        this.currProject = this.modCode + " " + this.title
+      }
       this.title = "";
       this.modCode = "";
       this.myDeadlineTime = "00:00";
@@ -3316,13 +3526,13 @@ export default {
 
     async addForGroupmates(project) {
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        if (this.oldGroupmates.includes(this.finalGroupmates[i])) {
+        if (this.oldGroupmates.includes(this.finalGroupmates[i]) && this.finalGroupmates[i] !== this.$store.state.user.uid) {
           console.log("groupmate already has the project");
         } else {
           db.collection("user")
             .doc(this.finalGroupmates[i])
             .update({
-              project: firebase.firestore.FieldValue.arrayUnion(
+              project_invited: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("project").doc(project.id)
               ),
             });
@@ -3331,6 +3541,7 @@ export default {
       console.log("check");
     },
 
+   
     async passGroupmates(response) {
       for (let i = 0; i < this.tempGroupmates.length; i++) {
         if (this.tempGroupmates[i].chipValue == true) {
@@ -3351,13 +3562,18 @@ export default {
     async addGroupmatesToProject(project) {
       console.log(project);
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        db.collection("project")
-          .doc(project.id)
-          .update({
-            groupmates: firebase.firestore.FieldValue.arrayUnion(
-              db.collection("user").doc(this.finalGroupmates[i])
-            ),
-          });
+        if (this.finalGroupmates[i] !== this.$store.state.user.uid){
+          db.collection("project")
+            .doc(project.id)
+            .update({
+              groupmates_invited: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("user").doc(this.finalGroupmates[i])
+              ),
+            });
+        } else {
+          db.collection("project").doc(project.id).update({groupmates:firebase.firestore.FieldValue.arrayUnion(
+                db.collection("user").doc(this.finalGroupmates[i])) })
+        }
       }
     },
 
@@ -3400,6 +3616,16 @@ export default {
         this.myDeadlineTime = "00:00";
       } else {
         this.displayDeadline = this.myDeadline;
+      }
+    },
+
+    changeTaskDisplayDeadline() {
+      if (this.TaskdateSwitchValue == 1) {
+        this.TaskdisplayDeadline = "Someday";
+        this.TaskswitchValue = false;
+        this.TaskmyDeadlineTime = "00:00";
+      } else {
+        this.TaskdisplayDeadline = this.TaskmyDeadline;
       }
     },
 
@@ -3455,6 +3681,43 @@ export default {
         }
         return counter;
       }
+    },
+
+    async acceptProject(projectInvitation){
+        await db.collection('user').doc(this.$store.state.user.uid).update({
+          project: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("project").doc(projectInvitation.id)
+        )})
+        this.$store.dispatch('getProjects')
+        await db.collection('user').doc(this.$store.state.user.uid).update({
+          project_invited: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("project").doc(projectInvitation.id)
+        )})
+        await db.collection('project').doc(projectInvitation).update({
+          groupmates: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("user").doc(this.$store.state.user.uid)
+        )})
+        await db.collection('project').doc(projectInvitation).update({
+          groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("user").doc(this.$store.state.user.uid)
+        )})
+        this.$store.dispatch('getProjectInvitations')
+    },
+
+    async declineProject(projectInvitation){
+        await db.collection('user').doc(this.$store.state.user.uid).update({
+          project_invited: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("project").doc(projectInvitation.id)
+        )})
+        this.$store.dispatch('getProjectInvitations')
+        await db.collection('project').doc(projectInvitation).update({
+          groupmates_declined: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("user").doc(this.$store.state.user.uid)
+        )})
+        await db.collection('project').doc(projectInvitation).update({
+          groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("user").doc(this.$store.state.user.uid)
+        )})
     },
   },
 };

@@ -51,6 +51,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   store.dispatch("getTasks");
   store.dispatch("getProjects");
+  store.dispatch("getProjectInvitations");
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
   if (requiresAuth && !isAuthenticated) {

@@ -21,6 +21,7 @@ export interface Task {
 
 export interface Project {
   id: string;
+  creator: User;
   title: string;
   todos: [];
   meetings: [];
