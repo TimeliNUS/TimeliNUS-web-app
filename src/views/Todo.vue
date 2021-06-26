@@ -270,9 +270,9 @@
                                 align="left"
                                 :class="`rounded-xl`"
                               >
-                                <span style="color: rgb(113, 113, 113)"
+                                <!-- <span style="color: rgb(113, 113, 113)"
                                   >Person In Charge</span
-                                >
+                                > -->
                                 <div v-if="tempGroupmates">
                                   <v-combobox
                                     :disabled="this.myProject == null"
@@ -283,9 +283,10 @@
                                     :items="tempGroupmates"
                                     chips
                                     clearable
-                                    label="Person In Charge"
+                                    label="Person In Charge*"
                                     multiple
                                     color="#ff9d66"
+                                    :rules="[(v) => !!v || 'Person In Charge is required']"
                                   >
                                     <template
                                       v-slot:selection="{
@@ -464,7 +465,8 @@
                               !valid ||
                               this.myTodo == '' ||
                               this.myProject == null ||
-                              this.displayDeadline == 'Deadline'
+                              this.displayDeadline == 'Deadline' ||
+                              this.groupmatesChips.length == 0
                             "
                             text
                             @click="
@@ -659,17 +661,19 @@
                                                 align="left"
                                                 :class="`rounded-xl`"
                                               >
-                                                <span
+                                                <!-- <span
                                                   style="
                                                     color: rgb(113, 113, 113);
                                                   "
                                                   >Person In Charge</span
-                                                >
+                                                > -->
                                                 <div v-if="tempGroupmates">
                                                   <v-combobox
                                                     :disabled="
                                                       myProject == null
                                                     "
+                                                    :rules="[(v) => !!v || 'Person In Charge is required']"
+
                                                     item-text="name"
                                                     item-value="id"
                                                     v-model="groupmatesChips"
@@ -677,7 +681,7 @@
                                                     :items="tempGroupmates"
                                                     chips
                                                     clearable
-                                                    label="Person In Charge"
+                                                    label="Person In Charge*"
                                                     multiple
                                                     color="#ff9d66"
                                                   >
@@ -1071,6 +1075,7 @@ export default {
     remove(item) {
       this.groupmatesChips.splice(this.groupmatesChips.indexOf(item), 1);
       this.groupmatesChips = [...this.groupmatesChips];
+      console.log(this.groupmatesChips)
     },
 
     async fillInfo(task) {
@@ -1086,6 +1091,7 @@ export default {
       this.dateSwitchValue = task.dateSwitchValue;
       this.displayDeadline = task.displayDeadline;
       this.groupmatesChips = await this.getPIC(task.PIC);
+      this.oldGroupmatesChipsObject = await this.getPIC(task.PIC);
       this.oldGroupmatesChips = await this.getPICId(task.PIC);
       console.log(this.oldGroupmatesChips);
       console.log(this.complete)
@@ -1093,6 +1099,7 @@ export default {
 
     async getPIC(PIC) {
       console.log(PIC);
+      this.varPIC = [];
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
         this.varPIC.push({
@@ -1107,6 +1114,7 @@ export default {
     },
 
     async getPICId(PIC) {
+      this.varPICId = [];
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
 
@@ -1343,6 +1351,8 @@ export default {
     },
 
     async renderGroupmates() {
+      this.tempGroupmates = [];
+      this.groupmatesChips = [];
       const docRef = await db.collection("project").doc(this.myProject).get();
       const data = await docRef.get("groupmates");
       for (let i = 0; i < data.length; i++) {
@@ -1360,6 +1370,9 @@ export default {
     },
 
     async addFinalPIC(task) {
+      if (this.groupmatesChips.length == 0){
+        this.groupmatesChips = this.oldGroupmatesChipsObject
+      }
       this.groupmatesChipsId = [];
       for (let i = 0; i < this.groupmatesChips.length; i++) {
         this.groupmatesChipsId.push(this.groupmatesChips[i].id);
