@@ -1355,6 +1355,7 @@ export default {
         });
       }
 
+      console.log(this.tempGroupmates)
       console.log(this.$store.state.user);
     },
 
