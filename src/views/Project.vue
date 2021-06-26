@@ -912,7 +912,7 @@
                                                    </v-row>
                                                    <br>
                                                    <br>
-                                                   
+
                                                   <v-row>
                                                   <div>
                                                   <v-dialog
@@ -1235,7 +1235,7 @@
                         </v-slide-group>
                       </v-sheet>
                     </div>
-                    <div v-else style="padding:80px; display:flex' align-items: center; justify-content: center">
+                    <div v-else style="padding:85px; display:flex' align-items: center; justify-content: center">
                        <span style="font-color: #999999; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
                     </div>
                     <div>
@@ -1259,7 +1259,7 @@
               </div>
             </v-col>
           </v-row>
-          <div v-if="currTodos.length !== 0 || currProject != null">
+          <div v-if="currTodos.length !== 0 || currProject !== null">
             <v-container :class="`rounded-xl`">
               <v-card
                 outlined
@@ -1306,6 +1306,300 @@
                           :class="`rounded-xl`"
                         >
                           <v-card-title>Your Todo</v-card-title>
+                          <v-dialog
+                  v-model="Taskdialog"
+                  persistent
+                  content-class="elevation-0"
+                  max-width="600px"
+                  :class="`rounded-lg`"
+                >
+                  <template
+                    v-slot:activator="{ on, attrs }"
+                    :class="`rounded-xl`"
+                  >
+                    <v-card
+                      outlined
+                      color="white"
+                      style="
+                        margin-top: 10px;
+                        margin-left: 16px;
+                        margin-right: 16px;
+                        padding: 8px;
+                      "
+                      :class="`rounded-xl`"
+                    >
+                      <v-btn
+                        :class="`rounded-xl`"
+                        color="white"
+                        block
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="
+                          Taskdialog = true;
+                          getProjectMenu();
+                          prefillProject(this.currProjectObject);
+                        "
+                      >
+                        <span style="color: #ff9d66; font-weight: bold">
+                          + Add New Todo</span
+                        >
+                      </v-btn>
+                    </v-card>
+                  </template>
+                  <v-sheet
+                    outlined
+                    color="#ff9d66"
+                    style="padding: 3px"
+                    :class="`rounded-xl`"
+                  >
+                    <v-card outlined :class="`rounded-xl`">
+                      <v-form ref="form" v-model="valid" lazy-validation>
+                        <v-card-title :class="`rounded-xl`">
+                          <span class="headline">Add New Todo</span>
+                        </v-card-title>
+
+                        <v-card-text>
+                          <v-container :class="`rounded-xl`">
+                            <v-row>
+                              <v-col cols="12" :class="`rounded-xl`">
+                                <v-text-field
+                                  label="Todo Title*"
+                                  required
+                                  :rules="nameRules"
+                                  color="#ff9d66"
+                                  v-model="TaskmyTodo"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" :class="`rounded-xl`">
+                                <v-select
+                                  :items="projects"
+                                  item-text="title"
+                                  item-value="id"
+                                  label="Module Project*"
+                                  required
+                                  color="#ff9d66"
+                                  v-model="TaskmyProject"
+                                  @input="renderGroupmates()"
+                                  :rules="[(v) => !!v || 'Project is required']"
+                                >
+                                </v-select>
+                              </v-col>
+                              <v-col
+                                cols="12"
+                                align="left"
+                                :class="`rounded-xl`"
+                              >
+                                <span style="color: rgb(113, 113, 113)"
+                                  >Person In Charge</span
+                                >
+                                <div v-if="TasktempGroupmates">
+                                  <v-combobox
+                                    :disabled="this.TaskmyProject == null"
+                                    item-text="name"
+                                    item-value="id"
+                                    v-model="TaskgroupmatesChips"
+                                    item-color="#ff9d66"
+                                    :items="TasktempGroupmates"
+                                    chips
+                                    clearable
+                                    label="Person In Charge"
+                                    multiple
+                                    color="#ff9d66"
+                                  >
+                                    <template
+                                      v-slot:selection="{
+                                        attrs,
+                                        item,
+                                        parent,
+                                        selected,
+                                      }"
+                                      color="#ff9d66"
+                                    >
+                                      <v-chip
+                                        class="ma-2"
+                                        color="#ff9d66"
+                                        text-color="white"
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        close
+                                        @click="parent.selectItem(item)"
+                                        @click:close="remove(item)"
+                                      >
+                                        <v-avatar left class="white--text">
+                                          <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
+                                          <v-img :src="item.avatar"></v-img>
+                                        </v-avatar>
+                                        <span>{{ item.name }}</span>
+                                      </v-chip>
+                                    </template>
+                                  </v-combobox>
+                                </div>
+                              </v-col>
+
+                              <v-col cols="12" :class="`rounded-xl`">
+                                <v-menu
+                                  required
+                                  v-model="TaskmenuAdd"
+                                  :close-on-content-click="false"
+                                  :nudge-right="40"
+                                  transition="scale-transition"
+                                  offset-y
+                                  color="#ff9d66"
+                                  min-width="auto"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      required
+                                      :rules="[
+                                        (v) =>
+                                          (!!v && v) !== 'Deadline' ||
+                                          'Deadline is required',
+                                      ]"
+                                      v-model="TaskdisplayDeadline"
+                                      label="Deadline*"
+                                      prepend-icon="mdi-calendar"
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      color="#ff9d66"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-date-picker
+                                    :disabled="TaskdateSwitchValue == 1"
+                                    color="#ff9d66"
+                                    v-model="TaskmyDeadline"
+                                    @input="
+                                      TaskmenuAdd = false;
+                                      changeTaskDisplayDeadline();
+                                    "
+                                  >
+                                    <div
+                                      style="
+                                        margin-left: 10px;
+                                        margin-top: -10px;
+                                        padding-bottom: 10px;
+                                      "
+                                    >
+                                      <v-switch
+                                        inset
+                                        hide-details
+                                        v-model="TaskdateSwitchValue"
+                                        color="#ff9d66"
+                                        :label="`Someday`"
+                                        @change="changeTaskDisplayDeadline()"
+                                      ></v-switch>
+                                    </div>
+                                  </v-date-picker>
+                                </v-menu>
+                                <v-row style="padding-top: 5px">
+                                  <v-col
+                                    cols="12"
+                                    md="6"
+                                    style="display: flex; align-items: center"
+                                  >
+                                    <v-switch
+                                      :disabled="TaskdateSwitchValue == 1"
+                                      inset
+                                      hide-details
+                                      v-model="TaskswitchValue"
+                                      color="#ff9d66"
+                                      :label="`Include Time`"
+                                    ></v-switch>
+                                  </v-col>
+                                  <v-col cols="12" md="6">
+                                    <v-menu
+                                      ref="Taskmenu3"
+                                      v-model="Taskmenu3"
+                                      color="#ff9d66"
+                                      :close-on-content-click="false"
+                                      :nudge-right="40"
+                                      :return-value.sync="TaskmyDeadlineTime"
+                                      transition="scale-transition"
+                                      offset-y
+                                      max-width="290px"
+                                      min-width="290px"
+                                    >
+                                      <template
+                                        v-slot:activator="{ on, attrs }"
+                                      >
+                                        <v-text-field
+                                          :disabled="
+                                            TaskswitchValue == 0 ||
+                                            TaskdateSwitchValue == 1
+                                          "
+                                          v-model="TaskmyDeadlineTime"
+                                          label="Time"
+                                          color="#ff9d66"
+                                          prepend-icon="mdi-clock-time-four-outline"
+                                          readonly
+                                          v-bind="attrs"
+                                          v-on="on"
+                                        ></v-text-field>
+                                      </template>
+                                      <v-time-picker
+                                        scrollable
+                                        v-if="Taskmenu3"
+                                        v-model="TaskmyDeadlineTime"
+                                        full-width
+                                        color="#ff9d66"
+                                        format="24hr"
+                                        @click:minute="
+                                          $refs.Taskmenu3.save(TaskmyDeadlineTime)
+                                        "
+                                      ></v-time-picker>
+                                    </v-menu>
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+
+                              <v-col cols="12" :class="`rounded-xl`">
+                                <v-textarea
+                                  name="input-7-1"
+                                  label="Notes"
+                                  rows="2"
+                                  color="#ff9d66"
+                                  v-model="TaskmyNote"
+                                ></v-textarea>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            justify="center"
+                            color="#ff9d66"
+                            text
+                            @click="
+                              Taskdialog = false;
+                              clearTodoInfo();
+                            "
+                          >
+                            Cancel
+                          </v-btn>
+                          <v-btn
+                            color="#ff9d66"
+                            :disabled="
+                              !valid ||
+                              this.TaskmyTodo == '' ||
+                              this.TaskmyProject == null ||
+                              this.TaskdisplayDeadline == 'Deadline'
+                            "
+                            text
+                            @click="
+                              Taskdialog = false;
+                              TodocheckTimeAdd();
+                            "
+                          >
+                            Save
+                          </v-btn>
+                        </v-card-actions>
+                      </v-form>
+                    </v-card>
+                  </v-sheet>
+                </v-dialog>
+                <br/>
+
                           <div v-if="currTodos">
                             <div
                               v-for="(todo, index) in orderedTasks"
@@ -1426,6 +1720,18 @@
                                             >{{ todo.note }}</span
                                           >
                                         </v-row>
+                                      </div>
+                                      <div v-else>
+                                        <span
+                                            style="
+                                              font-weight: lighter;
+                                              font-size: 14px;
+                                            "
+                                            v-bind:class="{
+                                              completed: todo.complete,
+                                            }"
+                                            >No notes</span
+                                          >
                                       </div>
                                       </v-col>
                                       <!--  -->
@@ -2835,6 +3141,8 @@ export default {
     display: {},
     Taskdisplay: {},
     menuEdit: {},
+    TaskmenuAdd: false,
+    Taskmenu3: false,
     tab: null,
     projectSlide: null,
     projectInvitationSlide: null,
@@ -2851,6 +3159,7 @@ export default {
     TasktempGroupmates: [],
     varGroupmates: [],
     varGroupmatesId: [],
+    Taskdialog: false,
     finalGroupmates: [],
     finalDeadline: new Date().toISOString().substr(0, 10),
     dateSwitchValue: false,
@@ -2874,7 +3183,7 @@ export default {
     currMeetings: [],
     Taskmenu: {},
     TaskmyTodo: "",
-    TaskmyProject: "",
+    TaskmyProject: null,
     TaskmyDeadline: new Date().toISOString().substr(0, 10),
     TaskmyDeadlineTime: "00:00",
     TaskfinalDeadline: new Date().toISOString().substr(0, 10),
@@ -2943,6 +3252,11 @@ export default {
       this.currProject = project.modCode + " " + project.title 
     },
 
+    prefillProject(project){
+      console.log(this.currProjectObject)
+      this.TaskmyProject = this.currProjectObject
+    },
+
     checkTodoEdit(task) {
       if (this.TaskswitchValue == false) {
         this.TaskmyDeadlineTime = "00:00";
@@ -2959,12 +3273,30 @@ export default {
       this.editTask(task);
     },
 
+    TodocheckTimeAdd() {
+      if (this.TaskswitchValue == false) {
+        this.TaskmyDeadlineTime = "00:00";
+      }
+      if (this.TaskdisplayDeadline == "Someday") {
+        this.TaskfinalDeadline = null;
+      } else {
+        this.TaskfinalDeadline = firebase.firestore.Timestamp.fromDate(
+          new Date(this.TaskmyDeadline + "T" + this.TaskmyDeadlineTime + ":00+08:00")
+        );
+      }
+      this.addTodo();
+    },
+
     async renderGroupmates() {
       const docRef = await db
         .collection("project")
         .doc(this.TaskmyProject)
         .get();
       const data = await docRef.get("groupmates");
+      this.TasktempGroupmates = [];
+      console.log(this.TaskmyProject)
+      console.log(docRef)
+      console.log(data)
       for (let i = 0; i < data.length; i++) {
         const currGroupmate = await data[i].get();
         this.TasktempGroupmates.push({
@@ -3048,6 +3380,56 @@ export default {
           });
       }
     },
+
+    async addTodo() {
+      this.errors = "";
+
+
+      const response = await db.collection("todo").add({
+        task: this.TaskmyTodo,
+        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        complete: false,
+        deadlineTime: this.TaskmyDeadlineTime,
+        deadlineDate: this.TaskmyDeadline,
+        switchValue: this.TaskswitchValue,
+        dateSwitchValue: this.TaskdateSwitchValue,
+        // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
+        deadline: this.TaskfinalDeadline,
+        displayDeadline: this.TaskdisplayDeadline,
+        PIC: [],
+        note: this.TaskmyNote,
+        project: db.collection("project").doc(this.TaskmyProject),
+      });
+      await this.addFinalPIC(response);
+      await db
+        .collection("user")
+        .doc(this.$store.state.user.uid)
+        .update({ todo: firebase.firestore.FieldValue.arrayUnion(response) });
+
+      await db
+        .collection("project")
+        .doc(this.TaskmyProject)
+        .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
+        .catch((error) => console.log(error));
+
+      
+      await this.$store.dispatch("getProjects");
+      await this.$store.dispatch("getTasks");
+      this.EditpassCurrSelectedProject(this.TaskmyProject)
+      this.TaskmyTodo = "";
+      this.TaskmyProject = null;
+      this.TaskmyNote = "";
+      this.TaskmyDeadlineTime = "00:00";
+      this.TaskmyDeadline = new Date().toISOString().substr(0, 10);
+      this.TaskswitchValue = false;
+      this.TaskdateSwitchValue = false;
+      this.TaskdisplayDeadline = "Deadline";
+      this.TaskfinalDeadline = new Date().toISOString().substr(0, 10);
+      this.TaskgroupmatesChips = [];
+      this.TasktempGroupmates = [],
+      this.clearTodoInfo();
+    },
+
 
     async deleteTask(task) {
       console.log(task)
@@ -3133,7 +3515,6 @@ export default {
       console.log(this.TaskmyProject)
       console.log(this.TaskoldMyProject)
       this.EditpassCurrSelectedProject(this.TaskoldMyProject)
-      this.currProject
       this.TaskmyTodo = "";
       this.TaskmyProject = null;
       this.TaskmyNote = "";
@@ -3146,6 +3527,7 @@ export default {
       this.TaskgroupmatesChips = [];
       this.TaskvarPIC = [];
       this.TaskvarPICId = [];
+      this.TasktempGroupmates = [];
     },
     async getProjectMenu() {
       let data = await this.$store.getters.getProjects;
@@ -3163,7 +3545,7 @@ export default {
     },
     clearTodoInfo() {
       this.TaskmyTodo = "";
-      this.TaskmyProject = "";
+      this.TaskmyProject = null;
       this.TaskmyDeadline = new Date().toISOString().substr(0, 10);
       this.TaskmyDeadlineTime = "00:00";
       this.TaskfinalDeadline = new Date().toISOString().substr(0, 10);
@@ -3175,6 +3557,7 @@ export default {
       this.TaskvarPIC = [];
       this.TaskvarPICId = [];
       this.TaskoldGroupmatesChips = [];
+      this.TasktempGroupmates = [];
     },
 
     async fillTodoInfo(task) {
@@ -3410,6 +3793,10 @@ export default {
         await db.collection('user').doc(this.$store.state.user.uid)
         .update({todo: firebase.firestore.FieldValue.arrayRemove( db.collection("todo").doc(project.todos[i].id))})
       }
+      await db.collection("project").doc(project.id).update({
+        groupmates: firebase.firestore.FieldValue.arrayRemove( db.collection("user").doc(this.$store.state.user.uid))
+      })
+      
       this.currTodos = [];
       this.currProject = null;
       this.$store.dispatch("getProjects");
@@ -3715,12 +4102,12 @@ export default {
           project_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("project").doc(projectInvitation.id)
         )})
-        this.$store.dispatch('getProjectInvitations')
+        await this.$store.dispatch('getProjectInvitations')
         await db.collection('user').doc(this.$store.state.user.uid).update({
           project: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("project").doc(projectInvitation.id)
         )})
-        this.$store.dispatch('getProjects')
+        await this.$store.dispatch('getProjects')
         
 
         await db.collection('project').doc(projectInvitation.id).update({

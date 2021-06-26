@@ -184,7 +184,7 @@
               <v-card
                 outlined
                 color="#FFE4CB"
-                style="padding: 20px; overflow-y: scroll; max-height: 61vh"
+                style="padding: 20px; overflow-y: scroll; max-height: 65vh"
                 :class="`rounded-xl`"
               >
                 <v-dialog
@@ -1064,7 +1064,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("getTasks");
+    // this.$store.dispatch("getTasks");
   },
 
   methods: {
