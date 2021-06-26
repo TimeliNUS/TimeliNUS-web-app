@@ -421,8 +421,8 @@
                           <v-btn
                             color="#ff9d66"
                             :disabled="
-                              !valid || this.title == '' || this.modCode == ''
-                            "
+                              !valid || this.title == '' || this.modCode == '' || this.checkTempGroupmates() ==0 || this.displayDeadline == 'Deadline' "
+                            
                             text
                             @click="
                               dialog = false;
@@ -1387,9 +1387,9 @@
                                 align="left"
                                 :class="`rounded-xl`"
                               >
-                                <span style="color: rgb(113, 113, 113)"
+                                <!-- <span style="color: rgb(113, 113, 113)"
                                   >Person In Charge</span
-                                >
+                                > -->
                                 <div v-if="TasktempGroupmates">
                                   <v-combobox
                                     :disabled="this.TaskmyProject == null"
@@ -1400,7 +1400,9 @@
                                     :items="TasktempGroupmates"
                                     chips
                                     clearable
-                                    label="Person In Charge"
+                                    label="Person In Charge*"
+                                    :rules="[(v) => !!v || 'Person In Charge is required']"
+
                                     multiple
                                     color="#ff9d66"
                                   >
@@ -1421,7 +1423,7 @@
                                         :input-value="selected"
                                         close
                                         @click="parent.selectItem(item)"
-                                        @click:close="remove(item)"
+                                        @click:close="Taskremove(item)"
                                       >
                                         <v-avatar left class="white--text">
                                           <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
@@ -1580,7 +1582,8 @@
                               !valid ||
                               this.TaskmyTodo == '' ||
                               this.TaskmyProject == null ||
-                              this.TaskdisplayDeadline == 'Deadline'
+                              this.TaskdisplayDeadline == 'Deadline' ||
+                              this.TaskgroupmatesChips.length == 0
                             "
                             text
                             @click="
@@ -1827,7 +1830,7 @@
                                                           align="left"
                                                           :class="`rounded-xl`"
                                                         >
-                                                          <span
+                                                          <!-- <span
                                                             style="
                                                               color: rgb(
                                                                 113,
@@ -1837,7 +1840,7 @@
                                                             "
                                                             >Person In
                                                             Charge</span
-                                                          >
+                                                          > -->
                                                           <div
                                                             v-if="
                                                               TasktempGroupmates
@@ -1857,9 +1860,11 @@
                                                               :items="
                                                                 TasktempGroupmates
                                                               "
+                                                              :rules="[(v) => !!v || 'Person In Charge is required']"
+
                                                               chips
                                                               clearable
-                                                              label="Person In Charge"
+                                                              label="Person In Charge*"
                                                               multiple
                                                               color="#ff9d66"
                                                             >
@@ -2131,7 +2136,9 @@
                                                     <v-btn
                                                       color="#ff9d66"
                                                       text
-                                                      :disabled="!valid"
+                                                      :disabled="
+                                                        !valid 
+                                                      "
                                                       @click="
                                                         Taskdisplay[
                                                           todo.title
@@ -2982,6 +2989,17 @@ export default {
       this.addTodo();
     },
 
+    checkTempGroupmates(){
+      let counter = 0;
+      for (let i = 0; i < this.tempGroupmates.length; i++) {
+        if(this.tempGroupmates[i].chipValue == true) {
+          counter += 1
+        }
+      }
+      return counter
+
+    },
+
     async renderGroupmates() {
       const docRef = await db
         .collection("project")
@@ -3032,6 +3050,9 @@ export default {
     },
 
     async addFinalPIC(task) {
+      if (this.TaskgroupmatesChips.length == 0){
+        this.TaskgroupmatesChips = this.TaskoldGroupmatesChipsObject
+      }
       this.TaskgroupmatesChipsId = [];
       for (let i = 0; i < this.TaskgroupmatesChips.length; i++) {
         this.TaskgroupmatesChipsId.push(this.TaskgroupmatesChips[i].id);
@@ -3162,6 +3183,15 @@ export default {
       
 
     },
+
+
+    removeTask(item) {
+      this.TaskgroupmatesChips.splice(this.TaskgroupmatesChips.indexOf(item), 1);
+      this.TaskgroupmatesChips = [...this.TaskgroupmatesChips];
+      console.log(this.TaskgroupmatesChips)
+    },
+
+
     async editTask(task) {
       console.log(task.id);
       console.log(this.TaskdateSwitchValue);
@@ -3272,6 +3302,7 @@ export default {
       this.TaskdisplayDeadline = task.TaskdisplayDeadline;
       this.TaskgroupmatesChips = task.TaskgroupmatesChips;
       this.TaskoldGroupmatesChips = task.TaskoldGroupmatesChips;
+      this.TaskoldGroupmatesChipsObject = task.TaskoldGroupmatesChipsObject;
       console.log(task.PIC)
       console.log(this.oldGroupmatesChips);
       console.log(this.TaskmyTodo)
@@ -3297,6 +3328,8 @@ export default {
           TaskdateSwitchValue: data.get("dateSwitchValue"),
           TaskdisplayDeadline: data.get("displayDeadline"),
           TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+
           TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
           
         })
@@ -3328,6 +3361,8 @@ export default {
           TaskdisplayDeadline: data.get("displayDeadline"),
           TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
           TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+
           
         })
         console.log(data.get("deadline"));
@@ -3630,6 +3665,9 @@ export default {
     },
 
     async addForGroupmates(project) {
+      if (this.finalGroupmates.length == 0){
+        this.finalGroupmates = this.oldGroupmates
+      }
       console.log(this.oldGroupmates)
       for (let i = 0; i < this.finalGroupmates.length; i++) {
         if (this.oldGroupmates.includes(this.finalGroupmates[i])) {
@@ -3684,6 +3722,10 @@ export default {
       console.log(this.oldGroupmates)
       console.log(this.finalGroupmates)
       console.log(project);
+      if (this.finalGroupmates.length == 0){
+        this.finalGroupmates = this.oldGroupmates
+      }
+      
       for (let i = 0; i < this.finalGroupmates.length; i++) {
         if (this.finalGroupmates[i] == this.$store.state.user.uid || this.oldGroupmates.includes(this.finalGroupmates[i])){
           db.collection("project")
@@ -3717,7 +3759,7 @@ export default {
 
     checkAdd(searchID){
       for (let i=0; i< this.tempGroupmates.length;i++){
-        if (this.tempGroupmates[i].id === searchID){
+        if (this.tempGroupmates[i].id === searchID && this.tempGroupmates[i].chipValue == true){
           return true
         } 
       }
