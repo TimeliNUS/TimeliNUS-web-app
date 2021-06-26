@@ -161,6 +161,13 @@ async function getTasks(state: any): Promise<Task[]> {
   console.log(state.user.uid);
   for (let i = 0; i < data.length; i++) {
     const doc = await data[i].get();
+    console.log(state.user.uid)
+    console.log(data)
+    console.log(documentSnapshot);
+    console.log(doc.id)
+    console.log(doc.get("complete"))
+
+
     console.log(doc.data())
     tasks.push({
       id: doc.id,
