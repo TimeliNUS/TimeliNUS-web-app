@@ -113,7 +113,6 @@
               <div style="margin-left: 1vw">
                 <v-dialog
                   v-model="dialog"
-                  persistent
                   content-class="elevation-0"
                   max-width="600px"
                   :class="`rounded-lg`"
@@ -220,7 +219,6 @@
                                   <div>
                                   <v-dialog
                                     v-model="dialogPerson"
-                                    persistent
                                     max-width="600px"
                                   >
                                     <template v-slot:activator="{ on, attrs }">
@@ -574,7 +572,7 @@
                                         Decline
                                       </v-btn>
                                       
-                                    </v-row>`
+                                    </v-row>
                                   </v-card-actions>
                                   
                         </v-col>
@@ -637,7 +635,8 @@
                           font-weight: bold;
                           margin-right: 3vw;
 
-                        ">
+                        "
+                        @click="tableView = true;">
                         Table View
                       </v-btn>
                     </div>
@@ -805,7 +804,6 @@
                               <v-dialog
                                     v-model="display[project.title]"
                                     content-class="elevation-0"
-                                    persistent
                                     max-width="600px"
                                     :class="`rounded-lg`"
                                   >
@@ -919,7 +917,6 @@
                                                     v-model="
                                                       groupmateDialogEdit
                                                     "
-                                                    persistent
                                                     max-width="600px"
                                                   >
                                                     <template
@@ -1236,12 +1233,12 @@
                       </v-sheet>
                     </div>
                     <div v-else style="padding:85px; display:flex' align-items: center; justify-content: center">
-                       <span style="font-color: #999999; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
+                       <span style="font-color: #4b4b4b; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
                     </div>
                     <div>
                       <span
                         style="
-                          margin-top: 10px;
+                          margin-top: 17px;
                           color: #4b4b4b;
                           font-size: 16px;
                           display: flex;
@@ -1260,11 +1257,11 @@
             </v-col>
           </v-row>
           <div v-if="currTodos.length !== 0 || currProject !== null">
-            <v-container :class="`rounded-xl`">
+            <v-container :class="`rounded-xl`" style="max-width:1450px !important; width: 80vw;  margin-left: 0.5vw; margin-right:3vw;">
               <v-card
                 outlined
                 color="#FFE4CB"
-                style="padding: 20px; max-height: 61vh; overflow-y: scroll; "
+                style="padding: 20px; padding-left: 30px;max-height: 61vh; overflow-y: scroll; "
                 :class="`rounded-xl`"
               >
                 <span style="color:#ff9d66; font-weight:bold; padding: 10px; font-size: 20px; display:flex; justify-content:flex-start;"> 
@@ -1308,7 +1305,6 @@
                           <v-card-title>Your Todo</v-card-title>
                           <v-dialog
                   v-model="Taskdialog"
-                  persistent
                   content-class="elevation-0"
                   max-width="600px"
                   :class="`rounded-lg`"
@@ -1338,7 +1334,8 @@
                         @click="
                           Taskdialog = true;
                           getProjectMenu();
-                          prefillProject(this.currProjectObject);
+                          prefillProject();
+                          
                         "
                       >
                         <span style="color: #ff9d66; font-weight: bold">
@@ -1600,7 +1597,7 @@
                 </v-dialog>
                 <br/>
 
-                          <div v-if="currTodos">
+                          <div v-if="currTodos.length !== 0">
                             <div
                               v-for="(todo, index) in orderedTasks"
                               :key="todo.id"
@@ -1745,7 +1742,6 @@
                                           <v-dialog
                                             v-model="Taskdisplay[todo.title]"
                                             content-class="elevation-0"
-                                            persistent
                                             max-width="600px"
                                             :class="`rounded-lg`"
                                           >
@@ -2198,6 +2194,9 @@
                               <br />
                             </div>
                           </div>
+                          <div v-else>
+                            <span style="color: #4b4b4b; font-weight: bold;"> You do not have any todo yet. </span>
+                          </div>
                         </v-card>
                       </v-container>
                     </v-tab-item>
@@ -2211,7 +2210,9 @@
           </div>
 
           <!-- Original Project Display -->
-          <!-- <div>
+          <v-dialog v-model="tableView"  content-class="elevation-0">
+            
+          <div>
             <v-container>
               <v-card
                 outlined
@@ -2219,354 +2220,23 @@
                 style="padding: 20px"
                 :class="`rounded-xl`"
               >
+              <div align="left">
+                <v-btn
+                  icon
+                  color="#ff9d66"
+                  @click="tableView = false"
+                >
+                  <v-icon color="#ff9d66">mdi-close</v-icon>
+                </v-btn>
+              </div>
                 <v-virtual-scroll
                   :items="items"
                   :bench="100"
                   height="61vh"
                   item-height="80"
                 >
-                  <v-dialog
-                    v-model="dialog"
-                    persistent
-                    content-class="elevation-0"
-                    max-width="600px"
-                    :class="`rounded-lg`"
-                  >
-                    <template
-                      v-slot:activator="{ on, attrs }"
-                      :class="`rounded-xl`"
-                    >
-                      <v-card
-                        outlined
-                        color="white"
-                        style="
-                          margin-top: 10px;
-                          margin-left: 16px;
-                          margin-right: 16px;
-                          padding: 8px;
-                        "
-                        :class="`rounded-xl`"
-                      >
-                        <v-btn
-                          :class="`rounded-xl`"
-                          color="white"
-                          block
-                          outlined
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="
-                            dialog = true;
-                            addCurrUserToTempGroupmates();
-                          "
-                        >
-                          <span style="color: #ff9d66; font-weight: bold">
-                            + Add New Project</span
-                          >
-                        </v-btn>
-                      </v-card>
-                    </template>
-                    <v-sheet
-                      outlined
-                      color="#ff9d66"
-                      style="padding: 3px"
-                      :class="`rounded-xl`"
-                    >
-                      <v-card outlined :class="`rounded-xl`">
-                        <v-form ref="form" v-model="valid" lazy-validation>
-                          <v-card-title :class="`rounded-xl`">
-                            <span style="color: #ff9d66" class="headline"
-                              >Add New Project</span
-                            >
-                          </v-card-title>
-
-                          <v-card-text>
-                            <v-container :class="`rounded-xl`">
-                              <v-row>
-                                <v-col cols="12" :class="`rounded-xl`">
-                                  <v-text-field
-                                    label="Project Title*"
-                                    required
-                                    :rules="nameRules"
-                                    color="#ff9d66"
-                                    v-model="title"
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" :class="`rounded-xl`">
-                                  <v-text-field
-                                    label="Module code*"
-                                    color="#ff9d66"
-                                    v-model="modCode"
-                                    :rules="[
-                                      (v) => !!v || 'Module Code is required',
-                                    ]"
-                                  >
-                                  </v-text-field>
-                                </v-col>
-                                <v-col cols="12" align="left">
-                                  <span>Groupmates</span>
-                                  <v-row>
-                                    <div v-if="tempGroupmates.length !== 0">
-                                      <v-row>
-                                        <div
-                                          v-for="(
-                                            user, index
-                                          ) in tempGroupmates"
-                                          :key="user.id"
-                                        >
-                                          <v-chip
-                                            class="ma-2"
-                                            color="#ff9d66"
-                                            text-color="white"
-                                            :input-value="user.id"
-                                            v-if="user.chipValue"
-                                            close
-                                            @click:close="remove(user, index)"
-                                          >
-                                            <v-avatar left class="white--text">
-                                              
-                                              <v-img :src="user.avatar"></v-img>
-                                            </v-avatar>
-                                            <span>{{ user.name }}</span>
-                                          </v-chip>
-                                        </div>
-                                      </v-row>
-                                    </div>
-                                    <v-dialog
-                                      v-model="dialogPerson"
-                                      persistent
-                                      max-width="600px"
-                                    >
-                                      <template
-                                        v-slot:activator="{ on, attrs }"
-                                      >
-                                        <v-btn
-                                          v-bind="attrs"
-                                          v-on="on"
-                                          outlined
-                                          color="#ff9d66"
-                                          @click="dialogPerson = true"
-                                        >
-                                          <v-icon>person_add</v-icon>
-                                        </v-btn>
-                                      </template>
-                                      <v-card>
-                                        <v-card-actions>
-                                          <v-text-field
-                                            v-model="search"
-                                            @input="
-                                              getMatchedUserbyEmail();
-                                              getMatchedUserbyName();
-                                              onQueryChange();
-                                            "
-                                          >
-                                          </v-text-field>
-                                          {{ search }}
-                                        </v-card-actions>
-                                        <v-card-text>
-                                          <div
-                                            v-for="user in this.users"
-                                            :key="user.id"
-                                          >
-                                            {{ user.id }}
-                                            {{ user.name }}
-                                            {{ user.email }}
-                                          </div>
-                                        </v-card-text>
-                                        <v-card
-                                          max-width="450"
-                                          class="mx-auto"
-                                          outlined
-                                        >
-                                          <v-list>
-                                            <v-list-item-avatar
-                                              v-if="searchName"
-                                            >
-                                              <v-img
-                                                :src="searchAvatar"
-                                              ></v-img>
-                                            </v-list-item-avatar>
-                                            {{ searchName }}
-                                            <br />
-                                            {{ searchEmail }}
-                                            <br />
-                                            {{ searchId }}
-                                            <v-list-item-action>
-                                              <v-btn
-                                                v-if="searchId"
-                                                color="#ff9d66"
-                                                outlined
-                                                @click="addGroupmates()"
-                                              >
-                                                <v-icon>person_add</v-icon>
-                                              </v-btn>
-                                            </v-list-item-action>
-                                          </v-list>
-                                          <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                              color="blue darken-1"
-                                              text
-                                              @click="dialogPerson = false"
-                                            >
-                                              Close
-                                            </v-btn>
-                                          </v-card-actions>
-                                        </v-card>
-                                      </v-card>
-                                    </v-dialog>
-                                  </v-row>
-                                </v-col>
-
-                                <v-col cols="12" :class="`rounded-xl`">
-                                  <v-menu
-                                    required
-                                    v-model="menuAdd"
-                                    :close-on-content-click="false"
-                                    :nudge-right="40"
-                                    transition="scale-transition"
-                                    offset-y
-                                    color="#ff9d66"
-                                    min-width="auto"
-                                  >
-                                    <template v-slot:activator="{ on, attrs }">
-                                      <v-text-field
-                                        required
-                                        :rules="[
-                                          (v) =>
-                                            (!!v && v) !== 'Deadline' ||
-                                            'Deadline is required',
-                                        ]"
-                                        v-model="displayDeadline"
-                                        label="Deadline*"
-                                        prepend-icon="mdi-calendar"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        color="#ff9d66"
-                                      ></v-text-field>
-                                    </template>
-                                    <v-date-picker
-                                      :disabled="dateSwitchValue == 1"
-                                      color="#ff9d66"
-                                      v-model="myDeadline"
-                                      @input="
-                                        menuAdd = false;
-                                        changeDisplayDeadline();
-                                      "
-                                    >
-                                      <div
-                                        style="
-                                          margin-left: 10px;
-                                          margin-top: -10px;
-                                          padding-bottom: 10px;
-                                        "
-                                      >
-                                        <v-switch
-                                          inset
-                                          hide-details
-                                          v-model="dateSwitchValue"
-                                          color="#ff9d66"
-                                          :label="`Someday`"
-                                          @change="changeDisplayDeadline()"
-                                        ></v-switch>
-                                      </div>
-                                    </v-date-picker>
-                                  </v-menu>
-                                  <v-row style="padding-top: 5px">
-                                    <v-col
-                                      cols="12"
-                                      md="6"
-                                      style="display: flex"
-                                    >
-                                      <v-switch
-                                        :disabled="dateSwitchValue == 1"
-                                        inset
-                                        hide-details
-                                        v-model="switchValue"
-                                        color="#ff9d66"
-                                        :label="`Include Time`"
-                                      ></v-switch>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                      <v-menu
-                                        ref="menu3"
-                                        v-model="menu3"
-                                        color="#ff9d66"
-                                        :close-on-content-click="false"
-                                        :nudge-right="40"
-                                        :return-value.sync="myDeadlineTime"
-                                        transition="scale-transition"
-                                        offset-y
-                                        max-width="290px"
-                                        min-width="290px"
-                                      >
-                                        <template
-                                          v-slot:activator="{ on, attrs }"
-                                        >
-                                          <v-text-field
-                                            :disabled="
-                                              switchValue == 0 ||
-                                              dateSwitchValue == 1
-                                            "
-                                            v-model="myDeadlineTime"
-                                            label="Time"
-                                            color="#ff9d66"
-                                            prepend-icon="mdi-clock-time-four-outline"
-                                            readonly
-                                            v-bind="attrs"
-                                            v-on="on"
-                                          ></v-text-field>
-                                        </template>
-                                        <v-time-picker
-                                          scrollable
-                                          v-if="menu3"
-                                          v-model="myDeadlineTime"
-                                          full-width
-                                          color="#ff9d66"
-                                          format="24hr"
-                                          @click:minute="
-                                            $refs.menu3.save(myDeadlineTime)
-                                          "
-                                        ></v-time-picker>
-                                      </v-menu>
-                                    </v-col>
-                                  </v-row>
-                                </v-col>
-                              </v-row>
-                            </v-container>
-                          </v-card-text>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              justify="center"
-                              color="#ff9d66"
-                              text
-                              @click="
-                                dialog = false;
-                                clearInfo();
-                              "
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              color="#ff9d66"
-                              :disabled="
-                                !valid || this.title == '' || this.modCode == ''
-                              "
-                              text
-                              @click="
-                                dialog = false;
-                                checkTimeAdd();
-                              "
-                            >
-                              Save
-                            </v-btn>
-                          </v-card-actions>
-                        </v-form>
-                      </v-card>
-                    </v-sheet>
-                  </v-dialog>
-                  <br />
-
+                
+                  <br/>
                   <div v-if="length">
                     <div
                       v-for="(project, index) in this.$store.state.projects"
@@ -2673,9 +2343,8 @@
                               >
                                 <v-list-item-action>
                                   <v-dialog
-                                    v-model="display[project.title]"
+                                    v-model="displayTable[project.title]"
                                     content-class="elevation-0"
-                                    persistent
                                     max-width="600px"
                                     :class="`rounded-lg`"
                                   >
@@ -2735,22 +2404,25 @@
                                                   </v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" align="left">
-                                                  <span>Groupmates</span>
+                                                  <span style="">Groupmates</span>
+                                                  <br>
+                                                   <v-row style="padding-top:12px; padding-right:12px; padding-left:12px;">
+
                                                   <div
                                                     v-if="
                                                       tempGroupmates.length !==
                                                       0
                                                     "
                                                   >
+                                                  <v-row>
                                                     <div
                                                       v-for="(
                                                         user, index
                                                       ) in tempGroupmates"
                                                       :key="user.id"
                                                     >
-                                                      <v-row>
                                                         <v-chip
-                                                          class="ma-2"
+                                                          style="margin-top: 16px; margin-left:12px; margin-right:12px;"
                                                           color="#ff9d66"
                                                           text-color="white"
                                                           :input-value="user.id"
@@ -2773,12 +2445,18 @@
                                                             user.name
                                                           }}</span>
                                                         </v-chip>
-                                                      </v-row>
                                                     </div>
+                                                  </v-row>
                                                   </div>
+                                                   </v-row>
+                                                   <br>
+                                                   <br>
+
+                                                  <v-row>
+                                                  <div>
                                                   <v-dialog
                                                     v-model="
-                                                      groupmateDialogEdit
+                                                      groupmateDialogEditTable
                                                     "
                                                     persistent
                                                     max-width="600px"
@@ -2793,9 +2471,10 @@
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         outlined
+                                                        style="margin-left:12px; margin-top:5px;"
                                                         color="#ff9d66"
                                                         @click="
-                                                          groupmateDialogEdit = true
+                                                          groupmateDialogEditTable = true
                                                         "
                                                       >
                                                         <v-icon
@@ -2803,10 +2482,12 @@
                                                         >
                                                       </v-btn>
                                                     </template>
-                                                    <v-card>
+                                                    <v-card style="padding: 20px;">
                                                       <v-card-actions>
                                                         <v-text-field
                                                           v-model="search"
+                                                          color="#ff9d66"
+                                                          label="Search your groupmates by entering their username or email"
                                                           @input="
                                                             getMatchedUserbyEmail();
                                                             getMatchedUserbyName();
@@ -2816,6 +2497,7 @@
                                                         </v-text-field>
                                                       </v-card-actions>
                                                       <v-card
+
                                                         max-width="450"
                                                         class="mx-auto"
                                                         outlined
@@ -2834,9 +2516,10 @@
                                                           <br />
                                                           {{ searchEmail }}
                                                           <br />
-                                                          {{ searchId }}
+                                                          
                                                           <v-list-item-action>
                                                             <v-btn
+                                                              :disabled="checkAdd(searchId)"
                                                               v-if="searchId"
                                                               outlined
                                                               color="#ff9d66"
@@ -2853,10 +2536,10 @@
                                                         <v-card-actions>
                                                           <v-spacer></v-spacer>
                                                           <v-btn
-                                                            color="blue darken-1"
+                                                            color="#ff9d66"
                                                             text
                                                             @click="
-                                                              groupmateDialogEdit = false;
+                                                              groupmateDialogEditTable = false;
                                                               checkClosing();
                                                             "
                                                           >
@@ -2866,17 +2549,15 @@
                                                       </v-card>
                                                     </v-card>
                                                   </v-dialog>
-                                                </v-col>
+                                                  </div>
+                                                  </v-row>
+                                                  </v-col>
 
                                                 <v-col cols="12">
-                                                  {{ myDeadline }}
-                                                  {{ myDeadlineTime }}
-                                                  {{ dateSwitchValue }}
-                                                  {{ switchValue }}
-                                                  {{ displayDeadline }}
+                                                  
                                                   <v-menu
                                                     v-model="
-                                                      menu[project.title]
+                                                      menuTable[project.title]
                                                     "
                                                     :close-on-content-click="
                                                       false
@@ -2918,7 +2599,7 @@
                                                       color="#ff9d66"
                                                       v-model="myDeadline"
                                                       @input="
-                                                        menu[
+                                                        menuTable[
                                                           project.title
                                                         ] = false;
                                                         changeDisplayDeadline();
@@ -2963,10 +2644,10 @@
                                                     <v-col cols="12" md="6">
                                                       <v-menu
                                                         :ref="
-                                                          'timeMenu' + index
+                                                          'timeMenuTable' + index
                                                         "
                                                         v-model="
-                                                          time[project.title]
+                                                          timeTable[project.title]
                                                         "
                                                         :close-on-content-click="
                                                           false
@@ -3016,13 +2697,13 @@
                                                           format="24hr"
                                                           @click:minute="
                                                             y =
-                                                              'timeMenu' +
+                                                              'timeMenuTable' +
                                                               index.toString();
                                                             a = $refs[y];
                                                             a[0].save(
                                                               myDeadlineTime
                                                             );
-                                                            time[
+                                                            timeTable[
                                                               project.title
                                                             ] = false;
                                                           "
@@ -3042,7 +2723,7 @@
                                               color="#ff9d66"
                                               text
                                               @click="
-                                                display[project.title] = false;
+                                                displayTable[project.title] = false;
                                                 clearInfo();
                                               "
                                             >
@@ -3053,7 +2734,7 @@
                                               text
                                               :disabled="!valid"
                                               @click="
-                                                display[project.title] = false;
+                                                displayTable[project.title] = false;
                                                 checkEdit(project);
                                               "
                                             >
@@ -3090,6 +2771,11 @@
                                 style="background-color: #ff9d66"
                                 :class="`rounded-r-xl`"
                               >
+                              <v-btn outlined color="white" @click="passCurrSelectedProject(project);
+                                assignCurrProject(project); tableView = false">
+                                Select
+                              </v-btn>
+                            
                               </v-col>
                             </v-row>
                           </v-card>
@@ -3103,7 +2789,8 @@
                 </v-virtual-scroll>
               </v-card>
             </v-container>
-          </div> -->
+          </div>
+          </v-dialog>
         </div>
       </v-col>
     </v-row>
@@ -3200,6 +2887,11 @@ export default {
     varPICId: [],
     currProjectObject: null,
     projectInvitations: [],
+    tableView: false,
+    displayTable: [],
+    groupmateDialogEditTable: false,
+    menuTable: [],
+    timeTable: [],
   }),
 
   created() {
@@ -3252,9 +2944,12 @@ export default {
       this.currProject = project.modCode + " " + project.title 
     },
 
-    prefillProject(project){
+    prefillProject(){
       console.log(this.currProjectObject)
-      this.TaskmyProject = this.currProjectObject
+      this.TaskmyProject = this.currProjectObject.id
+      console.log(this.TaskmyProject)
+      console.log(this.TaskmyProject.id)
+      this.renderGroupmates()
     },
 
     checkTodoEdit(task) {
@@ -3642,6 +3337,7 @@ export default {
     },
 
     async addCurrUserToTempGroupmates() {
+      this.tempGroupmates = [];
       const docRef = await db
         .collection("user")
         .doc(this.$store.state.user.uid)
@@ -3725,6 +3421,9 @@ export default {
       this.finalDeadline = new Date().toISOString().substr(0, 10);
       this.displayDeadline = "Deadline";
       this.dateSwitchValue = false;
+      this.tempGroupmates = [];
+      this.oldGroupmates = [];
+
     },
     async signOut() {
       try {
@@ -3775,6 +3474,7 @@ export default {
       this.switchValue = false;
       this.finalGroupmates = [];
       this.tempGroupmates = [];
+      this.oldGroupmates = [];
       this.dateSwitchValue = false;
       this.displayDeadline = "Deadline";
       this.finalDeadline = new Date().toISOString().substr(0, 10);
@@ -3819,15 +3519,16 @@ export default {
         todos: this.todos,
       });
       
-      console.log(this.currProjectObject.id)
-      console.log(project.id)
       
-      console.log(this.currProject)
       this.$store.dispatch("getProjects");
-      if (project.id == this.currProjectObject.id){
-      
-        this.currProject = this.modCode + " " + this.title
+      if (this.currProjectObject !== null) {
+        if (project.id == this.currProjectObject.id){
+          this.currProject = this.modCode + " " + this.title
+        } 
       }
+      
+      this.addForGroupmates(project)
+      this.addGroupmatesToProject(project)
       this.title = "";
       this.modCode = "";
       this.myDeadlineTime = "00:00";
@@ -3837,6 +3538,7 @@ export default {
       this.tempGroupmates = [];
       this.dateSwitchValue = false;
       this.displayDeadline = "Deadline";
+      this.oldGroupmates = [];
       this.finalDeadline = new Date().toISOString().substr(0, 10);
     },
 
@@ -3928,14 +3630,30 @@ export default {
     },
 
     async addForGroupmates(project) {
+      console.log(this.oldGroupmates)
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        if (this.oldGroupmates.includes(this.finalGroupmates[i]) || this.finalGroupmates[i] === this.$store.state.user.uid) {
-          console.log("groupmate already has the project");
-        } else {
+        if (this.oldGroupmates.includes(this.finalGroupmates[i])) {
+          console.log("they have the project record already")
+        
+        } else if (this.finalGroupmates[i] !== this.$store.state.user.uid) {
           db.collection("user")
             .doc(this.finalGroupmates[i])
             .update({
               project_invited: firebase.firestore.FieldValue.arrayUnion(
+                db.collection("project").doc(project.id)
+              ),
+            });
+        }
+      }
+      for (let i = 0; i < this.oldGroupmates.length; i++) {
+        if (this.finalGroupmates.includes(this.oldGroupmates[i])) {
+          console.log("they are still remaining in the project")
+        
+        } else {
+          db.collection("user")
+            .doc(this.oldGroupmates[i])
+            .update({
+              project: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("project").doc(project.id)
               ),
             });
@@ -3963,19 +3681,36 @@ export default {
     },
 
     async addGroupmatesToProject(project) {
+      console.log(this.oldGroupmates)
+      console.log(this.finalGroupmates)
       console.log(project);
       for (let i = 0; i < this.finalGroupmates.length; i++) {
-        if (this.finalGroupmates[i] !== this.$store.state.user.uid){
+        if (this.finalGroupmates[i] == this.$store.state.user.uid || this.oldGroupmates.includes(this.finalGroupmates[i])){
           db.collection("project")
             .doc(project.id)
             .update({
-              groupmates_invited: firebase.firestore.FieldValue.arrayUnion(
+              groupmates: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.finalGroupmates[i])
               ),
             });
         } else {
-          db.collection("project").doc(project.id).update({groupmates:firebase.firestore.FieldValue.arrayUnion(
+          db.collection("project").doc(project.id).update({groupmates_invited:firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.finalGroupmates[i])) })
+        }
+      }
+
+      for (let i = 0; i < this.oldGroupmates.length; i++) {
+        if (this.finalGroupmates.includes(this.oldGroupmates[i])) {
+          console.log("they are still remaining in the project")
+        
+        } else {
+          db.collection("project")
+            .doc(project.id)
+            .update({
+              groupmates: firebase.firestore.FieldValue.arrayRemove(
+                db.collection("user").doc(this.oldGroupmates[i])
+              ),
+            });
         }
       }
     },
@@ -3984,9 +3719,7 @@ export default {
       for (let i=0; i< this.tempGroupmates.length;i++){
         if (this.tempGroupmates[i].id === searchID){
           return true
-        } else if (searchID == this.$store.state.user.uid){
-          return true
-        }
+        } 
       }
       return false
     },
@@ -4073,9 +3806,9 @@ export default {
       for (let i = 0; i < groupmates.length; i++) {
         const docRef = await groupmates[i].get();
 
-        this.varGroupmatesId.push({
-          id: docRef.id,
-        });
+        this.varGroupmatesId.push(
+          docRef.id,
+      );
       }
 
       return this.varGroupmatesId;
