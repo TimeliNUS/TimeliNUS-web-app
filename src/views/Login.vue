@@ -199,7 +199,7 @@ export default {
 }
 
 .error {
-  color: red;
+  color: white;
   /*font-size: 18px;*/
 }
 

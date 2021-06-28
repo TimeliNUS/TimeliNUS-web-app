@@ -76,7 +76,7 @@
                           prepend-inner-icon="mdi-account"
                           outlined
                           type="text"
-                          placeholder="text"
+                          placeholder="Username"
                           v-model="name"
                           color="#ff9d66"
                           hide-details="auto"
@@ -241,7 +241,7 @@ export default {
 }
 
 .error {
-  color: red;
+  color:white;
   font-size: 18px;
 }
 
