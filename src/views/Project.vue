@@ -3873,39 +3873,40 @@ export default {
     },
 
     async acceptProject(projectInvitation){
-        await db.collection('user').doc(this.$store.state.user.uid).update({
+        db.collection('user').doc(this.$store.state.user.uid).update({
           project_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("project").doc(projectInvitation.id)
-        )})
-        await this.$store.dispatch('getProjectInvitations')
-        await db.collection('user').doc(this.$store.state.user.uid).update({
+        )}).then(this.$store.dispatch('getProjectInvitations'))
+
+        db.collection('user').doc(this.$store.state.user.uid).update({
           project: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("project").doc(projectInvitation.id)
-        )})
-        await this.$store.dispatch('getProjects')
-        
+        )}).then(this.$store.dispatch('getProjects'))
 
-        await db.collection('project').doc(projectInvitation.id).update({
+        db.collection('project').doc(projectInvitation.id).update({
           groupmates: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
-        await db.collection('project').doc(projectInvitation.id).update({
+        db.collection('project').doc(projectInvitation.id).update({
           groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
+        
+
+
     },
 
     async declineProject(projectInvitation){
-        await db.collection('user').doc(this.$store.state.user.uid).update({
+        db.collection('user').doc(this.$store.state.user.uid).update({
           project_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("project").doc(projectInvitation.id)
-        )})
-        this.$store.dispatch('getProjectInvitations')
-        await db.collection('project').doc(projectInvitation.id).update({
+        )}).then(this.$store.dispatch('getProjectInvitations'))
+
+        db.collection('project').doc(projectInvitation.id).update({
           groupmates_declined: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
-        await db.collection('project').doc(projectInvitation.id).update({
+        db.collection('project').doc(projectInvitation.id).update({
           groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.$store.state.user.uid)
         )})
