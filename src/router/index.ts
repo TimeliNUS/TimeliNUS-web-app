@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Secret from "../views/Secret.vue";
+import Meeting from "../views/Meeting.vue";
 import Project from "../views/Project.vue";
 import Login from "../views/Login.vue";
 import Todo from "../views/Todo.vue";
@@ -40,6 +41,12 @@ const routes = [
     component: Project,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/meeting",
+    name: "Meeting",
+    component: Meeting,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = new VueRouter({
@@ -52,6 +59,7 @@ router.beforeEach((to, from, next) => {
   store.dispatch("getTasks");
   store.dispatch("getProjects");
   store.dispatch("getProjectInvitations");
+  store.dispatch("getMeetingInvitations")
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
   if (requiresAuth && !isAuthenticated) {

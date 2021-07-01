@@ -44,3 +44,16 @@ export interface User {
   task: [];
   project: [];
 }
+
+export interface MeetingInvitations{
+  title: string;
+  invited_groupmates: User[];
+  project: Project;
+  startDate: Date;
+  endDate: Date;
+  startTime: string;
+  endTime: string;
+  timeLength: Number;
+  venue: string;
+  creator: User;
+}
