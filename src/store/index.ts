@@ -326,13 +326,14 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
     .collection("meeting")
     .where('invitations', 'array-contains', db.collection("user").doc(state.user.uid)).get();
     console.log(querySnapshot)
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach(async (doc) => {
     meetingInvitations.push({
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
       project: doc.data().project.get(),
-      startDate: doc.data().startDate,
-      endDate: doc.data().endDate,
+      projectTitle: await getTaskProject(doc.data().project),
+      startDate: doc.data().startDate.toDate(),
+      endDate: doc.data().endDate.toDate(),
       startTime: doc.data().startTime,
       endTime: doc.data().endTime,
       timeLength: doc.data().timeLength,

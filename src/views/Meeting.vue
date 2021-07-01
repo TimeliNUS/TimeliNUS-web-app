@@ -542,12 +542,12 @@
                                     "
                                   >
                                     <div>
-                                      <!-- <span style="">
+                                      <span style="">
                                         <v-icon color="#ff9d66" width="20px;"
                                           >calendar_today</v-icon
                                         >
                                         {{
-                                          project.deadline.toLocaleDateString(
+                                          meetingInv.startDate.toLocaleDateString(
                                             "en-US",
                                             {
                                               month: "short",
@@ -556,7 +556,7 @@
                                             }
                                           )
                                         }}</span
-                                      > -->
+                                      >
                                     </div>
                                     
                                   </v-card-text>
