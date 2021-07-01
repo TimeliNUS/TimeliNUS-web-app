@@ -49,6 +49,7 @@ export interface MeetingInvitations{
   title: string;
   invited_groupmates: User[];
   project: Project;
+  projectTitle: string;
   startDate: Date;
   endDate: Date;
   startTime: string;
