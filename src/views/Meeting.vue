@@ -428,6 +428,16 @@
                   </v-sheet>
                 </v-dialog>
               </div>
+              <br>
+              <div>
+                
+                <v-date-picker
+                  v-model="displayMeetingCalendar"
+                  :events="arrayEvents"
+                  event-color="orange"
+                  color="#ff9d66"
+                ></v-date-picker>
+              </div>
              
             </v-col>
 
@@ -502,7 +512,57 @@
                               "
                               style="padding: 10px; padding-left:14px;"
                             >
-                             {{meetingInv.title}}
+                             <v-row style="padding: 5px">
+                                <v-col
+                                  col="12"
+                                  md="9"
+                                  style="display: flex; flex-direction: column"
+                                >
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding-bottom: 0px !important;
+                                      padding-top: 3px !important;
+                                      padding-left: 3px !important;
+                                      padding-right: 3px !important;
+                                    "
+                                  >
+                                    {{ meetingInv.title }}
+                                  </v-card-text>
+                                  <v-card-title
+                                    style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                                 padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
+                                  >
+                                    {{  meetingInv.title }}
+                                  </v-card-title>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <!-- <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >calendar_today</v-icon
+                                        >
+                                        {{
+                                          project.deadline.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }}</span
+                                      > -->
+                                    </div>
+                                    
+                                  </v-card-text>
+                                </v-col>
+                                
+                              </v-row>
   
                               
                             </v-card>
@@ -624,6 +684,9 @@ export default {
     menuEndTime: false,
     tab: null,
     invitationsSlide:null,
+    arrayEvents: null,
+
+    displayMeetingCalendar: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
 
   }),
@@ -638,7 +701,7 @@ export default {
       return Array.from({ length: this.length }, (k, v) => v + 1);
     },
     length() {
-      return this.$store.state.tasks.length;
+      return this.$store.state.meetingInvitations.length;
     },
     orderedTasks: function () {
       return _.orderBy(
@@ -682,6 +745,12 @@ export default {
   },
 
   mounted() {
+    this.arrayEvents = [...Array(6)].map(() => {
+        const day = Math.floor(Math.random() * 30)
+        const d = new Date()
+        d.setDate(day)
+        return d.toISOString().substr(0, 10)
+      })
     // this.$store.dispatch("getTasks");
   },
 
@@ -901,13 +970,14 @@ export default {
         endDate: firebase.firestore.Timestamp.fromDate(new Date(this.meetingDateRange[1])),
         timeLength:this.meetingDuration,
         displayMeetingDateRange: this.displayMeetingDateRange,
-        groupmates: [],
+        groupmates: await this.addGroupmatesToMeeting(response),
         meetingVenue: this.meetingVenue,
         timeslot:[],
         project: db.collection("project").doc(this.meetingProject),
         author: db.collection("user").doc(this.$store.state.user.uid)
       });
-      await this.addMeetingGroupmates(response);
+      // await this.addMeetingGroupmates(response);
+      this.$store.dispatch("getMeetingInvitations")
       await db
         .collection("project")
         .doc(this.meetingProject)
@@ -1084,6 +1154,31 @@ export default {
 
       console.log(this.tempGroupmates)
       console.log(this.$store.state.user);
+    },
+
+    async addGroupmatesToMeeting(){
+      if (this.groupmatesChips.length == 0){
+        this.groupmatesChips = this.oldGroupmatesChipsObject
+      }
+      this.newGroupmatesChips = [];
+      for(let i=0 ; i<this.groupmatesChips.length;i++){
+        if(this.groupmatesChips[i].id == this.$store.state.user.uid){
+          this.newGroupmatesChips.push(this.groupmatesChips[i])
+          break;
+        }
+      }
+      for(let i=0 ; i<this.groupmatesChips.length;i++){
+        if(this.groupmatesChips[i].id !== this.$store.state.user.uid){
+          this.newGroupmatesChips.push(this.groupmatesChips[i])
+        }
+      }
+      this.groupmatesChips = this.newGroupmatesChips
+      this.groupmatesChipsId = [];
+      for (let i = 0; i < this.groupmatesChips.length; i++) {
+        this.groupmatesChipsId.push(db.collection('user').doc(this.groupmatesChips[i].id));
+      }
+      console.log(this.groupmatesChipsId)
+      return this.groupmatesChipsId 
     },
 
     async addMeetingGroupmates(meeting) {
