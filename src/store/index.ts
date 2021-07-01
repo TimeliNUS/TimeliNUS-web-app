@@ -1,6 +1,7 @@
 import { Task } from "@/models/task.model";
 import { Project } from "@/models/task.model";
 import { User } from "@/models/task.model";
+import { MeetingInvitations } from "@/models/task.model";
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     snapshot: {},
     allUser: [] as User[],
     projectInvitations: [] as Project[],
+    meetingInvitations: [] as MeetingInvitations[],
   },
   getters: {
     remaining(state) {
@@ -102,6 +104,11 @@ export default new Vuex.Store({
       state.projectInvitations = projectInvitations;
       console.log(state.projectInvitations)
     },
+
+    getMeetingInvitations: (state, { meetingInvitations }) => {
+      state.meetingInvitations = meetingInvitations;
+      console.log(state.meetingInvitations)
+    },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
     //     let user:User;
@@ -140,6 +147,13 @@ export default new Vuex.Store({
       const projectInvitations = await getProjectInvitations(context.state);
       console.log(projectInvitations);
       context.commit("getProjectInvitations", { projectInvitations });
+    },
+
+    getMeetingInvitations: async (context, payload) => {
+      console.log("start");
+      const meetingInvitations = await getMeetingInvitations(context.state);
+      console.log(meetingInvitations);
+      context.commit("getProjectInvitations", { meetingInvitations });
     },
 
     setUser: (context, user) => {
@@ -303,3 +317,29 @@ async function getProjectProgress(todos: any) {
     return counterCompleted / (counterIncompleted + counterCompleted);
   }
 }
+
+async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> {
+  console.log(state);
+  const meetingInvitations: MeetingInvitations[] = [];
+  
+  const querySnapshot = await db
+    .collection("meeting")
+    .where('invitations', 'array-contains', db.collection("user").doc(state.user.uid)).get();
+  querySnapshot.forEach((doc) => {
+    meetingInvitations.push({
+      title: doc.data().title,
+      invited_groupmates: doc.data().invitations,
+      project: doc.data().project.get(),
+      startDate: doc.data().startDate,
+      endDate: doc.data().endDate,
+      startTime: doc.data().startTime,
+      endTime: doc.data().endTime,
+      timeLength: doc.data().timeLength,
+      venue: doc.data().meetingVenue,
+      creator: doc.data().author
+    })
+  })
+  return meetingInvitations;
+}
+    
+ 
