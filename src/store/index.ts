@@ -153,7 +153,7 @@ export default new Vuex.Store({
       console.log("start");
       const meetingInvitations = await getMeetingInvitations(context.state);
       console.log(meetingInvitations);
-      context.commit("getProjectInvitations", { meetingInvitations });
+      context.commit("getMeetingInvitations", { meetingInvitations });
     },
 
     setUser: (context, user) => {
@@ -325,6 +325,7 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
   const querySnapshot = await db
     .collection("meeting")
     .where('invitations', 'array-contains', db.collection("user").doc(state.user.uid)).get();
+    console.log(querySnapshot)
   querySnapshot.forEach((doc) => {
     meetingInvitations.push({
       title: doc.data().title,
@@ -339,6 +340,7 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
       creator: doc.data().author
     })
   })
+  console.log(meetingInvitations)
   return meetingInvitations;
 }
     
