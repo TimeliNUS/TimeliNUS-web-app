@@ -1,5 +1,6 @@
 // import { firebaseApp } from "@/firebaseConfig";
 import { db } from "@/main";
+import axios from "axios";
 import firebase from "firebase";
 
 
@@ -73,3 +74,17 @@ export const googleSignIn = () => {
       const credential = error.credential;
     });
 };
+
+export const findCommonTime = (link: string, startDateString: string, endDateString: string, 
+  id: string, user: string) => {
+  axios({
+    url: "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
+    data: {
+      link: link,
+      startDate: startDateString,
+      endDate: endDateString,
+      id: id,
+      user: user,
+    },
+  });
+}
