@@ -1,7 +1,7 @@
 // import { firebaseApp } from "@/firebaseConfig";
 import { db } from "@/main";
-import firebase from "firebase";
 import axios from "axios";
+import firebase from "firebase";
 
 
 // export const register = async (
