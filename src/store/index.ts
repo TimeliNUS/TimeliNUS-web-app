@@ -2,6 +2,9 @@ import { Task } from "@/models/task.model";
 import { Project } from "@/models/task.model";
 import { User } from "@/models/task.model";
 import { MeetingInvitations } from "@/models/task.model";
+import { MeetingPendings } from "@/models/task.model";
+import { MeetingConfirmations } from "@/models/task.model";
+
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -19,6 +22,9 @@ export default new Vuex.Store({
     allUser: [] as User[],
     projectInvitations: [] as Project[],
     meetingInvitations: [] as MeetingInvitations[],
+    meetingPendings: [] as MeetingPendings[],
+    meetingConfirmations: [] as MeetingConfirmations[],
+
   },
   getters: {
     remaining(state) {
@@ -54,6 +60,13 @@ export default new Vuex.Store({
 
     getProjectInvitations: async (state) => {
       state.projectInvitations = await getProjectInvitations(state);
+    },
+
+    getMeetingPendings: async (state) => {
+      state.meetingPendings = await getMeetingPendings(state);
+    },
+    getMeetingConfirmations: async (state) => {
+      state.meetingPendings = await getMeetingConfirmations(state);
     },
   },
   mutations: {
@@ -109,6 +122,16 @@ export default new Vuex.Store({
       state.meetingInvitations = meetingInvitations;
       console.log(state.meetingInvitations)
     },
+
+    getMeetingPendings: (state, { meetingPendings }) => {
+      state.meetingPendings = meetingPendings;
+      console.log(state.meetingPendings)
+    },
+
+    getMeetingConfirmations: (state, { meetingConfirmations }) => {
+      state.meetingConfirmations = meetingConfirmations;
+      console.log(state.meetingConfirmations)
+    },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
     //     let user:User;
@@ -154,6 +177,20 @@ export default new Vuex.Store({
       const meetingInvitations = await getMeetingInvitations(context.state);
       console.log(meetingInvitations);
       context.commit("getMeetingInvitations", { meetingInvitations });
+    },
+
+    getMeetingPendings: async (context, payload) => {
+      console.log("start");
+      const meetingPendings = await getMeetingPendings(context.state);
+      console.log(meetingPendings);
+      context.commit("getMeetingPendings", { meetingPendings });
+    },
+
+    getMeetingConfirmations: async (context, payload) => {
+      console.log("start");
+      const meetingConfirmations = await getMeetingConfirmations(context.state);
+      console.log(meetingConfirmations);
+      context.commit("getMeetingConfirmations", { meetingConfirmations });
     },
 
     setUser: (context, user) => {
@@ -328,6 +365,7 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
     console.log(querySnapshot)
   querySnapshot.forEach(async (doc) => {
     meetingInvitations.push({
+      id: doc.id,
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
       project: doc.data().project.get(),
@@ -338,11 +376,67 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
       endTime: doc.data().endTime,
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
-      creator: doc.data().author
+      creator: await getCreator(doc.data().author),
     })
   })
   console.log(meetingInvitations)
   return meetingInvitations;
+}
+
+async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
+  console.log(state);
+  const meetingPendings: MeetingPendings[] = [];
+  
+  const querySnapshot = await db
+    .collection("meeting")
+    .where('confirmedInvitations', 'array-contains', db.collection("user").doc(state.user.uid)).where('invitations', "!=", []).get();
+    console.log(querySnapshot)
+  querySnapshot.forEach(async (doc) => {
+    meetingPendings.push({
+      id: doc.id,
+      title: doc.data().title,
+      invited_groupmates: doc.data().invitations,
+      project: doc.data().project.get(),
+      projectTitle: await getTaskProject(doc.data().project),
+      startDate: doc.data().startDate.toDate(),
+      endDate: doc.data().endDate.toDate(),
+      startTime: doc.data().startTime,
+      endTime: doc.data().endTime,
+      timeLength: doc.data().timeLength,
+      venue: doc.data().meetingVenue,
+      creator: await getCreator(doc.data().author),
+    })
+  })
+  console.log(meetingPendings)
+  return meetingPendings;
+}
+
+async function getMeetingConfirmations(state: any): Promise<MeetingConfirmations[]> {
+  console.log(state);
+  const meetingConfirmations: MeetingConfirmations[] = [];
+  
+  const querySnapshot = await db
+    .collection("meeting")
+    .where('confirmedInvitations', 'array-contains', db.collection("user").doc(state.user.uid)).where('invitations', "==", []).get();
+    console.log(querySnapshot)
+  querySnapshot.forEach(async (doc) => {
+    meetingConfirmations.push({
+      id: doc.id,
+      title: doc.data().title,
+      invited_groupmates: doc.data().invitations,
+      project: doc.data().project.get(),
+      projectTitle: await getTaskProject(doc.data().project),
+      startDate: doc.data().startDate.toDate(),
+      endDate: doc.data().endDate.toDate(),
+      startTime: doc.data().startTime,
+      endTime: doc.data().endTime,
+      timeLength: doc.data().timeLength,
+      venue: doc.data().meetingVenue,
+      creator: await getCreator(doc.data().author),
+    })
+  })
+  console.log(meetingConfirmations)
+  return meetingConfirmations;
 }
     
  

@@ -2212,7 +2212,9 @@
               </v-card>
             </v-container>
           </div>
-          <div v-else height="61vh" style="padding:20vh; display:flex; align-items: center; justify-content: center">
+          <div v-else height="40vh" style="padding:8vh; display:flex; align-items: center; justify-content: center; flex-direction: column ">
+            <v-img src="@/assets/project_cartoon.png" width="250"></v-img>
+            <br>
             <span style="font-weight: bold; font-size: 24px;">You have not selected any project yet.</span>
           </div>
 
@@ -2872,7 +2874,7 @@ export default {
       { title: "Dashboard", href: "./secret", icon: "dashboard" },
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
-      { title: "Meeting", href: "./meeting", icon: "work" },
+      { title: "Meeting", href: "./meeting", icon: "groups" },
 
     ],
     currTodos: [],

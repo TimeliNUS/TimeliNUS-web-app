@@ -184,7 +184,7 @@
               <v-card
                 outlined
                 color="#FFE4CB"
-                style="padding: 20px; overflow-y: scroll; max-height: 65vh"
+                style="padding: 20px; overflow-y: scroll; max-height: 65vh; min-height:65vh"
                 :class="`rounded-xl`"
               >
                 <v-dialog
@@ -959,6 +959,11 @@
                     <br />
                   </div>
                 </div>
+                <div v-else style="padding:8vh; display:flex; align-items: center; justify-content: center; flex-direction: column">
+                  <v-img src="@/assets/todo_cartoon.png" width="200"></v-img>
+                  <br>
+                  <span style="font-weight: bold; font-size: 24px;">You do not have any todo yet</span>
+                </div>
               </v-card>
             </v-container>
           </div>
@@ -1007,7 +1012,7 @@ export default {
       { title: "Dashboard", href: "./secret", icon: "dashboard" },
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
-      { title: "Meeting", href: "./meeting", icon: "work" },
+      { title: "Meeting", href: "./meeting", icon: "groups" },
 
     ],
     projects: [],
