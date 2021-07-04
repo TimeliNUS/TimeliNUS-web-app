@@ -46,6 +46,37 @@ export interface User {
 }
 
 export interface MeetingInvitations{
+  id: string;
+  title: string;
+  invited_groupmates: User[];
+  project: Project;
+  projectTitle: string;
+  startDate: Date;
+  endDate: Date;
+  startTime: string;
+  endTime: string;
+  timeLength: Number;
+  venue: string;
+  creator: User;
+}
+
+export interface MeetingPendings{
+  id: string;
+  title: string;
+  invited_groupmates: User[];
+  project: Project;
+  projectTitle: string;
+  startDate: Date;
+  endDate: Date;
+  startTime: string;
+  endTime: string;
+  timeLength: Number;
+  venue: string;
+  creator: User;
+}
+
+export interface MeetingConfirmations{
+  id: string;
   title: string;
   invited_groupmates: User[];
   project: Project;

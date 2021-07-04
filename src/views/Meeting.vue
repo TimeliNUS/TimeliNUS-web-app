@@ -235,16 +235,16 @@
 
                               <v-col cols="12" :class="`rounded-xl`">
                                   <v-subheader class="pl-0">
-                                    How long will the meeting take? (in hrs)
+                                    How long will the meeting take? (in hrs)*
                                     </v-subheader>
                                   <v-slider
                                     v-model="meetingDuration"
                                     step="0.5"
-                                    label="30 Mins"
                                     max="6"
-                                    min="0.5"
+                                    min="0"
                                     color="#ff9d66"
                                     thumb-label
+                                    :rules="[(v) => v !== 0 || 'Meeting duration is required']"
 
                                 ></v-slider>
                               </v-col>
@@ -265,18 +265,19 @@
                                     <v-text-field
                                       required
                                       
-                                      :rules="[
+                                     :rules="[
                                         (v) =>
                                           (!!v && v) !== 'Meeting Date Range' ||
                                           'Meeting Date Range is required',
                                       ]"
                                       v-model="displayMeetingDateRange"
-                                      label="Meeting Date Range"
+                                      label="Meeting Date Range*"
                                       prepend-icon="mdi-calendar"
                                       v-bind="attrs"
                                       v-on="on"
                                       color="#ff9d66"
                                     ></v-text-field>
+                                    
                                   </template>
                                   <v-date-picker
                                     color="#ff9d66"
@@ -284,7 +285,7 @@
                                     v-model="meetingDateRange"
                                     
                                   >
-                                    <v-btn outlined @click="menuAdd = false;">
+                                    <v-btn outlined color="#ff9d66" @click="menuAdd = false;">
                                         Close
                                     </v-btn>
                                   </v-date-picker>
@@ -309,12 +310,13 @@
                                         <v-text-field
                                           
                                           v-model="meetingStartTime"
-                                          label="Start"
+                                          label="Start*"
                                           color="#ff9d66"
                                           prepend-icon="mdi-clock-time-four-outline"
                                           readonly
                                           v-bind="attrs"
                                           v-on="on"
+                                          :rules="[(v) => !!v || 'Meeting Start Time is required']"
                                         ></v-text-field>
                                       </template>
                                       <v-time-picker
@@ -325,6 +327,7 @@
                                         color="#ff9d66"
                                         format="24hr"
                                         :max="meetingEndTime"
+                                        
                                         @click:minute="
                                           $refs.menuStartTime.save(meetingStartTime)
                                         "
@@ -350,12 +353,13 @@
                                         <v-text-field
                                          
                                           v-model="meetingEndTime"
-                                          label="End"
+                                          label="End*"
                                           color="#ff9d66"
                                           prepend-icon="mdi-clock-time-four-outline"
                                           readonly
                                           v-bind="attrs"
                                           v-on="on"
+                                          :rules="[(v) => !!v || 'Meeting End Time is required']"
                                         ></v-text-field>
                                       </template>
                                       <v-time-picker
@@ -373,9 +377,13 @@
                                     </v-menu>
                                   </v-col>
                                   <v-col cols="12" md="6">
+                                    <v-subheader class="pl-0">
+                                    Meeting Venue*
+                                    </v-subheader>
                                     <v-radio-group
                                       v-model="meetingVenue"
                                       row
+                                      :rules="[(v) => !!v || 'Meeting Venue is required']"
                                     >
                                       <v-radio
                                         color="#ff9d66"
@@ -412,7 +420,9 @@
                           <v-btn
                             color="#ff9d66"
                             :disabled="
-                              !valid || this.meetingTitle == '' || this.meetingProject == null "
+                              !valid || this.meetingTitle == '' || this.meetingProject == null ||  
+                              this.groupmatesChips.length == 0 || this.meetingVenue == '' || this.meetingDateRange.length == 0 || 
+                              this.meetingDuration < 0.5"
                             
                             text
                             @click="
@@ -429,14 +439,32 @@
                 </v-dialog>
               </div>
               <br>
-              <div>
+              <div style="margin-left: 1vw">
                 
                 <v-date-picker
+                ref="picker"
                   v-model="displayMeetingCalendar"
-                  :events="arrayEvents"
+                  :events="meetingCalendar"
                   event-color="orange"
                   color="#ff9d66"
+                  width="420"
+                  @click="loadMeetingsCalendar()"
                 ></v-date-picker>
+
+                <div class="text-h6">
+                  Month news ({{ pickerDate || 'change month...' }})
+                </div>
+                <div class="subheading">
+                  Change month to see other news
+                </div>
+                <ul class="ma-4">
+                  <li
+                    
+                  >
+                    <!-- {{ currMeetingsLoaded }} -->
+                    {{displayMeetingCalendar}}
+                  </li>
+                </ul>
               </div>
              
             </v-col>
@@ -476,10 +504,9 @@
                     <v-tab-item style="background-color:#ffe4cb;">
                       <v-container style=" border-radius:24px;" :class="`rounded-xl`">
                       <v-card color="#FFE4CB" outlined :class="`rounded-xl`" style="padding: 10px; overflow-y: scroll">
-                        <v-card-title>Invitations</v-card-title>
                         <div
-                      v-if="length"
-                      style="display: flex; flex-direction: row"
+                      v-if="invitationLength"
+                      style=""
                     >
                       <v-sheet
                         :class="`rounded-xl`"
@@ -495,27 +522,24 @@
                           show-arrows
                         >
                           <v-slide-item
-                            v-for="(meetingInv) in this.$store.state.meetingInvitations"
+                            v-for="(meetingInv) in orderedMeetingInv"
                             :key="meetingInv.id"
-                            v-slot="{ active, toggle }"
+                            v-slot="{ active }"
                           >
                           
                             <v-card
                               :class="`rounded-xl`"
                               :color="active ? undefined : 'white'"
                               class="ma-2"
-                              height="200"
-                              width="330"
-                              @click="
-                                toggle;
-                                
-                              "
+                              height="255"
+                              width="300"
+                             
                               style="padding: 10px; padding-left:14px;"
                             >
                              <v-row style="padding: 5px">
                                 <v-col
                                   col="12"
-                                  md="9"
+                                  md="12"
                                   style="display: flex; flex-direction: column"
                                 >
                                   <v-card-text
@@ -527,7 +551,7 @@
                                       padding-right: 3px !important;
                                     "
                                   >
-                                    {{ meetingInv.title }}
+                                    {{ meetingInv.projectTitle }}
                                   </v-card-text>
                                   <v-card-title
                                     style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
@@ -539,6 +563,7 @@
                                     style="
                                       display: flex;
                                       padding: 2px !important;
+                                      padding-bottom: 7px !important;
                                     "
                                   >
                                     <div>
@@ -555,11 +580,94 @@
                                               year: "numeric",
                                             }
                                           )
+                                        }} - {{
+                                          meetingInv.endDate.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
                                         }}</span
                                       >
                                     </div>
                                     
                                   </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >schedule</v-icon
+                                        >
+                                        {{
+                                          meetingInv.startTime
+                                        }} - {{
+                                          meetingInv.endTime
+                                        }}  ({{meetingInv.timeLength}} hrs)</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >place</v-icon
+                                        >
+                                        {{meetingInv.venue}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                   <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        
+                                        Created by {{meetingInv.creator}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-actions  style="padding: 0px; !important" >
+                                    <v-row
+                                    style="padding-top: 20px!important; "
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-btn text small color="#ff9d66" @click="passCurrSelectedMeetingInv(meetingInv);
+                                ">
+                                        Import Calendar
+                                      </v-btn>
+                                      <v-btn
+                                      small
+                                        text
+                                        color="#999999"
+                                        @click="declineMeeting(meetingInv)"
+                                      >
+                                        Decline
+                                      </v-btn>
+                                      
+                                    </v-row>
+                                  </v-card-actions>
                                 </v-col>
                                 
                               </v-row>
@@ -578,40 +686,629 @@
                     </v-tab-item>
                     <v-tab-item style="background-color:#ffe4cb;">
                       <v-container style=" border-radius:24px;" :class="`rounded-xl`">
-                        <v-card
-                          outlined
-                          style="padding: 10px;"
-                          color="#FFE4CB"
-                          :class="`rounded-xl`"
+                      <v-card color="#FFE4CB" outlined :class="`rounded-xl`" style="padding: 10px; overflow-y: scroll">
+                        <div
+                      v-if="pendingLength"
+                      style=""
+                    >
+                      <v-sheet
+                        :class="`rounded-xl`"
+                        class="mx-auto"
+                        elevation="0"
+                        max-width="50vw"
+                        style="background-color: #ffe4cb"
+                      >
+                        <v-slide-group
+                          v-model="pendingSlide"
+                       
+                          active-class="success"
+                          show-arrows
                         >
-                          <v-card-title>Pending</v-card-title>
+                          <v-slide-item
+                            v-for="(pending) in orderedMeetingPending"
+                            :key="pending.id"
+                            v-slot="{ active }"
+                          >
                           
-                      <br/>
+                            <v-card
+                              :class="`rounded-xl`"
+                              :color="active ? undefined : 'white'"
+                              class="ma-2"
+                              height="255"
+                              width="300"
+                             
+                              style="padding: 10px; padding-left:14px;"
+                            >
+                             <v-row style="padding: 5px">
+                                <v-col
+                                  col="12"
+                                  md="12"
+                                  style="display: flex; flex-direction: column"
+                                >
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding-bottom: 0px !important;
+                                      padding-top: 3px !important;
+                                      padding-left: 3px !important;
+                                      padding-right: 3px !important;
+                                    "
+                                  >
+                                    {{ pending.projectTitle }}
+                                  </v-card-text>
+                                  <v-card-title
+                                    style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                                 padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
+                                  >
+                                    {{  pending.title }}
+                                  </v-card-title>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >calendar_today</v-icon
+                                        >
+                                        {{
+                                          pending.startDate.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }} - {{
+                                          pending.endDate.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
 
-                        
-                        </v-card>
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >schedule</v-icon
+                                        >
+                                        {{
+                                          pending.startTime
+                                        }} - {{
+                                          pending.endTime
+                                        }}  ({{pending.timeLength}} hrs)</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >place</v-icon
+                                        >
+                                        {{pending.venue}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                   <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                       
+                                        Created by {{pending.creator}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-actions  style="padding: 0px; !important" >
+                                    <v-row
+                                    style="padding-top: 20px!important; "
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-btn text small color="#ff9d66" @click="passCurrSelectedMeetingPending(pending);
+                                ">
+                                        View
+                                      </v-btn>
+                                      <v-btn
+                                      small
+                                        text
+                                        color="#999999"
+                                        @click="quitMeeting(pending)"
+                                      >
+                                        Quit Meeting
+                                      </v-btn>
+                                      
+                                      
+                                    </v-row>
+                                  </v-card-actions>
+                                </v-col>
+                                
+                              </v-row>
+  
+                              
+                            </v-card>
+                          </v-slide-item>
+                        </v-slide-group>
+                      </v-sheet>
+                    </div>
+                    <div v-else style="padding:85px; display:flex' align-items: center; justify-content: center">
+                       <span style="font-color: #4b4b4b; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
+                    </div>
+                      </v-card>
                       </v-container>
                     </v-tab-item>
                        <v-tab-item style="background-color:#ffe4cb;">
                       <v-container style=" border-radius:24px;" :class="`rounded-xl`">
-                        <v-card
-                          outlined
-                          style="padding: 10px;"
-                          color="#FFE4CB"
-                          :class="`rounded-xl`"
+                      <v-card color="#FFE4CB" outlined :class="`rounded-xl`" style="padding: 10px; overflow-y: scroll">
+                        <div
+                      v-if="confirmationLength"
+                      style=""
+                    >
+                      <v-sheet
+                        :class="`rounded-xl`"
+                        class="mx-auto"
+                        elevation="0"
+                        max-width="50vw"
+                        style="background-color: #ffe4cb"
+                      >
+                        <v-slide-group
+                          v-model="confirmationSlide"
+                       
+                          active-class="success"
+                          show-arrows
                         >
-                          <v-card-title>Confirmation</v-card-title>
+                          <v-slide-item
+                            v-for="(confirmation) in orderedMeetingConfirmation"
+                            :key="confirmation.id"
+                            v-slot="{ active }"
+                          >
                           
-                      <br/>
-
-                        
-                        </v-card>
+                            <v-card
+                              :class="`rounded-xl`"
+                              :color="active ? undefined : 'white'"
+                              class="ma-2"
+                              height="255"
+                              width="300"
+                             
+                              style="padding: 10px; padding-left:14px;"
+                            >
+                             <v-row style="padding: 5px">
+                                <v-col
+                                  col="12"
+                                  md="12"
+                                  style="display: flex; flex-direction: column"
+                                >
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding-bottom: 0px !important;
+                                      padding-top: 3px !important;
+                                      padding-left: 3px !important;
+                                      padding-right: 3px !important;
+                                    "
+                                  >
+                                    {{ confirmation.projectTitle }}
+                                  </v-card-text>
+                                  <v-card-title
+                                    style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                                 padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
+                                  >
+                                    {{  confirmation.title }}
+                                  </v-card-title>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >calendar_today</v-icon
+                                        >
+                                        {{
+                                          confirmation.startDate.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }} - {{
+                                          confirmation.endDate.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                              month: "short",
+                                              day: "2-digit",
+                                              year: "numeric",
+                                            }
+                                          )
+                                        }}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >schedule</v-icon
+                                        >
+                                        {{
+                                          confirmation.startTime
+                                        }} - {{
+                                          confirmation.endTime
+                                        }}  ({{confirmation.timeLength}} hrs)</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        <v-icon color="#ff9d66" width="20px;"
+                                          >place</v-icon
+                                        >
+                                        {{confirmation.venue}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                   <v-card-text
+                                    style="
+                                      display: flex;
+                                      padding: 2px !important;
+                                      padding-bottom: 7px !important;
+                                    "
+                                  >
+                                    <div>
+                                      <span style="">
+                                        
+                                        Created by {{confirmation.creator}}</span
+                                      >
+                                    </div>
+                                    
+                                  </v-card-text>
+                                  <v-card-actions  style="padding: 0px; !important" >
+                                    <v-row
+                                    style="padding-top: 20px!important; "
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-btn text small color="#ff9d66" @click="passCurrSelectedMeetingConfirmation(confirmation);
+                                ">
+                                        View
+                                      </v-btn>
+                                      <v-btn
+                                      small
+                                        text
+                                        color="#999999"
+                                        @click="quitMeeting(confirmation)"
+                                      >
+                                        Quit Meeting
+                                      </v-btn>
+                                      
+                                      
+                                    </v-row>
+                                  </v-card-actions>
+                                </v-col>
+                                
+                              </v-row>
+  
+                              
+                            </v-card>
+                          </v-slide-item>
+                        </v-slide-group>
+                      </v-sheet>
+                    </div>
+                    <div v-else style="padding:85px; display:flex' align-items: center; justify-content: center">
+                       <span style="font-color: #4b4b4b; font-weight: bold; font-size: 16px;">You do have any project yet. Create a new one or accept any project invitation</span>
+                    </div>
+                      </v-card>
                       </v-container>
                     </v-tab-item>
                   </v-tabs-items>
                   </v-card>
                 </v-container>
               </div>
+            
+            
+             <div v-if="currMeetingInv!== null">
+            <!-- <v-container :class="`rounded-xl`" style="max-width:1450px !important; width: 80vw;  margin-left: 0.5vw; margin-right:3vw;"> -->
+              <v-card
+                outlined
+                color="#FFE4CB"
+                style="max-height: 61vh; overflow-y: scroll; "
+                :class="`rounded-xl`"
+              >
+                <span style="color:#ff9d66; font-weight:bold; padding: 10px; font-size: 20px; display:flex; justify-content:flex-start;"> 
+                  {{currMeetingInv.title}}</span>
+                <v-card
+                  outlined
+                  color="#ff9d66"
+                  style="padding: 20px;  max-height: 61vh"
+                  :class="`rounded-lg`"
+                >
+                <v-card-title color="#4b4b4b">
+                  Current Timetable
+                </v-card-title>
+                <v-row>
+                  <v-col col="12" md="6">
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col col="12" md="6">
+                     <v-card-title
+                        style="
+                          display: flex;
+                          padding-bottom: 0px !important;
+                          padding-top: 3px !important;
+                          padding-left: 10px !important;
+                          padding-right: 3px !important;
+                          color:white;
+                          font-size: 18px !important;
+                          font-weight: bold !important;
+                          margin-bottom: 20px;
+                        "
+                      >
+                        Import Calendar
+                      </v-card-title>
+                      
+                      <v-card-title
+                        style="font-weight: bold !important; color:white;display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                      padding-left :10px !important; padding-right :3px !important; font-size: 18px !important;" 
+                      >
+                        NUSMods:
+                      </v-card-title>
+                    <v-card-actions>
+
+                      
+                      <v-radio-group
+                        v-model="importCalendarChoice"
+                        class="random-abc"
+                      >
+                        <v-radio
+                          color="white"
+                          dark
+                          label="Use existing/default calendar"
+                          value="existingCalendar"
+                          
+                          
+                        ></v-radio>
+                        <v-row style="margin-top: 5px; padding-left: 10px;">
+                        <v-text-field
+                          outlined
+                          dense
+                          v-model="existingCalendarURL"
+                          
+                          id="output"
+                           color="white"
+                          :disabled="importCalendarChoice ==  'newCalendar' || importCalendarChoice == null"
+                          
+                        >
+                        </v-text-field>
+
+                        <v-btn outlined small style="margin: 8px;" color="white"
+                        :disabled="importCalendarChoice ==  'newCalendar' || importCalendarChoice == null"
+                        @click="importCalendar(existingCalendarURL, currMeetingInv)">
+                            Import
+                          </v-btn>
+                       
+                        </v-row>
+                      
+                        <v-radio
+                        dark
+                        color="white"
+                          label="Import a new calendar"
+                          value="newCalendar"
+                        ></v-radio>
+                        <v-row style="margin-top: 5px; padding-left: 10px;">
+                        <v-text-field
+                        :disabled="importCalendarChoice ==  'existingCalendar' || importCalendarChoice == null"
+                          color="white"
+                          v-model="newCalendarURL"
+                          outlined
+                          dense
+                        ></v-text-field>
+                        <v-btn outlined small style="margin: 8px;" color="white"
+                        :disabled="importCalendarChoice ==  'existingCalendar' || importCalendarChoice == null"
+                        @click="importCalendar(this.newCalendarURL, currMeetingInv)">
+                            Import
+                          </v-btn>
+                      </v-row>
+                      </v-radio-group>
+                      
+                    </v-card-actions>
+                    <v-row style="padding-left: 10px;">
+                      <v-card-title
+                        style="font-weight: bold !important; color:white;display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                      padding-left :10px !important; padding-right :3px !important; font-size: 18px !important;" 
+                      >
+                        Google Calendar:
+                      </v-card-title>
+                      <v-card-actions>
+                      <v-btn outlined color="white" style="padding-left:10px;">
+                        Login to Google
+                      </v-btn>
+                      </v-card-actions>
+                      </v-row>
+                      <v-row style="padding-left: 10px;">
+                      <v-card-title
+                        style="font-weight: bold !important; color:white;display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                      padding-left :10px !important; padding-right :3px !important; font-size: 18px !important;" 
+                      >
+                        Quick Links:
+                      </v-card-title>
+                      <v-card-actions>
+                      <a href="https://www.google.com" target="_blank">
+
+                      <v-img width="50px" src="@/assets/google_calendar.png" ></v-img>
+                      </a>
+                      <a href="https://nusmods.com/timetable/sem-1" target="_blank">
+                      <v-img width="50px" src="@/assets/NUSMods_logo.png"></v-img>
+                      </a>
+                      </v-card-actions>
+                      </v-row>
+                      
+                  </v-col>
+                </v-row>
+
+              </v-card>
+              </v-card>
+            <!-- </v-container> -->
+             </div>
+             <div v-if="currMeetingPending!== null">
+            <!-- <v-container :class="`rounded-xl`" style="max-width:1450px !important; width: 80vw;  margin-left: 0.5vw; margin-right:3vw;"> -->
+              <v-card
+                outlined
+                color="#FFE4CB"
+                style="max-height: 61vh; overflow-y: scroll; "
+                :class="`rounded-xl`"
+              >
+                <span style="color:#ff9d66; font-weight:bold; padding: 10px; font-size: 20px; display:flex; justify-content:flex-start;"> 
+                  {{currMeetingPending.title}}</span>
+                <v-card
+                  outlined
+                  color="#ff9d66"
+                  style="padding: 20px;  max-height: 61vh"
+                  :class="`rounded-lg`"
+                >
+                <v-card-title color="#4b4b4b">
+                  Current Timetable
+                </v-card-title>
+                <v-row>
+                  <v-col col="12" md="6">
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col col="12" md="6">
+                     
+        
+                      <v-row style="padding-left: 10px;">
+                      <v-card-title
+                        style="font-weight: bold !important; color:white;display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                      padding-left :10px !important; padding-right :3px !important; font-size: 18px !important;" 
+                      >
+                        Quick Links:
+                      </v-card-title>
+                      <v-card-actions>
+                      <a href="https://www.google.com" target="_blank">
+
+                      <v-img width="50px" src="@/assets/google_calendar.png" ></v-img>
+                      </a>
+                      <a href="https://nusmods.com/timetable/sem-1" target="_blank">
+                      <v-img width="50px" src="@/assets/NUSMods_logo.png"></v-img>
+                      </a>
+                      </v-card-actions>
+                      </v-row>
+                      
+                  </v-col>
+                </v-row>
+
+              </v-card>
+              </v-card>
+            <!-- </v-container> -->
+             </div>
+             <div v-if="currMeetingConfirmation!== null">
+            <!-- <v-container :class="`rounded-xl`" style="max-width:1450px !important; width: 80vw;  margin-left: 0.5vw; margin-right:3vw;"> -->
+              <v-card
+                outlined
+                color="#FFE4CB"
+                style="max-height: 61vh; overflow-y: scroll; "
+                :class="`rounded-xl`"
+              >
+                <span style="color:#ff9d66; font-weight:bold; padding: 10px; font-size: 20px; display:flex; justify-content:flex-start;"> 
+                  {{currMeetingConfirmation.title}}</span>
+                <v-card
+                  outlined
+                  color="#ff9d66"
+                  style="padding: 20px;  max-height: 61vh"
+                  :class="`rounded-lg`"
+                >
+                <v-card-title color="#4b4b4b">
+                  Current Timetable
+                </v-card-title>
+                <v-row>
+                  <v-col col="12" md="6">
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col col="12" md="6">
+                     
+        
+                      <v-row style="padding-left: 10px;">
+                      <v-card-title
+                        style="font-weight: bold !important; color:white;display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                      padding-left :10px !important; padding-right :3px !important; font-size: 18px !important;" 
+                      >
+                        Quick Links:
+                      </v-card-title>
+                      <v-card-actions>
+                      <a href="https://www.google.com" target="_blank">
+
+                      <v-img width="50px" src="@/assets/google_calendar.png" ></v-img>
+                      </a>
+                      <a href="https://nusmods.com/timetable/sem-1" target="_blank">
+                      <v-img width="50px" src="@/assets/NUSMods_logo.png"></v-img>
+                      </a>
+                      </v-card-actions>
+                      </v-row>
+                      
+                  </v-col>
+                </v-row>
+
+              </v-card>
+              </v-card>
+            <!-- </v-container> -->
+             </div>
+             <div v-if="currMeetingInv== null && currMeetingConfirmation== null && currMeetingPending== null"
+             style="display:flex; justify-content: center; align-items: center; flex-direction: column">
+               <v-img src="@/assets/meeting_cartoon.png" width="150" style=" margin: 30px;"></v-img>
+               <span style="font-weight: bold; font-size: 18px;"> You have not selected any meeting invitation, pending meeting or meeting confirmation yet </span>
+             </div>
             </v-col>
           </v-row>
           
@@ -625,6 +1322,7 @@
 import firebase from "firebase";
 import { db } from "../main.ts";
 import _ from "lodash";
+import {findCommonTime} from "../services/firebaseService.ts";
 
 export default {
   name: "Meeting.vue",
@@ -661,7 +1359,7 @@ export default {
       { title: "Dashboard", href: "./secret", icon: "dashboard" },
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
-      { title: "Meeting", href: "./meeting", icon: "work" },
+      { title: "Meeting", href: "./meeting", icon: "groups" },
 
     ],
     projects: [],
@@ -684,32 +1382,92 @@ export default {
     menuEndTime: false,
     tab: null,
     invitationsSlide:null,
-    arrayEvents: null,
-
+    meetingCalendar: null,
+    pickerDate: null,
+    notes: [],
+    allNotes: [
+      'President met with prime minister',
+      'New power plant opened',
+      'Rocket launch announced',
+      'Global warming discussion cancelled',
+      'Company changed its location',
+    ],
     displayMeetingCalendar: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-
+    currMeetingInv: null,
+    currMeetingPending: null,
+    currMeetingConfirmation: null,
+    importCalendarChoice: null,
+    newCalendarURL: null,
+    existingCalendarURL: null,
+    pendingSlide: null,
+    confirmationSlide: null,
+    
 
   }),
+  watch: {
+      pickerDate (val) {
+        this.notes = [
+          this.allNotes[Math.floor(Math.random() * 5)],
+          this.allNotes[Math.floor(Math.random() * 5)],
+          this.allNotes[Math.floor(Math.random() * 5)],
+        ].filter((value, index, self) => self.indexOf(value) === index)
+      },
+    },
 
   computed: {
       
     displayMeetingDateRange () {
+      if(this.meetingDateRange.length == 0){
+        return "Meeting Date Range"
+      } else {
+        if (this.meetingDateRange[0] > this.meetingDateRange[1]){
+          let newMeetingDateRange = [];
+          newMeetingDateRange.push(this.meetingDateRange[1])
+          newMeetingDateRange.push(this.meetingDateRange[0])
+          return newMeetingDateRange.join("~")
+        }
         return this.meetingDateRange.join(' ~ ')
+
+      }
       },
     
     items() {
       return Array.from({ length: this.length }, (k, v) => v + 1);
     },
-    length() {
+    invitationLength() {
       return this.$store.state.meetingInvitations.length;
     },
-    orderedTasks: function () {
+    pendingLength() {
+      return this.$store.state.meetingPendings.length;
+    },
+    confirmationLength(){
+      return this.$store.state.meetingConfirmations.length;
+
+    },
+    orderedMeetingInv: function () {
       return _.orderBy(
-        this.$store.state.tasks,
-        ["complete", "deadline"],
-        ["asc", "asc"]
+        this.$store.state.meetingInvitations,
+        ["startDate", "projectTitle", "endDate"],
+        ["asc", "asc", "asc"]
       );
     },
+
+    orderedMeetingPending: function () {
+      return _.orderBy(
+        this.$store.state.meetingPendings,
+        ["startDate", "projectTitle", "endDate"],
+        ["asc", "asc", "asc"]
+      );
+    },
+
+    orderedMeetingConfirmation: function () {
+      return _.orderBy(
+        this.$store.state.meetingConfirmations,
+        ["startDate", "projectTitle", "endDate"],
+        ["asc", "asc","asc"]
+      );
+    },
+
 
     remaining() {
       return this.$store.getters.remaining;
@@ -745,7 +1503,7 @@ export default {
   },
 
   mounted() {
-    this.arrayEvents = [...Array(6)].map(() => {
+    this.meetingCalendar = [...Array(6)].map(() => {
         const day = Math.floor(Math.random() * 30)
         const d = new Date()
         d.setDate(day)
@@ -755,6 +1513,10 @@ export default {
   },
 
   methods: {
+    async loadMeetingsCalendar(){
+      this.currMeetingsLoaded = this.displayMeetingCalendar
+    },
+
     remove(item) {
       this.groupmatesChips.splice(this.groupmatesChips.indexOf(item), 1);
       this.groupmatesChips = [...this.groupmatesChips];
@@ -962,12 +1724,26 @@ export default {
     },
 
     async addMeeting() {
+      if (this.meetingDateRange[0] > this.meetingDateRange[1]){
+        let newMeetingDateRange = [];
+        newMeetingDateRange.push(this.meetingDateRange[1])
+        newMeetingDateRange.push(this.meetingDateRange[0])
+        this.meetingDateRange = newMeetingDateRange
+        this.displayMeetingDateRange = this.meetingDateRange.join(' ~ ')
+      }
+      if (this.meetingDateRange.length == 1){
+        this.meetingDateRange.push(this.meetingDateRange[0])
+        this.displayMeetingDateRange = this.meetingDateRange.join(' ~ ')
+
+      }
       console.log(this.groupmatesChips)
       const response = await db.collection("meeting").add({
         title: this.meetingTitle,
         _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         startDate: firebase.firestore.Timestamp.fromDate(new Date(this.meetingDateRange[0])),
         endDate: firebase.firestore.Timestamp.fromDate(new Date(this.meetingDateRange[1])),
+        startTime: this.meetingStartTime,
+        endTime: this.meetingEndTime,
         timeLength:this.meetingDuration,
         displayMeetingDateRange: this.displayMeetingDateRange,
         groupmates: await this.addGroupmatesToMeeting(response),
@@ -1216,6 +1992,87 @@ export default {
           });
       }
     },
+
+    async passCurrSelectedMeetingInv(meetingInv){
+      console.log(meetingInv)
+      this.currMeetingPending = null
+      this.currMeetingConfirmation = null
+      this.currMeetingInv = meetingInv
+    },
+
+    async passCurrSelectedMeetingPending(pending){
+      this.currMeetingInv = null
+      this.currMeetingConfirmation = null
+      this.currMeetingPending = pending
+    },
+    async passCurrSelectedMeetingConfirmation(confirmation){
+      this.currMeetingInv = null
+      this.currMeetingPending = null
+      this.currMeetingConfirmation = confirmation
+    },
+
+
+    
+    async declineMeeting(meetingInv){
+      console.log(meetingInv)
+      db.collection('meeting').doc(meetingInv.id).update({
+        invitations: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('user').doc(this.$store.state.user.uid)
+        )
+      })
+      this.$store.dispatch("getMeetingInvitations")
+      db.collection('meeting').doc(meetingInv.id).update({
+        groupmates: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('user').doc(this.$store.state.user.uid)
+        )
+      })
+      const getData = await db.collection('meeting').doc(meetingInv.id).get()
+      const groupmatesLength = getData.get("groupmates")
+      const getProject = await (meetingInv.project)
+      if(groupmatesLength == 0){
+        
+        db.collection('project').doc(getProject.id).update({
+          meetings: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('meeting').doc(meetingInv.id)
+        )})
+        db.collection('meeting').doc(meetingInv.id).delete()
+      }
+      
+      
+    },
+
+    async quitMeeting(meeting){
+      db.collection('meeting').doc(meeting.id).update({
+        confirmedInvitations: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('user').doc(this.$store.state.user.uid)
+        )
+      })
+      this.$store.dispatch("getMeetingPendings")
+      this.$store.dispatch("getMeetingConfirmations")
+
+      db.collection('meeting').doc(meeting.id).update({
+        groupmates: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('user').doc(this.$store.state.user.uid)
+        )
+      })
+      const getData = await db.collection('meeting').doc(meeting.id).get()
+      const groupmatesLength = getData.get("groupmates")
+      const getProject = await (meeting.project)
+      if(groupmatesLength == 0){
+        
+        db.collection('project').doc(getProject.id).update({
+          meetings: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('meeting').doc(meeting.id)
+        )})
+        db.collection('meeting').doc(meeting.id).delete()
+      }
+    },
+
+    async importCalendar(link,meetingInv){
+      let importStartDate= new Date(meetingInv.startDate + "T" + meetingInv.startTime + ":00+08:00").toISOString;
+      let importEndDate = new Date(meetingInv.endDate + "T" + meetingInv.endTime + ":00+08:00").toISOString;;
+      findCommonTime(link, importStartDate, importEndDate, meetingInv.id, this.$store.state.user.uid )
+    },
   },
 };
 </script>
@@ -1324,6 +2181,10 @@ export default {
 
 .center-me {
   transform: translate(-50%, 0);
+}
+
+.random-abc .v-input__control .v-input__slot .v-input--radio-group__input .v-input .v-input__append-outer{
+  margin-top: 0px !important;
 }
 </style>
 <style lang="sass">
