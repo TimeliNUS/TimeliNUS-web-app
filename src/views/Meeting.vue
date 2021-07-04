@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #fff0df; font-family: DM Sans, sans-serif">
+  <div style="background-color: #fff0df; font-family: DM Sans, sans-serif; min-height:100vh;">
     <v-row>
       <v-col col="12" md="2">
         <v-navigation-drawer
