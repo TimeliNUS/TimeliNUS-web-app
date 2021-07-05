@@ -451,12 +451,7 @@
                   @click="loadMeetingsCalendar()"
                 ></v-date-picker>
 
-                <div class="text-h6">
-                  Month news ({{ pickerDate || 'change month...' }})
-                </div>
-                <div class="subheading">
-                  Change month to see other news
-                </div>
+                
                 <ul class="ma-4">
                   <li
                     
@@ -1075,11 +1070,19 @@
                   style="padding: 20px;  max-height: 61vh"
                   :class="`rounded-lg`"
                 >
-                <v-card-title color="#4b4b4b">
+                <v-card-title color="#ffffff">
                   Current Timetable
                 </v-card-title>
                 <v-row>
                   <v-col col="12" md="6">
+                    <div class="schedule-vue-sample"  style="">
+        <div class="col-md-12 control-section">
+            <div class="content-wrapper" style="">
+                <ejs-schedule class="scheduleHeight" style=" height:450px!important; overflow-y: scroll;  " id='Schedule'  :selectedDate='selectedDate' :eventSettings='eventSettings' :currentView="currentView"
+                    :readonly="readonly"  ></ejs-schedule>
+            </div>
+        </div>
+    </div> 
                   </v-col>
                   <v-divider vertical></v-divider>
                   <v-col col="12" md="6">
@@ -1218,11 +1221,19 @@
                   style="padding: 20px;  max-height: 61vh"
                   :class="`rounded-lg`"
                 >
-                <v-card-title color="#4b4b4b">
+                <v-card-title color="#ffffff">
                   Current Timetable
                 </v-card-title>
                 <v-row>
                   <v-col col="12" md="6">
+                     <div class="schedule-vue-sample"  style="">
+        <div class="col-md-12 control-section">
+            <div class="content-wrapper" style="">
+                <ejs-schedule class="scheduleHeight" style=" height:450px!important; overflow-y: scroll;  " id='Schedule'  :selectedDate='selectedDate' :eventSettings='eventSettings' :currentView="currentView"
+                    :readonly="readonly"  ></ejs-schedule>
+            </div>
+        </div>
+    </div> 
                   </v-col>
                   <v-divider vertical></v-divider>
                   <v-col col="12" md="6">
@@ -1269,11 +1280,19 @@
                   style="padding: 20px;  max-height: 61vh"
                   :class="`rounded-lg`"
                 >
-                <v-card-title color="#4b4b4b">
+                <v-card-title color="#ffffff">
                   Current Timetable
                 </v-card-title>
                 <v-row>
                   <v-col col="12" md="6">
+                    <div class="schedule-vue-sample"  style="">
+        <div class="col-md-12 control-section">
+            <div class="content-wrapper" style="">
+                <ejs-schedule class="scheduleHeight" style=" height:450px!important; overflow-y: scroll;  " id='Schedule'  :selectedDate='selectedDate' :eventSettings='eventSettings' :currentView="currentView"
+                    :readonly="readonly"  ></ejs-schedule>
+            </div>
+        </div>
+    </div> 
                   </v-col>
                   <v-divider vertical></v-divider>
                   <v-col col="12" md="6">
@@ -1321,12 +1340,26 @@
 <script>
 import firebase from "firebase";
 import { db } from "../main.ts";
+// import BlockEvent from "../components/block-event.vue"
 import _ from "lodash";
 import {findCommonTime} from "../services/firebaseService.ts";
 
+    import Vue from "vue";
+    import { extend } from '@syncfusion/ej2-base';
+    // import { getBlockedTimeSlot } from '../services/dataSource';
+    import { Schedule, SchedulePlugin, Day, Week, WorkWeek, Month, Agenda, TimelineViews, TimelineMonth, Resize, DragAndDrop } from "@syncfusion/ej2-vue-schedule";
+    Vue.use(SchedulePlugin);
+
 export default {
   name: "Meeting.vue",
+  // components:{
+  //   BlockEvent
+  // },
   data: () => ({
+    selectedDate: new Date(),
+                readonly: true,
+                eventSettings: [],
+                currentView: 'Week',
     dialog: false,
     nameRules: [(v) => !!v || "Todo title is required"],
     dialogEdit: false,
@@ -1360,6 +1393,8 @@ export default {
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
+      { title: "Profile", href: "./profile", icon: "groups" },
+
 
     ],
     projects: [],
@@ -1404,6 +1439,14 @@ export default {
     
 
   }),
+
+  // created: async function(){
+  //           await getBlockedTimeSlot().then(result => this.eventSettings = { dataSource: extend([], result, null, true) });
+  //       },
+  provide: {
+      schedule: [Day, Week, WorkWeek, Month, Agenda, Resize]
+  },
+
   watch: {
       pickerDate (val) {
         this.notes = [
@@ -1500,6 +1543,9 @@ export default {
       }
     });
     // this.$store.dispatch('getTasks');
+
+    this.getBlockedTimeSlot().then(result => this.eventSettings = { dataSource: extend([], result, null, true) });
+        
   },
 
   mounted() {
@@ -1513,6 +1559,50 @@ export default {
   },
 
   methods: {
+    onResizeStart: function(args) {
+      console.log(this.currMeetingConfirmation.timeLength)
+  args.interval = this.currMeetingConfirmation.timeLength* 60; 
+},
+   async getBlockedTimeSlot(){
+    console.log(await db)
+    const array = await db.collection('meeting').doc("dAngynKjopYVkqH6YGfc").get()
+    const timeslot = await array.get('timeslot')
+    let pushTimeSlot = [{
+        Id: 1,
+    Subject: "Explosion of Betelgeuse Star",
+    StartTime: new Date(2021,6,5,12,0),
+    EndTime: new Date(2021,6,5,13,0),
+    IsBlock: true,
+    }];
+    let counter = 0;
+    console.log(timeslot)
+    for(let i=0; i<timeslot.length; i++){
+        console.log(timeslot[i].start.toDate().toLocaleDateString())
+        console.log(new Date(timeslot[i].start.seconds))
+        console.log(new Date(2018, 1, 13, 9, 30))
+        const currStart = timeslot[i].start.toDate().toLocaleDateString()
+        const currStartYear = parseInt(currStart.substr(6,4))
+        const currStartMonth = parseInt(currStart.substr(3,2)) -1
+        const currStartDate = parseInt(currStart.substr(0,2))
+
+        const currEnd = timeslot[i].end.toDate().toLocaleDateString()
+        const currEndYear = parseInt(currEnd.substr(6,4))
+        const currEndMonth = parseInt(currEnd.substr(3,2)) -1
+        const currEndDate = parseInt(currEnd.substr(0,2))
+        pushTimeSlot.push({
+            Id: counter,
+            Subject: "",
+            StartTime: new Date(timeslot[i].start.toDate()),
+            EndTime: new Date(timeslot[i].end.toDate()),
+            IsBlock:true
+        })
+        counter += 1
+    }
+    console.log("hello !" + JSON.stringify(pushTimeSlot))
+    console.log(pushTimeSlot)
+    return pushTimeSlot
+
+},
     async loadMeetingsCalendar(){
       this.currMeetingsLoaded = this.displayMeetingCalendar
     },
@@ -2069,8 +2159,10 @@ export default {
     },
 
     async importCalendar(link,meetingInv){
-      let importStartDate= new Date(meetingInv.startDate + "T" + meetingInv.startTime + ":00+08:00").toISOString;
-      let importEndDate = new Date(meetingInv.endDate + "T" + meetingInv.endTime + ":00+08:00").toISOString;;
+   
+     
+      let importStartDate= new Date(meetingInv.displayMeetingDateRange.substr(0,10) + "T" + meetingInv.startTime + ":00+08:00").toISOString();
+      let importEndDate = new Date(meetingInv.displayMeetingDateRange.substr(13) + "T" + meetingInv.endTime + ":00+08:00").toISOString();
       findCommonTime(link, importStartDate, importEndDate, meetingInv.id, this.$store.state.user.uid )
     },
   },
@@ -2079,6 +2171,64 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-calendars/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-vue-schedule/styles/material.css';
+
+    .scheduleHeight{
+      height: 380px !important;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .template-wrap {
+        width: 100%;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .e-vertical-view .e-resource-cells {
+        height: 58px;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .e-timeline-view .e-resource-left-td,
+    .schedule-vue-sample .block-events.e-schedule .e-timeline-month-view .e-resource-left-td {
+        width: 170px;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .e-resource-cells.e-child-node .employee-category,
+    .schedule-vue-sample .block-events.e-schedule .e-resource-cells.e-child-node .employee-name {
+        padding: 5px
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .employee-image {
+        width: 45px;
+        height: 40px;
+        float: left;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .employee-name {
+        font-size: 13px;
+    }
+
+    .schedule-vue-sample .block-events.e-schedule .employee-designation {
+        font-size: 10px;
+    }
+
+    /* .e-schedule .e-vertical-view .e-selected-cells {
+        background-color: blue !important;
+    } */
+
+    .e-schedule .e-vertical-view .e-selected-cell {
+        background-color: #ffe4cb !important;
+    }
+
+    .e-schedule .e-vertical-view .e-work-cells {
+        background-color: white ;
+    }
 
 .todo-item {
   margin-bottom: 12px;

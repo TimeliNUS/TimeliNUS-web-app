@@ -4,6 +4,9 @@ import Home from "../views/Home.vue";
 import Secret from "../views/Secret.vue";
 import Meeting from "../views/Meeting.vue";
 import Project from "../views/Project.vue";
+import Profile from "../views/Profile.vue";
+import BlockEvent from "../views/block-event.vue";
+
 import Login from "../views/Login.vue";
 import Todo from "../views/Todo.vue";
 import Register from "../views/Register.vue";
@@ -47,6 +50,18 @@ const routes = [
     component: Meeting,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/block-event",
+    name: "Block-event",
+    component: BlockEvent,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = new VueRouter({
@@ -62,9 +77,15 @@ router.beforeEach((to, from, next) => {
   store.dispatch("getMeetingInvitations");
   store.dispatch("getMeetingPendings");
   store.dispatch("getMeetingConfirmations");
+  store.dispatch("getTodayProjects");
+  store.dispatch("getCalendarProjects");
+
+  
+
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
+  
   if (requiresAuth && !isAuthenticated) {
     next("/login");
   } else {
