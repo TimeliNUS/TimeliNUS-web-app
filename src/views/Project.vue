@@ -2875,6 +2875,8 @@ export default {
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
+      { title: "Profile", href: "./profile", icon: "groups" },
+
 
     ],
     currTodos: [],

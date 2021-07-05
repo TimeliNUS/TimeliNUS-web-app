@@ -1,5 +1,6 @@
 import { Task } from "@/models/task.model";
 import { Project } from "@/models/task.model";
+import { TodayProject } from "@/models/task.model";
 import { User } from "@/models/task.model";
 import { MeetingInvitations } from "@/models/task.model";
 import { MeetingPendings } from "@/models/task.model";
@@ -24,9 +25,55 @@ export default new Vuex.Store({
     meetingInvitations: [] as MeetingInvitations[],
     meetingPendings: [] as MeetingPendings[],
     meetingConfirmations: [] as MeetingConfirmations[],
+    todayProjects: [] as TodayProject[],
+    calendarProjects: [] as TodayProject[]
 
   },
   getters: {
+    todayRemaining(state){
+      let counter = 0
+      for(let i=0; i<state.todayProjects.length; i++){
+        const todoArray = state.todayProjects[i].todos
+        console.log(todoArray)
+        for(let j=0; j<todoArray.length; j++){
+          if(todoArray[j].complete === false){
+            counter += 1
+          }
+        }
+      }
+      console.log(state.todayProjects)
+      
+      console.log(counter)
+      return counter;
+        
+    },
+
+    todayTaskDone(state){
+      let counter = 0
+      for(let i=0; i<state.todayProjects.length; i++){
+        const todoArray = state.todayProjects[i].todos
+        for(let j=0; j<todoArray.length; j++){
+          if(todoArray[j].complete === true){
+            counter += 1
+          }
+        }
+      }
+      console.log(counter)
+      return counter;
+        
+    },
+
+    todayTaskNumber(state,getters){
+      console.log(getters.todayTaskDone + getters.todayRemaining)
+      return getters.todayTaskDone + getters.todayRemaining
+    },
+
+    todayTaskProgress(state,getters){
+      console.log( getters.todayTaskDone /getters.todayTaskNumber)
+      return getters.todayTaskDone /getters.todayTaskNumber
+
+    },
+
     remaining(state) {
       return state.tasks.filter((task) => !task.complete).length;
     },
@@ -67,6 +114,10 @@ export default new Vuex.Store({
     },
     getMeetingConfirmations: async (state) => {
       state.meetingPendings = await getMeetingConfirmations(state);
+    },
+
+    getTodayProjects: async (state) => {
+      state.todayProjects = await getTodayProjects(state);
     },
   },
   mutations: {
@@ -132,6 +183,16 @@ export default new Vuex.Store({
       state.meetingConfirmations = meetingConfirmations;
       console.log(state.meetingConfirmations)
     },
+
+    getTodayProjects: (state, { todayProjects }) => {
+      state.todayProjects = todayProjects;
+      console.log(state.todayProjects)
+    },
+
+    getCalendarProjects: (state, { calendarProjects }) => {
+      state.calendarProjects = calendarProjects;
+      console.log(state.calendarProjects)
+    },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
     //     let user:User;
@@ -192,6 +253,20 @@ export default new Vuex.Store({
       console.log(meetingConfirmations);
       context.commit("getMeetingConfirmations", { meetingConfirmations });
     },
+
+
+    getTodayProjects: async (context, payload) => {
+      console.log("start");
+      const todayProjects = await getTodayProjects(context.state);
+      context.commit("getTodayProjects", { todayProjects });
+    },
+
+    getCalendarProjects: async (context, payload) => {
+      console.log("start");
+      const calendarProjects = await getCalendarProjects(context.state);
+      context.commit("getCalendarProjects", { calendarProjects });
+    },
+
 
     setUser: (context, user) => {
       context.commit("setUser", { user });
@@ -355,6 +430,140 @@ async function getProjectProgress(todos: any) {
   }
 }
 
+async function getTodayProjects(state: any): Promise<TodayProject[]> {
+  console.log(state);
+  const documentSnapshot = await db
+    .collection("user")
+    .doc(state.user.uid)
+    .get();
+  console.log(documentSnapshot.exists);
+  const data = await documentSnapshot.get("project");
+  const projects: TodayProject[] = [];
+  console.log(data);
+  console.log(state.user.uid);
+  for (let i = 0; i < data.length; i++) {
+    const doc = await data[i].get();
+    projects.push({
+      id: doc.id,
+      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
+      meetings: doc.data().meetings,
+      todos: await getTodayTodos(doc),
+      _createdAt: doc.data().dateTime,
+      title: doc.data().title,
+      progress: await getProjectProgress(doc.data().todos),
+      modCode: doc.data().modCode,
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
+      groupmates: doc.data().groupmates ?? "",
+      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+    });
+  }
+  console.log(projects);
+  return projects;
+}
+
+async function getCalendarProjects(state: any): Promise<TodayProject[]> {
+  console.log(state);
+  const documentSnapshot = await db
+    .collection("user")
+    .doc(state.user.uid)
+    .get();
+  console.log(documentSnapshot.exists);
+  const data = await documentSnapshot.get("project");
+  const projects: TodayProject[] = [];
+  console.log(data);
+  console.log(state.user.uid);
+  for (let i = 0; i < data.length; i++) {
+    const doc = await data[i].get();
+    projects.push({
+      id: doc.id,
+      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
+      meetings: doc.data().meetings,
+      todos: await getCalendarTodos(doc),
+      _createdAt: doc.data().dateTime,
+      title: doc.data().title,
+      progress: await getProjectProgress(doc.data().todos),
+      modCode: doc.data().modCode,
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
+      groupmates: doc.data().groupmates ?? "",
+      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+    });
+  }
+  console.log(projects);
+  return projects;
+}
+
+async function getTodayTodos(project: any){
+  const docRef = await db
+    .collection("project").doc(project.id).get()
+  const data = await docRef.get('todos')
+  const pushTodos: Task[] = [];
+  for(let i=0; i<data.length; i++){
+    const doc = await db.collection('todo').doc(data[i].id).get()
+    if (doc.get('deadlineDate') === new Date().toISOString().substr(0, 10)){
+      pushTodos.push({
+        id: doc.id,
+        task: doc.get("task") ?? "",
+        complete: doc.get("complete"),
+        _createdAt: doc.get("dateTime"),
+        note: doc.get("note"),
+        project: doc.get("project"),
+        projectTitle: await getTaskProject(doc.get("project")),
+        deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
+        deadlineDate: doc.get("deadlineDate"),
+        deadlineTime: doc.get("deadlineTime"),
+        switchValue: doc.get("switchValue"),
+        dateSwitchValue: doc.get("dateSwitchValue"),
+        displayDeadline: doc.get("displayDeadline"),
+        PIC: doc.get("PIC"),
+      });
+    }
+  }
+  console.log(pushTodos)
+  return pushTodos
+    
+}
+
+async function getCalendarTodos(project: any){
+  const docRef = await db
+    .collection("project").doc(project.id).get()
+  const data = await docRef.get('todos')
+  const pushTodos: Task[] = [];
+  for(let i=0; i<data.length; i++){
+    const doc = await db.collection('todo').doc(data[i].id).get()
+    
+      pushTodos.push({
+        id: doc.id,
+        task: doc.get("task") ?? "",
+        complete: doc.get("complete"),
+        _createdAt: doc.get("dateTime"),
+        note: doc.get("note"),
+        project: doc.get("project"),
+        projectTitle: await getTaskProject(doc.get("project")),
+        deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
+        deadlineDate: doc.get("deadlineDate"),
+        deadlineTime: doc.get("deadlineTime"),
+        switchValue: doc.get("switchValue"),
+        dateSwitchValue: doc.get("dateSwitchValue"),
+        displayDeadline: doc.get("displayDeadline"),
+        PIC: doc.get("PIC"),
+      });
+    
+  }
+  console.log(pushTodos)
+  return pushTodos
+    
+}
+
 async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> {
   console.log(state);
   const meetingInvitations: MeetingInvitations[] = [];
@@ -377,6 +586,7 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
+      displayMeetingDateRange: doc.data().displayMeetingDateRange 
     })
   })
   console.log(meetingInvitations)

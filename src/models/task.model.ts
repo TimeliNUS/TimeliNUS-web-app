@@ -38,6 +38,25 @@ export interface Project {
   dateSwitchValue: boolean;
 }
 
+export interface TodayProject {
+  id: string;
+  creator: User;
+  title: string;
+  todos: Task[];
+  meetings: [];
+  _createdAt: firebase.firestore.Timestamp;
+  deadline: Date | null;
+  progress: number;
+  modCode: string;
+  deadlineTime: string;
+  deadlineDate: string;
+  switchValue: boolean;
+  groupmates: [];
+  groupmatesName: string[];
+  displayDeadline: string | Date;
+  dateSwitchValue: boolean;
+}
+
 export interface User {
   uid: string;
   email: string;
@@ -58,6 +77,7 @@ export interface MeetingInvitations{
   timeLength: Number;
   venue: string;
   creator: User;
+  displayMeetingDateRange: string;
 }
 
 export interface MeetingPendings{

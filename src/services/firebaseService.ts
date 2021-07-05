@@ -77,14 +77,12 @@ export const googleSignIn = () => {
 
 export const findCommonTime = (link: string, startDateString: string, endDateString: string, 
   id: string, user: string) => {
-  axios({
-    url: "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
-    data: {
-      link: link,
-      startDate: startDateString,
-      endDate: endDateString,
-      id: id,
-      user: user,
-    },
-  });
+  const obj = {
+    link: link,
+    startDate: startDateString,
+    endDate: endDateString,
+    id: id,
+    user: user,
+  }
+  axios.post("https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon", obj);
 } 
