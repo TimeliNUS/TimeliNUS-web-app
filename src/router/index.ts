@@ -80,12 +80,9 @@ router.beforeEach((to, from, next) => {
   store.dispatch("getTodayProjects");
   store.dispatch("getCalendarProjects");
 
-  
-
-
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
-  
+
   if (requiresAuth && !isAuthenticated) {
     next("/login");
   } else {

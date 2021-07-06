@@ -1,5 +1,11 @@
 <template>
-  <div style="background-color: #fff0df; font-family: DM Sans, sans-serif; min-height: 100vh">
+  <div
+    style="
+      background-color: #fff0df;
+      font-family: DM Sans, sans-serif;
+      min-height: 100vh;
+    "
+  >
     <v-row>
       <v-col col="12" md="2">
         <v-navigation-drawer
@@ -96,29 +102,36 @@
                   align-items: flex-start;
                   font-weight: bold;
                 "
-                >Welcome! {{this.$store.state.user.displayName}}</span
+                >Welcome! {{ this.$store.state.user.displayName }}</span
               >
             </v-container>
             <v-row>
               <v-col col="12" md="8">
-            <v-container
-                  style="margin-right: auto; margin-left: auto; display: flex; justify-content: center"
-                  
-                  
+                <v-container
+                  style="
+                    margin-right: auto;
+                    margin-left: auto;
+                    display: flex;
+                    justify-content: center;
+                  "
                 >
                   <v-card
                     max-width="51vw"
                     min-width="51vw"
-                    
                     outlined
                     color="#FFE4CB"
                     style="padding: 14px; display: flex; flex-direction: column"
                     :class="`rounded-xl`"
                   >
                     <div
-                      style="padding: 8px; display: flex; flex-direction: row; justify-content: space-between"
+                      style="
+                        padding: 8px;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                      "
                     >
-                    <span
+                      <span
                         style="
                           margin-top: 10px;
                           margin-left: 3vw;
@@ -130,9 +143,11 @@
                         "
                         >Projects</span
                       >
-                      
-                      <v-btn align="right" outlined 
-                            style="
+
+                      <v-btn
+                        align="right"
+                        outlined
+                        style="
                           margin-top: 10px;
                           color: #4b4b4b;
                           font-size: 16px;
@@ -140,10 +155,9 @@
                           align-items: center;
                           font-weight: bold;
                           margin-right: 3vw;
-
                         "
                         @click="$router.push('/project')"
-                       >
+                      >
                         View All
                       </v-btn>
                     </div>
@@ -160,12 +174,11 @@
                       >
                         <v-slide-group
                           v-model="projectSlide"
-                       
                           active-class="success"
                           show-arrows
                         >
                           <v-slide-item
-                            v-for="(project) in this.$store.state.projects"
+                            v-for="project in this.$store.state.projects"
                             :key="project.id"
                             v-slot="{ active }"
                           >
@@ -176,8 +189,7 @@
                               height="200"
                               width="250"
                               outlined
-                              
-                              style="padding: 10px; padding-left:14px;"
+                              style="padding: 10px; padding-left: 14px"
                             >
                               <v-row style="padding: 5px">
                                 <v-col
@@ -235,7 +247,6 @@
                                     </div>
                                   </v-card-text>
                                 </v-col>
-                                
                               </v-row>
                               <span
                                 style="
@@ -248,134 +259,149 @@
                                 ><v-icon
                                   color="#999999"
                                   width="20px"
-                                  
                                   style="padding: 3px; padding-right: 10px"
                                   >groups</v-icon
                                 >
                                 Scheduled Meeting</span
                               >
 
-                              <div style="display:flex; justify-content: space-between">
-                              <span
+                              <div
                                 style="
                                   display: flex;
-                                  padding: 3px;
-                                  padding-bottom: 7px;
-                                  font-size: 14px;
-                                  align-items: center;
-                                  color: #999999;
+                                  justify-content: space-between;
                                 "
-                                ><v-icon
-                                  color="#999999"
-                                  width="20px"
-                                  style="padding: 3px; padding-right:10px;"
-                                  >check_circle</v-icon
-                                >
-                                Incompleted Todo
-                              </span>
-                              
-                              </div>
-                              
-                              <v-progress-linear
-                                    style="
-                                      display: flex;
-                                      justify-content: center;
-                                      align-item: center;
-                                    "
-                                    
-                                    :rotate="-90"
-                                    :size="60"
-                                    :width="8"
-                                    :value="project.progress * 100"
-                                    color="#ff7200"
+                              >
+                                <span
+                                  style="
+                                    display: flex;
+                                    padding: 3px;
+                                    padding-bottom: 7px;
+                                    font-size: 14px;
+                                    align-items: center;
+                                    color: #999999;
+                                  "
+                                  ><v-icon
+                                    color="#999999"
+                                    width="20px"
+                                    style="padding: 3px; padding-right: 10px"
+                                    >check_circle</v-icon
                                   >
-                                    <!-- <span style="font-weight: bold">{{
+                                  Incompleted Todo
+                                </span>
+                              </div>
+
+                              <v-progress-linear
+                                style="
+                                  display: flex;
+                                  justify-content: center;
+                                  align-item: center;
+                                "
+                                :rotate="-90"
+                                :size="60"
+                                :width="8"
+                                :value="project.progress * 100"
+                                color="#ff7200"
+                              >
+                                <!-- <span style="font-weight: bold">{{
                                       Math.trunc(project.progress * 100) + "%"
                                     }}</span> -->
-                                  </v-progress-linear>
-                              
-                             
+                              </v-progress-linear>
                             </v-card>
                           </v-slide-item>
-                          
                         </v-slide-group>
                       </v-sheet>
                     </div>
-                    
-                    </v-card>
-              </v-container>
+                  </v-card>
+                </v-container>
 
-            <v-row>
-              <v-col col="12" md="6">
-              <v-container
-                  style="margin-right: auto; margin-left: auto; display: flex; justify-content: flex-start; flex-direction: column"
-                  
-                >
-                  
-                    <div
-                      style="padding: 8px; display: flex; flex-direction: row; "
+                <v-row>
+                  <v-col col="12" md="6">
+                    <v-container
+                      style="
+                        margin-right: auto;
+                        margin-left: auto;
+                        display: flex;
+                        justify-content: flex-start;
+                        flex-direction: column;
+                      "
                     >
-                    <span
-                        style="
-                          margin-top: 10px;
-                          margin-left: 3vw;
-                          color: #4b4b4b;
-                          font-size: 20px;
-                          display: flex;
-                          align-items: flex-start;
-                          font-weight: bold;
-                        "
-                        >Today's Meetings</span
+                      <div
+                        style="padding: 8px; display: flex; flex-direction: row"
                       >
-                      
-                    </div>
-                    
-                    <v-card color="white" outlined :class="`rounded-xl`" style="padding: 10px;">
-                      <div v-for="meetingPendings in this.$store.state.meetingPendings" :key="meetingPendings.id">
-                        <v-card outlined color="white">
-                          <span color="#ff9d66"> {{meetingPendings.title}} </span>
-                          
-                        </v-card>
-                        <v-divider></v-divider>
+                        <span
+                          style="
+                            margin-top: 10px;
+                            margin-left: 3vw;
+                            color: #4b4b4b;
+                            font-size: 20px;
+                            display: flex;
+                            align-items: flex-start;
+                            font-weight: bold;
+                          "
+                          >Today's Meetings</span
+                        >
                       </div>
-                   
-                    </v-card>
-                    
-                    
-                   
-              </v-container>
-              </v-col>
-              <v-col col="12" md="6">
-                <v-container
-                  style="margin-right: auto; margin-left: auto; display: flex; justify-content: flex-start; flex-direction: column"
-                  
-                >
-                  
-                    <div
-                      style="padding: 8px; display: flex; flex-direction: row; "
-                    >
-                    <span
-                        style="
-                          margin-top: 10px;
-                          margin-left: 3vw;
-                          color: #4b4b4b;
-                          font-size: 20px;
-                          display: flex;
-                          align-items: flex-start;
-                          font-weight: bold;
-                        "
-                        >Today's Todos</span
+
+                      <v-card
+                        color="white"
+                        outlined
+                        :class="`rounded-xl`"
+                        style="padding: 10px"
                       >
-                      
-                    </div>
-                      <v-card color="#ff9d66" outlined :class="`rounded-xl`" style="padding: 10px;">
+                        <div
+                          v-for="meetingPendings in this.$store.state
+                            .meetingPendings"
+                          :key="meetingPendings.id"
+                        >
+                          <v-card outlined color="white">
+                            <span color="#ff9d66">
+                              {{ meetingPendings.title }}
+                            </span>
+                          </v-card>
+                          <v-divider></v-divider>
+                        </div>
+                      </v-card>
+                    </v-container>
+                  </v-col>
+                  <v-col col="12" md="6">
+                    <v-container
+                      style="
+                        margin-right: auto;
+                        margin-left: auto;
+                        display: flex;
+                        justify-content: flex-start;
+                        flex-direction: column;
+                      "
+                    >
+                      <div
+                        style="padding: 8px; display: flex; flex-direction: row"
+                      >
+                        <span
+                          style="
+                            margin-top: 10px;
+                            margin-left: 3vw;
+                            color: #4b4b4b;
+                            font-size: 20px;
+                            display: flex;
+                            align-items: flex-start;
+                            font-weight: bold;
+                          "
+                          >Today's Todos</span
+                        >
+                      </div>
+                      <v-card
+                        color="#ff9d66"
+                        outlined
+                        :class="`rounded-xl`"
+                        style="padding: 10px"
+                      >
                         <div>
                           <v-card-text
                             style="
                               color: white;
                               display: flex;
                               font-weight: bold;
-                              
+
                               font-family: MuseoModerno, sans-serif;
                             "
                           >
@@ -389,7 +415,10 @@
                               "
                             >
                               <v-progress-circular
-                                class="progress-circular v-progress-circular__underlay"
+                                class="
+                                  progress-circular
+                                  v-progress-circular__underlay
+                                "
                                 :rotate="-90"
                                 :size="80"
                                 :width="10"
@@ -411,7 +440,7 @@
                                 flex-direction: column;
                               "
                             >
-                              <span style="display: flex; font-size: 24px;" 
+                              <span style="display: flex; font-size: 24px"
                                 >{{ totalTaskDone }} / {{ totalTask }}</span
                               >
                               <span
@@ -425,74 +454,107 @@
                               >
                             </v-col>
                           </v-card-text>
-                        <div v-for="project in this.$store.state.todayProjects" :key="project.id" style=" margin-left:0.5vw; margin-right:0.5vw;">
-                          <div v-if="project.todos.length !== 0">
-                          <v-card outlined color="white" :class="`rounded-xl`" style="text-align:left; padding: 20px;">
-                            <div style="padding:5px;">
-                            <span style="color: #ff9d66;" >{{project.modCode}} {{project.title}}</span>
-                            </div>
-                            <v-divider style="padding:5px;"></v-divider>
-                           
-                            <div v-for="todo in project.todos" :key="todo.id" style="padding:5px; display:flex; justify-content:space-between;">
-                              <span style="padding:5px; color: #ff9d66" v-bind:class="{ completed: todo.complete }">{{todo.task}}</span>
-                              <v-checkbox
-                                  class="centerAlign"
-                                  color="#ff9d66"
-                                  hide-details
-                                  style="margin-top:0px !important;"
-                                  v-model="todo.complete"
-                                  @click="completeTask(todo)"
-                                />
-                              
-                            
-                            </div>
+                          <div
+                            v-for="project in this.$store.state.todayProjects"
+                            :key="project.id"
+                            style="margin-left: 0.5vw; margin-right: 0.5vw"
+                          >
+                            <div v-if="project.todos.length !== 0">
+                              <v-card
+                                outlined
+                                color="white"
+                                :class="`rounded-xl`"
+                                style="text-align: left; padding: 20px"
+                              >
+                                <div style="padding: 5px">
+                                  <span style="color: #ff9d66"
+                                    >{{ project.modCode }}
+                                    {{ project.title }}</span
+                                  >
+                                </div>
+                                <v-divider style="padding: 5px"></v-divider>
 
-                          </v-card>
-                           <br>
+                                <div
+                                  v-for="todo in project.todos"
+                                  :key="todo.id"
+                                  style="
+                                    padding: 5px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                  "
+                                >
+                                  <span
+                                    style="padding: 5px; color: #ff9d66"
+                                    v-bind:class="{ completed: todo.complete }"
+                                    >{{ todo.task }}</span
+                                  >
+                                  <v-checkbox
+                                    class="centerAlign"
+                                    color="#ff9d66"
+                                    hide-details
+                                    style="margin-top: 0px !important"
+                                    v-model="todo.complete"
+                                    @click="completeTask(todo)"
+                                  />
+                                </div>
+                              </v-card>
+                              <br />
+                            </div>
                           </div>
-                         
                         </div>
-                        
-                        </div>
-                              
-                          
-                        </v-card>
-                </v-container>
-              </v-col>
-            </v-row>
+                      </v-card>
+                    </v-container>
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col col="12" md="4">
-                <div style="margin-right: auto; margin-left: auto; display: flex; justify-content: flex-start; flex-direction: column" >
-                <div>
-                <v-date-picker
-                ref="picker"
-                v-model="date"
-                :events="events"
-                  event-color="orange"
-                  color="#ff9d66"
-                  width="360"
-                  height="100"
-               
+                <div
+                  style="
+                    margin-right: auto;
+                    margin-left: auto;
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-direction: column;
+                  "
                 >
-      
-                </v-date-picker>
-                <v-card
-                   width="360"
-                    
-                    outlined
-                    color="#FFE4CB"
-                    style="padding: 14px; display: flex; flex-direction: column; margin-left: 2.5vw;"
-                    :class="`rounded-xl`"
-                  >
-                  <v-card-text>
-                    {{date}}
-                  </v-card-text>
-                  <v-card-text>
-                    
-                    <div v-for="project in this.$store.state.calendarProjects" :key="project.id">
-                      <div v-if="project.todos.length !== 0 && checkTodoDate(project.todos)">
-
-                          <!-- <v-card outlined color="white" :class="`rounded-xl`" style="text-align:left; padding: 20px;">
+                  <div>
+                    <v-date-picker
+                      ref="picker"
+                      v-model="date"
+                      :events="events"
+                      event-color="orange"
+                      color="#ff9d66"
+                      width="360"
+                      height="100"
+                    >
+                    </v-date-picker>
+                    <v-card
+                      width="360"
+                      outlined
+                      color="#FFE4CB"
+                      style="
+                        padding: 14px;
+                        display: flex;
+                        flex-direction: column;
+                        margin-left: 2.5vw;
+                      "
+                      :class="`rounded-xl`"
+                    >
+                      <v-card-text>
+                        {{ date }}
+                      </v-card-text>
+                      <v-card-text>
+                        <div
+                          v-for="project in this.$store.state.calendarProjects"
+                          :key="project.id"
+                        >
+                          <div
+                            v-if="
+                              project.todos.length !== 0 &&
+                              checkTodoDate(project.todos)
+                            "
+                          >
+                            <!-- <v-card outlined color="white" :class="`rounded-xl`" style="text-align:left; padding: 20px;">
                             <div style="padding:5px;">
                             <span style="color: #ff9d66;" >{{project.modCode}} {{project.title}}</span>
                             </div>
@@ -514,61 +576,85 @@
                             </div>
 
                           </v-card> -->
-                        
+
                             <!-- <div style="padding:5px;"> -->
-                              <v-expansion-panels flat >
-                              <v-expansion-panel flat :class="`rounded-lg`" style="margin-bottom:10px; min-width: 320px; max-width: 320px;  box-shadow: none !important;">
-                            <v-expansion-panel-header style="color: #ff9d66;" >{{project.modCode}} {{project.title}}</v-expansion-panel-header>
-                           
-                            <v-expansion-panel-content>
-                            <v-divider style="padding:5px;"></v-divider>
-                           
-                            <div v-for="todo in project.todos" :key="todo.id">
-                              <div v-if="changeTodoDate(todo.deadline) === date" style="padding:5px; display:flex; justify-content:space-between;">
-                              <span style="padding:5px; color: #ff9d66" v-bind:class="{ completed: todo.complete }">{{todo.task}}</span>
-                              <v-checkbox
-                                  class="centerAlign"
-                                  color="#ff9d66"
-                                  hide-details
-                                  style="margin-top:0px !important;"
-                                  v-model="todo.complete"
-                                  @click="completeTask(todo)"
-                                />
-                              
-                              </div>
-                              <div v-else style="padding:0px; display:flex; justify-content:space-between;">
-                              </div>
-                            </div>
-                            </v-expansion-panel-content>
+                            <v-expansion-panels flat>
+                              <v-expansion-panel
+                                flat
+                                :class="`rounded-lg`"
+                                style="
+                                  margin-bottom: 10px;
+                                  min-width: 320px;
+                                  max-width: 320px;
+                                  box-shadow: none !important;
+                                "
+                              >
+                                <v-expansion-panel-header style="color: #ff9d66"
+                                  >{{ project.modCode }}
+                                  {{ project.title }}</v-expansion-panel-header
+                                >
+
+                                <v-expansion-panel-content>
+                                  <v-divider style="padding: 5px"></v-divider>
+
+                                  <div
+                                    v-for="todo in project.todos"
+                                    :key="todo.id"
+                                  >
+                                    <div
+                                      v-if="
+                                        changeTodoDate(todo.deadline) === date
+                                      "
+                                      style="
+                                        padding: 5px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                      "
+                                    >
+                                      <span
+                                        style="padding: 5px; color: #ff9d66"
+                                        v-bind:class="{
+                                          completed: todo.complete,
+                                        }"
+                                        >{{ todo.task }}</span
+                                      >
+                                      <v-checkbox
+                                        class="centerAlign"
+                                        color="#ff9d66"
+                                        hide-details
+                                        style="margin-top: 0px !important"
+                                        v-model="todo.complete"
+                                        @click="completeTask(todo)"
+                                      />
+                                    </div>
+                                    <div
+                                      v-else
+                                      style="
+                                        padding: 0px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                      "
+                                    ></div>
+                                  </div>
+                                </v-expansion-panel-content>
                               </v-expansion-panel>
-                              </v-expansion-panels>
-                      </div>
+                            </v-expansion-panels>
+                          </div>
 
-                           <!-- <br> -->
+                          <!-- <br> -->
                           <!-- </div> -->
-                    </div>
-                  
-                    
-                  </v-card-text>
-                </v-card>
+                        </div>
+                      </v-card-text>
+                    </v-card>
+                  </div>
+                  <div></div>
                 </div>
-                <div>
-                
-                </div>
-
-              
-              </div>
-             
-            </v-col>
+              </v-col>
             </v-row>
-              
           </div>
-            <v-card>
-            </v-card>
+          <v-card> </v-card>
 
-          <div>
-
-          </div>
+          <div></div>
         </div>
       </v-col>
     </v-row>
@@ -585,17 +671,17 @@ export default {
   data() {
     return {
       projectSlide: null,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      events:null,
+      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
+      events: null,
       navItems: [
-      { title: "Dashboard", href: "./secret", icon: "dashboard" },
-      { title: "Todo", href: "./todo", icon: "done" },
-      { title: "Project", href: "./project", icon: "work" },
-      { title: "Meeting", href: "./meeting", icon: "groups" },
-      { title: "Profile", href: "./profile", icon: "groups" },
-
-
-    ],
+        { title: "Dashboard", href: "./secret", icon: "dashboard" },
+        { title: "Todo", href: "./todo", icon: "done" },
+        { title: "Project", href: "./project", icon: "work" },
+        { title: "Meeting", href: "./meeting", icon: "groups" },
+        { title: "Profile", href: "./profile", icon: "groups" },
+      ],
       chips: [],
       groupmates: [
         {
@@ -649,87 +735,84 @@ export default {
     totalTaskDone() {
       return this.$store.getters.todayTaskDone;
     },
-    
+
     totalTaskProgress() {
       const progress = this.$store.getters.todayTaskProgress;
-      console.log(progress)
-      if (progress == null || progress == undefined ||  isNaN(progress) ){
-        return 0
+      console.log(progress);
+      if (progress == null || progress == undefined || isNaN(progress)) {
+        return 0;
       } else {
         return progress;
-
       }
     },
   },
 
-mounted() {
+  mounted() {
     this.events = this.$store.state.tasks.map((todo) => {
-      if (todo !== null && todo.deadline !== null){
-console.log(todo)
-        console.log(todo.deadline)
-                console.log(todo.deadline.toLocaleDateString().substr(0, 10))
-                
+      if (todo !== null && todo.deadline !== null) {
+        console.log(todo);
+        console.log(todo.deadline);
+        console.log(todo.deadline.toLocaleDateString().substr(0, 10));
 
-        const currLocalDate = todo.deadline.toLocaleDateString().substr(0, 10)
-        const currYear = currLocalDate.substr(6)
-        const currMonth = currLocalDate.substr(3,2)
-        const currDate = currLocalDate.substr(0,2)
-        console.log(currLocalDate)
-        console.log(currYear)
-        console.log(currMonth)
-        console.log(currDate)
-        const newDate = currYear + "-" +currMonth + "-" + currDate
-        console.log(newDate)
-console.log(new Date(todo.deadline).toISOString().substr(0, 10))
-        return newDate
-      
+        const currLocalDate = todo.deadline.toLocaleDateString().substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        const newDate = currYear + "-" + currMonth + "-" + currDate;
+        console.log(newDate);
+        console.log(new Date(todo.deadline).toISOString().substr(0, 10));
+        return newDate;
       }
-      })
-        // const day = Math.floor(Math.random() * 30)
-        // const d = new Date()
-        // d.setDate(day)
-        
+    });
+    // const day = Math.floor(Math.random() * 30)
+    // const d = new Date()
+    // d.setDate(day)
+
     // this.$store.dispatch("getTasks");
   },
 
-
   methods: {
-    checkTodoDate(todos){
-      for(let i=0; i<todos.length;i ++){
+    checkTodoDate(todos) {
+      for (let i = 0; i < todos.length; i++) {
         if (todos[i].deadline !== null) {
-      const currLocalDate = todos[i].deadline.toLocaleDateString().substr(0, 10)
-        const currYear = currLocalDate.substr(6)
-        const currMonth = currLocalDate.substr(3,2)
-        const currDate = currLocalDate.substr(0,2)
-        console.log(currLocalDate)
-        console.log(currYear)
-        console.log(currMonth)
-        console.log(currDate)
-        const newDate = currYear + "-" +currMonth + "-" + currDate
-        if (newDate == this.date){
-          return true
+          const currLocalDate = todos[i].deadline
+            .toLocaleDateString()
+            .substr(0, 10);
+          const currYear = currLocalDate.substr(6);
+          const currMonth = currLocalDate.substr(3, 2);
+          const currDate = currLocalDate.substr(0, 2);
+          console.log(currLocalDate);
+          console.log(currYear);
+          console.log(currMonth);
+          console.log(currDate);
+          const newDate = currYear + "-" + currMonth + "-" + currDate;
+          if (newDate == this.date) {
+            return true;
+          }
         }
       }
-      }
-      return false
+      return false;
     },
-    changeTodoDate(date){
+    changeTodoDate(date) {
       if (date !== null) {
-      const currLocalDate = date.toLocaleDateString().substr(0, 10)
-        const currYear = currLocalDate.substr(6)
-        const currMonth = currLocalDate.substr(3,2)
-        const currDate = currLocalDate.substr(0,2)
-        console.log(currLocalDate)
-        console.log(currYear)
-        console.log(currMonth)
-        console.log(currDate)
-        const newDate = currYear + "-" +currMonth + "-" + currDate
-        return newDate
+        const currLocalDate = date.toLocaleDateString().substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        const newDate = currYear + "-" + currMonth + "-" + currDate;
+        return newDate;
       }
-
     },
-    redirectToProject(){
-      this.$router.push('/project')
+    redirectToProject() {
+      this.$router.push("/project");
     },
     remove(item) {
       this.chips.splice(this.chips.indexOf(item), 1);
@@ -757,11 +840,9 @@ console.log(new Date(todo.deadline).toISOString().substr(0, 10))
       db.collection("todo").doc(task.id).update({
         complete: task.complete,
       });
-      this.$store.dispatch("getProjects")
-      this.$store.dispatch("getTodayProjects")
+      this.$store.dispatch("getProjects");
+      this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
-
-
     },
 
     async getMatchedUserbyEmail() {
@@ -813,8 +894,6 @@ console.log(new Date(todo.deadline).toISOString().substr(0, 10))
           console.log("Error getting documents: ", error);
         });
     },
-
-   
   },
 };
 </script>
@@ -855,4 +934,11 @@ console.log(new Date(todo.deadline).toISOString().substr(0, 10))
   text-decoration: line-through;
   color: grey;
 }
+
+.v-list--rounded .v-list-item,
+.v-list--rounded .v-list-item::before,
+.v-list--rounded .v-list-item > .v-ripple__container {
+  border-radius: 20px !important;
+}
+
 </style>

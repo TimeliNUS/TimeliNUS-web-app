@@ -1,6 +1,5 @@
 <template>
   <div style="background-color: #fff0df; font-family: DM Sans, sans-serif">
-      
     <v-row>
       <v-col col="12" md="2">
         <v-navigation-drawer
@@ -87,57 +86,7 @@
       <v-col col="12" md="10">
         <div>
           <div>
-              <!-- <DxScheduler
-    :data-source="dataSource"
-    :current-date="currentDate"
-    :views="views"
-    :current-view="currentView"
-    :height="600"
-    :show-all-day-panel="false"
-    :first-day-of-week="0"
-    :start-day-hour="9"
-    :end-day-hour="19"
-    data-cell-template="dataCellTemplate"
-    date-cell-template="dateCellTemplate"
-    time-cell-template="timeCellTemplate"
-    :on-appointment-form-opening="onAppointmentFormOpening"
-    :on-appointment-adding="onAppointmentAdding"
-    :on-appointment-updating="onAppointmentUpdating"
-  >
-
-    <template #dataCellTemplate="{ data: cellData }">
-      <DataCell :cell-data="cellData"/>
-    </template>
-
-    <template #dateCellTemplate="{ data: cellData }">
-      <DateCell :cell-data="cellData"/>
-    </template>
-
-    <template #timeCellTemplate="{ data: cellData }">
-      <TimeCell :cell-data="cellData"/>
-    </template>
-
-  </DxScheduler> -->
-  <div class="schedule-vue-sample">
-        <div class="col-md-12 control-section">
-            <div class="schedule-container">
-                <ejs-schedule id='Schedule' ref="ScheduleObj" height="650px" :cssClass='cssClass' :selectedDate='selectedDate' :eventSettings='eventSettings'
-                    :group='group' :currentView='currentView' :resourceHeaderTemplate='resourceHeaderTemplate'>
-                    <e-views>
-                        <e-view option="Day"></e-view>
-                        <e-view option="TimelineDay"></e-view>
-                        <e-view option="TimelineMonth"></e-view>
-                    </e-views>
-                    <e-resources>
-                        <e-resource field='EmployeeId' title='Employees' name='Employee' :dataSource='employeeDataSource'
-                            textField='Text' idField='Id' groupIDField='GroupId' colorField='Color'>
-                        </e-resource>
-                    </e-resources>
-                </ejs-schedule>
-            </div>
             
-        </div>
-    </div>
             <v-container style="padding-bottom: 0px">
               <span
                 style="
@@ -152,12 +101,9 @@
               >
             </v-container>
           </div>
-            <v-card>
-            </v-card>
+          <v-card> </v-card>
 
-          <div>
-
-          </div>
+          <div></div>
         </div>
       </v-col>
     </v-row>
@@ -168,59 +114,101 @@
 import firebase from "firebase";
 import { db } from "../main.ts";
 import _ from "lodash";
-import { extend } from '@syncfusion/ej2-base';
-import { blockData } from '../services/dataSource';
-import { SchedulePlugin, Day, TimelineViews, TimelineMonth, Resize, DragAndDrop } from "@syncfusion/ej2-vue-schedule";
-
+import { extend } from "@syncfusion/ej2-base";
+import { blockData } from "../services/dataSource";
+import {
+  SchedulePlugin,
+  Day,
+  TimelineViews,
+  TimelineMonth,
+  Resize,
+  DragAndDrop,
+} from "@syncfusion/ej2-vue-schedule";
 
 export default {
   name: "Profile.vue",
-    //  resourceHeaderVue: Vue.component("resource-headerTemplate", {
-    //     template: '<div className="template-wrap"><div class="employee-category"><div><img class="employee-image" :src="getImage" :alt="getImage"/></div><div class="employee-name">' +
-    //               '{{getEmployeeName(data)}}</div><div class="employee-designation">{{getEmployeeDesignation(data)}}</div></div></div>',
-    //     data() {
-    //         return {
-    //             data: {}
-    //         };
-    //     },
-    //     computed: {
-    //         getImage: function() {
-    //             return './source/schedule/images/' + this.getEmployeeName(this.data).toLowerCase() + '.png';
-    //         }
-    //     },
-    //     methods: {
-    //         getEmployeeName: function (data) {
-    //             let value = JSON.parse(JSON.stringify(data));
-    //             return (value.resourceData) ? value.resourceData[value.resource.textField] : value.resourceName;
-    //         },
-    //         getEmployeeDesignation: function (data) {
-    //             let value = JSON.parse(JSON.stringify(data));
-    //             return value.resourceData.Designation;
-    //         }
-    //     }
-    // }),
+  //  resourceHeaderVue: Vue.component("resource-headerTemplate", {
+  //     template: '<div className="template-wrap"><div class="employee-category"><div><img class="employee-image" :src="getImage" :alt="getImage"/></div><div class="employee-name">' +
+  //               '{{getEmployeeName(data)}}</div><div class="employee-designation">{{getEmployeeDesignation(data)}}</div></div></div>',
+  //     data() {
+  //         return {
+  //             data: {}
+  //         };
+  //     },
+  //     computed: {
+  //         getImage: function() {
+  //             return './source/schedule/images/' + this.getEmployeeName(this.data).toLowerCase() + '.png';
+  //         }
+  //     },
+  //     methods: {
+  //         getEmployeeName: function (data) {
+  //             let value = JSON.parse(JSON.stringify(data));
+  //             return (value.resourceData) ? value.resourceData[value.resource.textField] : value.resourceName;
+  //         },
+  //         getEmployeeDesignation: function (data) {
+  //             let value = JSON.parse(JSON.stringify(data));
+  //             return value.resourceData.Designation;
+  //         }
+  //     }
+  // }),
   data: () => ({
-     eventSettings: {
-                    dataSource: extend([], blockData, null, true)
-                },
-                selectedDate: new Date(2018, 7, 1),
-                currentView: 'TimelineDay',
-                cssClass: 'block-events',
-                group: {
-                    enableCompactView: false,
-                    resources: ['Employee']
-                },
-                employeeDataSource: [
-                    { Text: 'Alice', Id: 1, GroupId: 1, Color: '#bbdc00', Designation: 'Content writer' },
-                    { Text: 'Nancy', Id: 2, GroupId: 2, Color: '#9e5fff', Designation: 'Designer' },
-                    { Text: 'Robert', Id: 3, GroupId: 1, Color: '#bbdc00', Designation: 'Software Engineer' },
-                    { Text: 'Robson', Id: 4, GroupId: 2, Color: '#9e5fff', Designation: 'Support Engineer' },
-                    { Text: 'Laura', Id: 5, GroupId: 1, Color: '#bbdc00', Designation: 'Human Resource' },
-                    { Text: 'Margaret', Id: 6, GroupId: 2, Color: '#9e5fff', Designation: 'Content Analyst' }
-                ],
-                // resourceHeaderTemplate: function (e) {
-                //     return { template: resourceHeaderVue }
-                // },
+    eventSettings: {
+      dataSource: extend([], blockData, null, true),
+    },
+    selectedDate: new Date(2018, 7, 1),
+    currentView: "TimelineDay",
+    cssClass: "block-events",
+    group: {
+      enableCompactView: false,
+      resources: ["Employee"],
+    },
+    employeeDataSource: [
+      {
+        Text: "Alice",
+        Id: 1,
+        GroupId: 1,
+        Color: "#bbdc00",
+        Designation: "Content writer",
+      },
+      {
+        Text: "Nancy",
+        Id: 2,
+        GroupId: 2,
+        Color: "#9e5fff",
+        Designation: "Designer",
+      },
+      {
+        Text: "Robert",
+        Id: 3,
+        GroupId: 1,
+        Color: "#bbdc00",
+        Designation: "Software Engineer",
+      },
+      {
+        Text: "Robson",
+        Id: 4,
+        GroupId: 2,
+        Color: "#9e5fff",
+        Designation: "Support Engineer",
+      },
+      {
+        Text: "Laura",
+        Id: 5,
+        GroupId: 1,
+        Color: "#bbdc00",
+        Designation: "Human Resource",
+      },
+      {
+        Text: "Margaret",
+        Id: 6,
+        GroupId: 2,
+        Color: "#9e5fff",
+        Designation: "Content Analyst",
+      },
+    ],
+    // resourceHeaderTemplate: function (e) {
+    //     return { template: resourceHeaderVue }
+    // },
     dialog: false,
     nameRules: [(v) => !!v || "Todo title is required"],
     dialogEdit: false,
@@ -253,9 +241,7 @@ export default {
       { title: "Todo", href: "./todo", icon: "done" },
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
-    { title: "Profile", href: "./profile", icon: "groups" },
-
-
+      { title: "Profile", href: "./profile", icon: "groups" },
     ],
     projects: [],
     input: {
@@ -266,35 +252,34 @@ export default {
     varPIC: [],
     varPICId: [],
     groupmatesChipsId: [],
-    today: '2021-07-05',
-      events: [
-        {
-          name: 'Weekly Meeting',
-          start: '2021-07-05 09:00',
-          end: '2021-07-05 10:00',
-        },
-        {
-          name: `Thomas' Birthday`,
-          start: '2021-07-05',
-        },
-        {
-          name: 'Mash Potatoes',
-          start: '2021-07-05 12:30',
-          end: '2021-07-05 15:30',
-        },
-      ],
-      tracked: {
-        '2021-07-04': [23, 45, 10],
-        '2021-07-05': [10],
-        '2021-07-06': [0, 78, 5],
-        '2021-07-07': [0, 0, 50],
-        '2021-07-08': [0, 10, 23],
-        '2021-07-09': [2, 90],
-        '2021-07-10': [10, 32],
-       
+    today: "2021-07-05",
+    events: [
+      {
+        name: "Weekly Meeting",
+        start: "2021-07-05 09:00",
+        end: "2021-07-05 10:00",
       },
-      colors: ['#1867c0', '#fb8c00', '#000000'],
-      category: ['Development', 'Meetings', 'Slacking'],
+      {
+        name: `Thomas' Birthday`,
+        start: "2021-07-05",
+      },
+      {
+        name: "Mash Potatoes",
+        start: "2021-07-05 12:30",
+        end: "2021-07-05 15:30",
+      },
+    ],
+    tracked: {
+      "2021-07-04": [23, 45, 10],
+      "2021-07-05": [10],
+      "2021-07-06": [0, 78, 5],
+      "2021-07-07": [0, 0, 50],
+      "2021-07-08": [0, 10, 23],
+      "2021-07-09": [2, 90],
+      "2021-07-10": [10, 32],
+    },
+    colors: ["#1867c0", "#fb8c00", "#000000"],
+    category: ["Development", "Meetings", "Slacking"],
   }),
 
   computed: {
@@ -312,8 +297,6 @@ export default {
       );
     },
 
-    
-
     remaining() {
       return this.$store.getters.remaining;
     },
@@ -325,19 +308,18 @@ export default {
     },
     totalTaskProgress() {
       const progress = this.$store.getters.totalTaskProgress;
-      console.log(progress)
-      if (progress == null || progress == undefined ||  isNaN(progress) ){
-        return 0
+      console.log(progress);
+      if (progress == null || progress == undefined || isNaN(progress)) {
+        return 0;
       } else {
         return progress;
-
       }
     },
   },
 
-   provide: {
-            schedule: [Day, TimelineViews, TimelineMonth, Resize, DragAndDrop]
-        },
+  provide: {
+    schedule: [Day, TimelineViews, TimelineMonth, Resize, DragAndDrop],
+  },
 
   created() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -356,12 +338,10 @@ export default {
   },
 
   methods: {
-      
-  
     remove(item) {
       this.groupmatesChips.splice(this.groupmatesChips.indexOf(item), 1);
       this.groupmatesChips = [...this.groupmatesChips];
-      console.log(this.groupmatesChips)
+      console.log(this.groupmatesChips);
     },
 
     async fillInfo(task) {
@@ -380,7 +360,7 @@ export default {
       this.oldGroupmatesChipsObject = await this.getPIC(task.PIC);
       this.oldGroupmatesChips = await this.getPICId(task.PIC);
       console.log(this.oldGroupmatesChips);
-      console.log(this.complete)
+      console.log(this.complete);
     },
 
     async getPIC(PIC) {
@@ -520,10 +500,8 @@ export default {
         .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
         .catch((error) => console.log(error));
 
-      
       await this.$store.dispatch("getProjects");
       await this.$store.dispatch("getTasks");
-
 
       this.myTodo = "";
       this.myProject = "";
@@ -651,13 +629,13 @@ export default {
         });
       }
 
-      console.log(this.tempGroupmates)
+      console.log(this.tempGroupmates);
       console.log(this.$store.state.user);
     },
 
     async addFinalPIC(task) {
-      if (this.groupmatesChips.length == 0){
-        this.groupmatesChips = this.oldGroupmatesChipsObject
+      if (this.groupmatesChips.length == 0) {
+        this.groupmatesChips = this.oldGroupmatesChipsObject;
       }
       this.groupmatesChipsId = [];
       for (let i = 0; i < this.groupmatesChips.length; i++) {
@@ -837,13 +815,13 @@ export default {
 
 @-moz-document url-prefix() {
   .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-      position: relative;
+    position: relative;
   }
 
   .dx-scheduler-work-space-month .dx-scheduler-date-table-cell .disable-date {
-      position: absolute;
-      width: 100%;
-      height: 100%; 
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -854,18 +832,20 @@ export default {
 }
 
 .disable-date {
-  background-image: repeating-linear-gradient(135deg,
-      rgba(244, 67, 54, 0.1),
-      rgba(244, 67, 54, 0.1) 4px,
-      transparent 4px,
-      transparent 9px);
-  color: #9B6467;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(244, 67, 54, 0.1),
+    rgba(244, 67, 54, 0.1) 4px,
+    transparent 4px,
+    transparent 9px
+  );
+  color: #9b6467;
 }
 
 .dx-scheduler-header-panel-cell .disable-date {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .dinner {
@@ -883,64 +863,76 @@ export default {
 }
 
 td.dx-scheduler-time-panel-cell .dinner .cafe {
-    height: 200%;
-    width: 100%;
-    left: 50%;
-    /* -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>');
+  height: 200%;
+  width: 100%;
+  left: 50%;
+  /* -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>');
     -webkit-mask-repeat: no-repeat; */
-    -webkit-mask-position-y: 50%;
-    -webkit-mask-position-x: 100%;
-    margin-top: -4px;
-    background-color: #ffc107;
+  -webkit-mask-position-y: 50%;
+  -webkit-mask-position-x: 100%;
+  margin-top: -4px;
+  background-color: #ffc107;
 }
 
 .dx-scheduler-date-table-cell {
-    padding: 0;
-    opacity: 1;
+  padding: 0;
+  opacity: 1;
 }
 
 .schedule-vue-sample .block-events.e-schedule .template-wrap {
-        width: 100%;
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .e-vertical-view .e-resource-cells {
-        height: 58px;
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .e-timeline-view .e-resource-left-td,
-    .schedule-vue-sample .block-events.e-schedule .e-timeline-month-view .e-resource-left-td {
-        width: 170px;
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .e-resource-cells.e-child-node .employee-category,
-    .schedule-vue-sample .block-events.e-schedule .e-resource-cells.e-child-node .employee-name {
-        padding: 5px
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .employee-image {
-        width: 45px;
-        height: 40px;
-        float: left;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .employee-name {
-        font-size: 13px;
-    }
-
-    .schedule-vue-sample .block-events.e-schedule .employee-designation {
-        font-size: 10px;
-    }
-
-@media all and (-ms-high-contrast:none)
-{
-    td.dx-scheduler-time-panel-cell .dinner .cafe {
-      background-color: transparent;
-    }
+  width: 100%;
 }
 
+.schedule-vue-sample
+  .block-events.e-schedule
+  .e-vertical-view
+  .e-resource-cells {
+  height: 58px;
+}
 
+.schedule-vue-sample
+  .block-events.e-schedule
+  .e-timeline-view
+  .e-resource-left-td,
+.schedule-vue-sample
+  .block-events.e-schedule
+  .e-timeline-month-view
+  .e-resource-left-td {
+  width: 170px;
+}
+
+.schedule-vue-sample
+  .block-events.e-schedule
+  .e-resource-cells.e-child-node
+  .employee-category,
+.schedule-vue-sample
+  .block-events.e-schedule
+  .e-resource-cells.e-child-node
+  .employee-name {
+  padding: 5px;
+}
+
+.schedule-vue-sample .block-events.e-schedule .employee-image {
+  width: 45px;
+  height: 40px;
+  float: left;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.schedule-vue-sample .block-events.e-schedule .employee-name {
+  font-size: 13px;
+}
+
+.schedule-vue-sample .block-events.e-schedule .employee-designation {
+  font-size: 10px;
+}
+
+@media all and (-ms-high-contrast: none) {
+  td.dx-scheduler-time-panel-cell .dinner .cafe {
+    background-color: transparent;
+  }
+}
 </style>
 <style lang="sass">
 @import './src/sass/variables.sass'

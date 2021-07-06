@@ -26,52 +26,48 @@ export default new Vuex.Store({
     meetingPendings: [] as MeetingPendings[],
     meetingConfirmations: [] as MeetingConfirmations[],
     todayProjects: [] as TodayProject[],
-    calendarProjects: [] as TodayProject[]
-
+    calendarProjects: [] as TodayProject[],
   },
   getters: {
-    todayRemaining(state){
-      let counter = 0
-      for(let i=0; i<state.todayProjects.length; i++){
-        const todoArray = state.todayProjects[i].todos
-        console.log(todoArray)
-        for(let j=0; j<todoArray.length; j++){
-          if(todoArray[j].complete === false){
-            counter += 1
+    todayRemaining(state) {
+      let counter = 0;
+      for (let i = 0; i < state.todayProjects.length; i++) {
+        const todoArray = state.todayProjects[i].todos;
+        console.log(todoArray);
+        for (let j = 0; j < todoArray.length; j++) {
+          if (todoArray[j].complete === false) {
+            counter += 1;
           }
         }
       }
-      console.log(state.todayProjects)
-      
-      console.log(counter)
+      console.log(state.todayProjects);
+
+      console.log(counter);
       return counter;
-        
     },
 
-    todayTaskDone(state){
-      let counter = 0
-      for(let i=0; i<state.todayProjects.length; i++){
-        const todoArray = state.todayProjects[i].todos
-        for(let j=0; j<todoArray.length; j++){
-          if(todoArray[j].complete === true){
-            counter += 1
+    todayTaskDone(state) {
+      let counter = 0;
+      for (let i = 0; i < state.todayProjects.length; i++) {
+        const todoArray = state.todayProjects[i].todos;
+        for (let j = 0; j < todoArray.length; j++) {
+          if (todoArray[j].complete === true) {
+            counter += 1;
           }
         }
       }
-      console.log(counter)
+      console.log(counter);
       return counter;
-        
     },
 
-    todayTaskNumber(state,getters){
-      console.log(getters.todayTaskDone + getters.todayRemaining)
-      return getters.todayTaskDone + getters.todayRemaining
+    todayTaskNumber(state, getters) {
+      console.log(getters.todayTaskDone + getters.todayRemaining);
+      return getters.todayTaskDone + getters.todayRemaining;
     },
 
-    todayTaskProgress(state,getters){
-      console.log( getters.todayTaskDone /getters.todayTaskNumber)
-      return getters.todayTaskDone /getters.todayTaskNumber
-
+    todayTaskProgress(state, getters) {
+      console.log(getters.todayTaskDone / getters.todayTaskNumber);
+      return getters.todayTaskDone / getters.todayTaskNumber;
     },
 
     remaining(state) {
@@ -113,7 +109,7 @@ export default new Vuex.Store({
       state.meetingPendings = await getMeetingPendings(state);
     },
     getMeetingConfirmations: async (state) => {
-      state.meetingPendings = await getMeetingConfirmations(state);
+      state.meetingConfirmations = await getMeetingConfirmations(state);
     },
 
     getTodayProjects: async (state) => {
@@ -166,32 +162,32 @@ export default new Vuex.Store({
 
     getProjectInvitations: (state, { projectInvitations }) => {
       state.projectInvitations = projectInvitations;
-      console.log(state.projectInvitations)
+      console.log(state.projectInvitations);
     },
 
     getMeetingInvitations: (state, { meetingInvitations }) => {
       state.meetingInvitations = meetingInvitations;
-      console.log(state.meetingInvitations)
+      console.log(state.meetingInvitations);
     },
 
     getMeetingPendings: (state, { meetingPendings }) => {
       state.meetingPendings = meetingPendings;
-      console.log(state.meetingPendings)
+      console.log(state.meetingPendings);
     },
 
     getMeetingConfirmations: (state, { meetingConfirmations }) => {
       state.meetingConfirmations = meetingConfirmations;
-      console.log(state.meetingConfirmations)
+      console.log(state.meetingConfirmations);
     },
 
     getTodayProjects: (state, { todayProjects }) => {
       state.todayProjects = todayProjects;
-      console.log(state.todayProjects)
+      console.log(state.todayProjects);
     },
 
     getCalendarProjects: (state, { calendarProjects }) => {
       state.calendarProjects = calendarProjects;
-      console.log(state.calendarProjects)
+      console.log(state.calendarProjects);
     },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
@@ -254,7 +250,6 @@ export default new Vuex.Store({
       context.commit("getMeetingConfirmations", { meetingConfirmations });
     },
 
-
     getTodayProjects: async (context, payload) => {
       console.log("start");
       const todayProjects = await getTodayProjects(context.state);
@@ -266,7 +261,6 @@ export default new Vuex.Store({
       const calendarProjects = await getCalendarProjects(context.state);
       context.commit("getCalendarProjects", { calendarProjects });
     },
-
 
     setUser: (context, user) => {
       context.commit("setUser", { user });
@@ -287,14 +281,13 @@ async function getTasks(state: any): Promise<Task[]> {
   console.log(state.user.uid);
   for (let i = 0; i < data.length; i++) {
     const doc = await data[i].get();
-    console.log(state.user.uid)
-    console.log(data)
+    console.log(state.user.uid);
+    console.log(data);
     console.log(documentSnapshot);
-    console.log(doc.id)
-    console.log(doc.get("complete"))
+    console.log(doc.id);
+    console.log(doc.get("complete"));
 
-
-    console.log(doc.data())
+    console.log(doc.data());
     tasks.push({
       id: doc.id,
       task: doc.data().task ?? "",
@@ -326,7 +319,7 @@ async function getProjectInvitations(state: any): Promise<Project[]> {
   const projectInvitations: Project[] = [];
   for (let i = 0; i < data.length; i++) {
     const doc = await data[i].get();
-    console.log(doc.data().creator)
+    console.log(doc.data().creator);
     projectInvitations.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -344,11 +337,10 @@ async function getProjectInvitations(state: any): Promise<Project[]> {
       displayDeadline: doc.data().displayDeadline,
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
-
     });
   }
-  console.log(projectInvitations)
-  return projectInvitations
+  console.log(projectInvitations);
+  return projectInvitations;
 }
 
 async function getTaskProject(project: any) {
@@ -358,10 +350,10 @@ async function getTaskProject(project: any) {
   return await docRef.get("title");
 }
 
-async function getCreator(creator: any){
-  console.log(creator)
+async function getCreator(creator: any) {
+  console.log(creator);
   const docRef = await creator.get();
-  return docRef.get('name');
+  return docRef.get("name");
 }
 
 async function getProjects(state: any): Promise<Project[]> {
@@ -502,14 +494,13 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
   return projects;
 }
 
-async function getTodayTodos(project: any){
-  const docRef = await db
-    .collection("project").doc(project.id).get()
-  const data = await docRef.get('todos')
+async function getTodayTodos(project: any) {
+  const docRef = await db.collection("project").doc(project.id).get();
+  const data = await docRef.get("todos");
   const pushTodos: Task[] = [];
-  for(let i=0; i<data.length; i++){
-    const doc = await db.collection('todo').doc(data[i].id).get()
-    if (doc.get('deadlineDate') === new Date().toISOString().substr(0, 10)){
+  for (let i = 0; i < data.length; i++) {
+    const doc = await db.collection("todo").doc(data[i].id).get();
+    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10)) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
@@ -528,50 +519,53 @@ async function getTodayTodos(project: any){
       });
     }
   }
-  console.log(pushTodos)
-  return pushTodos
-    
+  console.log(pushTodos);
+  return pushTodos;
 }
 
-async function getCalendarTodos(project: any){
-  const docRef = await db
-    .collection("project").doc(project.id).get()
-  const data = await docRef.get('todos')
+async function getCalendarTodos(project: any) {
+  const docRef = await db.collection("project").doc(project.id).get();
+  const data = await docRef.get("todos");
   const pushTodos: Task[] = [];
-  for(let i=0; i<data.length; i++){
-    const doc = await db.collection('todo').doc(data[i].id).get()
-    
-      pushTodos.push({
-        id: doc.id,
-        task: doc.get("task") ?? "",
-        complete: doc.get("complete"),
-        _createdAt: doc.get("dateTime"),
-        note: doc.get("note"),
-        project: doc.get("project"),
-        projectTitle: await getTaskProject(doc.get("project")),
-        deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
-        deadlineDate: doc.get("deadlineDate"),
-        deadlineTime: doc.get("deadlineTime"),
-        switchValue: doc.get("switchValue"),
-        dateSwitchValue: doc.get("dateSwitchValue"),
-        displayDeadline: doc.get("displayDeadline"),
-        PIC: doc.get("PIC"),
-      });
-    
+  for (let i = 0; i < data.length; i++) {
+    const doc = await db.collection("todo").doc(data[i].id).get();
+
+    pushTodos.push({
+      id: doc.id,
+      task: doc.get("task") ?? "",
+      complete: doc.get("complete"),
+      _createdAt: doc.get("dateTime"),
+      note: doc.get("note"),
+      project: doc.get("project"),
+      projectTitle: await getTaskProject(doc.get("project")),
+      deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
+      deadlineDate: doc.get("deadlineDate"),
+      deadlineTime: doc.get("deadlineTime"),
+      switchValue: doc.get("switchValue"),
+      dateSwitchValue: doc.get("dateSwitchValue"),
+      displayDeadline: doc.get("displayDeadline"),
+      PIC: doc.get("PIC"),
+    });
   }
-  console.log(pushTodos)
-  return pushTodos
-    
+  console.log(pushTodos);
+  return pushTodos;
 }
 
-async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> {
+async function getMeetingInvitations(
+  state: any
+): Promise<MeetingInvitations[]> {
   console.log(state);
   const meetingInvitations: MeetingInvitations[] = [];
-  
+
   const querySnapshot = await db
     .collection("meeting")
-    .where('invitations', 'array-contains', db.collection("user").doc(state.user.uid)).get();
-    console.log(querySnapshot)
+    .where(
+      "invitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
+    .get();
+  console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
     meetingInvitations.push({
       id: doc.id,
@@ -586,26 +580,35 @@ async function getMeetingInvitations(state: any): Promise<MeetingInvitations[]> 
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
-      displayMeetingDateRange: doc.data().displayMeetingDateRange 
-    })
-  })
-  console.log(meetingInvitations)
+      displayMeetingDateRange: doc.data().displayMeetingDateRange,
+    });
+  });
+  console.log(meetingInvitations);
   return meetingInvitations;
 }
 
 async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
   console.log(state);
   const meetingPendings: MeetingPendings[] = [];
-  
+
   const querySnapshot = await db
     .collection("meeting")
-    .where('confirmedInvitations', 'array-contains', db.collection("user").doc(state.user.uid)).where('invitations', "!=", []).get();
-    console.log(querySnapshot)
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
+    .where("invitations", "!=", [])
+    .get();
+  console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
     meetingPendings.push({
       id: doc.id,
       title: doc.data().title,
-      invited_groupmates: doc.data().invitations,
+      invited_groupmates: await getPendingGroupmates(doc.data().invitations),
+      confirmed_groupmates: await getPendingGroupmates(
+        doc.data().confirmedInvitations
+      ),
       project: doc.data().project.get(),
       projectTitle: await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
@@ -615,20 +618,28 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
-    })
-  })
-  console.log(meetingPendings)
+    });
+  });
+  console.log(meetingPendings);
   return meetingPendings;
 }
 
-async function getMeetingConfirmations(state: any): Promise<MeetingConfirmations[]> {
+async function getMeetingConfirmations(
+  state: any
+): Promise<MeetingConfirmations[]> {
   console.log(state);
   const meetingConfirmations: MeetingConfirmations[] = [];
-  
+
   const querySnapshot = await db
     .collection("meeting")
-    .where('confirmedInvitations', 'array-contains', db.collection("user").doc(state.user.uid)).where('invitations', "==", []).get();
-    console.log(querySnapshot)
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
+    .where("invitations", "==", [])
+    .get();
+  console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
     meetingConfirmations.push({
       id: doc.id,
@@ -643,10 +654,23 @@ async function getMeetingConfirmations(state: any): Promise<MeetingConfirmations
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
-    })
-  })
-  console.log(meetingConfirmations)
+    });
+  });
+  console.log(meetingConfirmations);
   return meetingConfirmations;
 }
-    
- 
+
+async function getPendingGroupmates(groupmates: any): Promise<User[]> {
+  const groupmatesArray: User[] = [];
+  for (let i = 0; i < groupmates.length; i++) {
+    const docRef = await db.collection("user").doc(groupmates[i].id).get();
+    groupmatesArray.push({
+      uid: docRef.id,
+      name: docRef.get("name"),
+      email: docRef.get("email"),
+      task: docRef.get("todo"),
+      project: docRef.get("project"),
+    });
+  }
+  return groupmatesArray;
+}
