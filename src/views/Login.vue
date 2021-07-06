@@ -119,7 +119,6 @@
 import firebase from "firebase";
 import { db } from "../main.ts";
 
-
 export default {
   name: "Login.vue",
 
@@ -146,47 +145,42 @@ export default {
       }
     },
 
-     async googleSignIn() {
+    async googleSignIn() {
       const provider = new firebase.auth.GoogleAuthProvider();
       let user;
       await firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-      /** @type {firebase.auth.OAuthCredential} */
-      const credential = result.credential;
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          /** @type {firebase.auth.OAuthCredential} */
+          const credential = result.credential;
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const token = credential.accessToken;
-      // The signed-in user info.
-      user = result.user;
-      console.log('google sign in')
-      console.log(user);
-      console.log(user.displayName);
-      const findUser = db.collection('user').doc(user.uid)
-      if (result.additionalUserInfo.isNewUser){
-        db.collection("user")
-          .doc(user.uid)
-          .set({
-            email: user.email,
-            name: user.displayName,
-            todo: [],
-            project: [],
-            created_at: Date.now(),
-          })
-      }
-     
-    })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.email;
-            const credential = error.credential;
-          });
-    this.$router.replace({ name: "Secret" });
-
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = credential.accessToken;
+          // The signed-in user info.
+          user = result.user;
+          console.log("google sign in");
+          console.log(user);
+          console.log(user.displayName);
+          const findUser = db.collection("user").doc(user.uid);
+          if (result.additionalUserInfo.isNewUser) {
+            db.collection("user").doc(user.uid).set({
+              email: user.email,
+              name: user.displayName,
+              todo: [],
+              project: [],
+              created_at: Date.now(),
+            });
+          }
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const email = error.email;
+          const credential = error.credential;
+        });
+      this.$router.replace({ name: "Secret" });
     },
-
   },
 };
 </script>

@@ -59,12 +59,13 @@ export interface TodayProject {
 
 export interface User {
   uid: string;
+  name: string;
   email: string;
   task: [];
   project: [];
 }
 
-export interface MeetingInvitations{
+export interface MeetingInvitations {
   id: string;
   title: string;
   invited_groupmates: User[];
@@ -74,28 +75,29 @@ export interface MeetingInvitations{
   endDate: Date;
   startTime: string;
   endTime: string;
-  timeLength: Number;
+  timeLength: number;
   venue: string;
   creator: User;
   displayMeetingDateRange: string;
 }
 
-export interface MeetingPendings{
+export interface MeetingPendings {
   id: string;
   title: string;
   invited_groupmates: User[];
+  confirmed_groupmates: User[];
   project: Project;
   projectTitle: string;
   startDate: Date;
   endDate: Date;
   startTime: string;
   endTime: string;
-  timeLength: Number;
+  timeLength: number;
   venue: string;
   creator: User;
 }
 
-export interface MeetingConfirmations{
+export interface MeetingConfirmations {
   id: string;
   title: string;
   invited_groupmates: User[];
@@ -105,7 +107,7 @@ export interface MeetingConfirmations{
   endDate: Date;
   startTime: string;
   endTime: string;
-  timeLength: Number;
+  timeLength: number;
   venue: string;
   creator: User;
 }

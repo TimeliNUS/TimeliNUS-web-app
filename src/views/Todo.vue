@@ -184,7 +184,12 @@
               <v-card
                 outlined
                 color="#FFE4CB"
-                style="padding: 20px; overflow-y: scroll; max-height: 65vh; min-height:65vh"
+                style="
+                  padding: 20px;
+                  overflow-y: scroll;
+                  max-height: 65vh;
+                  min-height: 65vh;
+                "
                 :class="`rounded-xl`"
               >
                 <v-dialog
@@ -286,7 +291,10 @@
                                     label="Person In Charge*"
                                     multiple
                                     color="#ff9d66"
-                                    :rules="[(v) => !!v || 'Person In Charge is required']"
+                                    :rules="[
+                                      (v) =>
+                                        !!v || 'Person In Charge is required',
+                                    ]"
                                   >
                                     <template
                                       v-slot:selection="{
@@ -672,8 +680,11 @@
                                                     :disabled="
                                                       myProject == null
                                                     "
-                                                    :rules="[(v) => !!v || 'Person In Charge is required']"
-
+                                                    :rules="[
+                                                      (v) =>
+                                                        !!v ||
+                                                        'Person In Charge is required',
+                                                    ]"
                                                     item-text="name"
                                                     item-value="id"
                                                     v-model="groupmatesChips"
@@ -959,10 +970,21 @@
                     <br />
                   </div>
                 </div>
-                <div v-else style="padding:8vh; display:flex; align-items: center; justify-content: center; flex-direction: column">
+                <div
+                  v-else
+                  style="
+                    padding: 8vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                  "
+                >
                   <v-img src="@/assets/todo_cartoon.png" width="200"></v-img>
-                  <br>
-                  <span style="font-weight: bold; font-size: 24px;">You do not have any todo yet</span>
+                  <br />
+                  <span style="font-weight: bold; font-size: 24px"
+                    >You do not have any todo yet</span
+                  >
                 </div>
               </v-card>
             </v-container>
@@ -1014,8 +1036,6 @@ export default {
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
       { title: "Profile", href: "./profile", icon: "groups" },
-
-
     ],
     projects: [],
     input: {
@@ -1054,12 +1074,11 @@ export default {
     },
     totalTaskProgress() {
       const progress = this.$store.getters.totalTaskProgress;
-      console.log(progress)
-      if (progress == null || progress == undefined ||  isNaN(progress) ){
-        return 0
+      console.log(progress);
+      if (progress == null || progress == undefined || isNaN(progress)) {
+        return 0;
       } else {
         return progress;
-
       }
     },
   },
@@ -1084,7 +1103,7 @@ export default {
     remove(item) {
       this.groupmatesChips.splice(this.groupmatesChips.indexOf(item), 1);
       this.groupmatesChips = [...this.groupmatesChips];
-      console.log(this.groupmatesChips)
+      console.log(this.groupmatesChips);
     },
 
     async fillInfo(task) {
@@ -1103,7 +1122,7 @@ export default {
       this.oldGroupmatesChipsObject = await this.getPIC(task.PIC);
       this.oldGroupmatesChips = await this.getPICId(task.PIC);
       console.log(this.oldGroupmatesChips);
-      console.log(this.complete)
+      console.log(this.complete);
     },
 
     async getPIC(PIC) {
@@ -1243,10 +1262,8 @@ export default {
         .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
         .catch((error) => console.log(error));
 
-      
       await this.$store.dispatch("getProjects");
       await this.$store.dispatch("getTasks");
-
 
       this.myTodo = "";
       this.myProject = "";
@@ -1374,13 +1391,13 @@ export default {
         });
       }
 
-      console.log(this.tempGroupmates)
+      console.log(this.tempGroupmates);
       console.log(this.$store.state.user);
     },
 
     async addFinalPIC(task) {
-      if (this.groupmatesChips.length == 0){
-        this.groupmatesChips = this.oldGroupmatesChipsObject
+      if (this.groupmatesChips.length == 0) {
+        this.groupmatesChips = this.oldGroupmatesChipsObject;
       }
       this.groupmatesChipsId = [];
       for (let i = 0; i < this.groupmatesChips.length; i++) {

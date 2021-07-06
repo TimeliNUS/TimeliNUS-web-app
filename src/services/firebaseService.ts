@@ -3,7 +3,6 @@ import { db } from "@/main";
 import axios from "axios";
 import firebase from "firebase";
 
-
 // export const register = async (
 //   email: string,
 //   password: string
@@ -55,17 +54,15 @@ export const googleSignIn = () => {
       const token = credential.accessToken;
       // The signed-in user info.
       user = result.user;
-      console.log('google sign in')
+      console.log("google sign in");
       console.log(user);
-      db.collection("user")
-          .doc(user!.uid)
-          .set({
-            email: user!.email,
-            name: user!.displayName,
-            todo: [],
-            project: [],
-            created_at: Date.now(),
-          })
+      db.collection("user").doc(user!.uid).set({
+        email: user!.email,
+        name: user!.displayName,
+        todo: [],
+        project: [],
+        created_at: Date.now(),
+      });
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -75,14 +72,22 @@ export const googleSignIn = () => {
     });
 };
 
-export const findCommonTime = (link: string, startDateString: string, endDateString: string, 
-  id: string, user: string) => {
+export const findCommonTime = (
+  link: string,
+  startDateString: string,
+  endDateString: string,
+  id: string,
+  user: string
+) => {
   const obj = {
     link: link,
     startDate: startDateString,
     endDate: endDateString,
     id: id,
     user: user,
-  }
-  axios.post("https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon", obj);
-} 
+  };
+  axios.post(
+    "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
+    obj
+  );
+};
