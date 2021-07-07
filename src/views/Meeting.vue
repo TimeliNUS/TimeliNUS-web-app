@@ -1197,6 +1197,10 @@
                           <div class="col-md-12 control-section">
                             <div class="content-wrapper" style="">
                               <ejs-schedule
+                              :startHour="currMeetingInv.startTime"
+                              :endHour="currMeetingInv.endTime"
+                              :minDate='new Date(currMeetingInv.startDate)'
+                              :maxDate='new Date(currMeetingInv.endDate)'
                                 class="scheduleHeight"
                                 style="
                                   height: 450px !important;
@@ -1426,6 +1430,10 @@
                           <div class="col-md-12 control-section">
                             <div class="content-wrapper" style="">
                               <ejs-schedule
+                              :startHour="currMeetingPending.startTime"
+                              :endHour="currMeetingPending.endTime"
+                              :minDate='new Date(currMeetingPending.startDate)'
+                              :maxDate='new Date(currMeetingPending.endDate)'
                                 class="scheduleHeight"
                                 style="
                                   height: 450px !important;
@@ -1476,8 +1484,19 @@
                           v-for="groupmate in currMeetingPending.confirmed_groupmates"
                           :key="groupmate.id"
                         >
-                          <v-avatar>{{ groupmate.avatar }}</v-avatar
-                          ><span>{{ groupmate.name }}</span>
+                        <v-row style="display: flex;
+                            padding-bottom: 0px !important;
+                            padding-top: 3px !important;
+                            padding-left: 10px !important;
+                            padding-right: 3px !important;
+                            color: white;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
+                            margin-bottom: 20px;
+                            align-items: center">
+                          <v-avatar size="40"><v-img :src="groupmate.avatar"></v-img></v-avatar>
+                          <span style="margin-left: 10px">{{ groupmate.name }}</span>
+                        </v-row>
                         </div>
 
                         <v-card-title
@@ -1513,8 +1532,19 @@
                           v-for="groupmate in currMeetingPending.invited_groupmates"
                           :key="groupmate.id"
                         >
-                          <v-avatar>{{ groupmate.avatar }}</v-avatar
-                          ><span>{{ groupmate.name }}</span>
+                         <v-row style="display: flex;
+                            padding-bottom: 0px !important;
+                            padding-top: 3px !important;
+                            padding-left: 10px !important;
+                            padding-right: 3px !important;
+                            color: white;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
+                            margin-bottom: 20px;
+                            align-items: center">
+                          <v-avatar size="40"><v-img :src="groupmate.avatar"></v-img></v-avatar>
+                          <span style="margin-left: 10px">{{ groupmate.name }}</span>
+                        </v-row>
                         </div>
                         <v-row style="padding-left: 10px">
                           <v-card-title
@@ -1594,6 +1624,11 @@
                           <div class="col-md-12 control-section">
                             <div class="content-wrapper" style="">
                               <ejs-schedule
+                               
+                              :startHour="currMeetingConfirmation.startTime"
+                              :endHour="currMeetingConfirmation.endTime"
+                              :minDate='new Date(currMeetingConfirmation.startDate)'
+                              :maxDate='new Date(currMeetingConfirmation.endDate)'
                                 class="scheduleHeight"
                                 style="
                                   height: 450px !important;
@@ -2188,14 +2223,16 @@ export default {
         this.displayMeetingDateRange = this.meetingDateRange.join(" ~ ");
       }
       console.log(this.groupmatesChips);
-      const response = await db.collection("meeting").add({
+      console.log(this.meetingDateRange)
+      console.log(this.displayMeetingDateRange)
+const response = await db.collection("meeting").add({
         title: this.meetingTitle,
         _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         startDate: firebase.firestore.Timestamp.fromDate(
-          new Date(this.meetingDateRange[0])
+          new Date(this.meetingDateRange[0] + "T" + "00:00" + ":00+08:00")
         ),
         endDate: firebase.firestore.Timestamp.fromDate(
-          new Date(this.meetingDateRange[1])
+          new Date(this.meetingDateRange[1] + "T" + "00:00" + ":00+08:00")
         ),
         startTime: this.meetingStartTime,
         endTime: this.meetingEndTime,
@@ -2565,10 +2602,10 @@ export default {
         meetingInv.id,
         this.$store.state.user.uid
       );
-      // this.currMeetingInv = null
-      // this.$store.dispatch("getMeetingInvitations")
-      // this.$store.dispatch("getMeetingPendings")
-      // this.$store.dispatch("getMeetingConfirmations")
+      this.currMeetingInv = null
+      this.$store.dispatch("getMeetingInvitations")
+      this.$store.dispatch("getMeetingPendings")
+      this.$store.dispatch("getMeetingConfirmations")
 
     },
   },

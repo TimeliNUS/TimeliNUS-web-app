@@ -183,6 +183,7 @@ export default {
               todo: [],
               project: [],
               created_at: Date.now(),
+              photoURL: user.displayPhoto,
             });
           }
         })
@@ -205,6 +206,7 @@ export default {
             todo: [],
             project: [],
             created_at: Date.now(),
+            photoURL: null,
           })
           .then((response) => {
             if (response) {
