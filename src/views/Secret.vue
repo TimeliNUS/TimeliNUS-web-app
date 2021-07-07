@@ -102,7 +102,7 @@
                   align-items: flex-start;
                   font-weight: bold;
                 "
-                >Welcome! {{ this.$store.state.user.displayName }}</span
+                >Welcome! {{ this.$store.state.displayUser.name }}</span
               >
             </v-container>
             <v-row>

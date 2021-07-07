@@ -27,6 +27,7 @@ export default new Vuex.Store({
     meetingConfirmations: [] as MeetingConfirmations[],
     todayProjects: [] as TodayProject[],
     calendarProjects: [] as TodayProject[],
+    displayUser: {} as User,
   },
   getters: {
     todayRemaining(state) {
@@ -115,6 +116,10 @@ export default new Vuex.Store({
     getTodayProjects: async (state) => {
       state.todayProjects = await getTodayProjects(state);
     },
+
+    getDisplayUser: async (state) => {
+      state.displayUser = await getDisplayUser(state);
+    },
   },
   mutations: {
     setItems: (state) => {
@@ -189,6 +194,11 @@ export default new Vuex.Store({
       state.calendarProjects = calendarProjects;
       console.log(state.calendarProjects);
     },
+
+    getDisplayUser: (state, { displayUser }) => {
+      state.displayUser = displayUser;
+      console.log(state.displayUser);
+    },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
     //     let user:User;
@@ -262,12 +272,40 @@ export default new Vuex.Store({
       context.commit("getCalendarProjects", { calendarProjects });
     },
 
+    getDisplayUser: async (context, payload) => {
+      console.log("start");
+      const displayUser = await getDisplayUser(context.state);
+      context.commit("getDisplayUser", { displayUser });
+    },
+
     setUser: (context, user) => {
       context.commit("setUser", { user });
     },
   },
   modules: {},
 });
+
+async function getDisplayUser(state: any): Promise<User>{
+  const displayUser: User = {
+    uid: "",
+    name: "",
+    email: "",
+    task: [],
+    project: [],
+    avatar: "",
+  }
+  const data= await db.collection("user").doc(state.user.uid).get()
+  displayUser.uid =state.user.uid,
+  displayUser.name = data.get("name")
+  displayUser.email = data.get("email")
+  displayUser.avatar = state.user.photoURL ? state.user.photoURL : 
+  "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
+  displayUser.task = data.get("task")
+  displayUser.project = data.get("project")
+  console.log(displayUser)
+  console.log(state.user.photoURL)
+  return displayUser
+}
 
 async function getTasks(state: any): Promise<Task[]> {
   const documentSnapshot = await db
@@ -670,6 +708,7 @@ async function getPendingGroupmates(groupmates: any): Promise<User[]> {
       email: docRef.get("email"),
       task: docRef.get("todo"),
       project: docRef.get("project"),
+      avatar:  docRef.get("photoURL") ? docRef.get("photoURL") : "@/assets/default_profile_pic.jpg",
     });
   }
   return groupmatesArray;

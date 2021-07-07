@@ -79,6 +79,7 @@ router.beforeEach((to, from, next) => {
   store.dispatch("getMeetingConfirmations");
   store.dispatch("getTodayProjects");
   store.dispatch("getCalendarProjects");
+  store.dispatch("getDisplayUser");
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
