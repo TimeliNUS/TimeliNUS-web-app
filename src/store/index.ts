@@ -298,7 +298,7 @@ async function getDisplayUser(state: any): Promise<User>{
   displayUser.uid =state.user.uid,
   displayUser.name = data.get("name")
   displayUser.email = data.get("email")
-  displayUser.avatar = state.user.photoURL ? state.user.photoURL : 
+  displayUser.avatar = data.get("photoURL") ? data.get("photoURL") : 
   "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
   displayUser.task = data.get("task")
   displayUser.project = data.get("project")
@@ -708,7 +708,8 @@ async function getPendingGroupmates(groupmates: any): Promise<User[]> {
       email: docRef.get("email"),
       task: docRef.get("todo"),
       project: docRef.get("project"),
-      avatar:  docRef.get("photoURL") ? docRef.get("photoURL") : "@/assets/default_profile_pic.jpg",
+      avatar:  docRef.get("photoURL") ? docRef.get("photoURL") : 
+      "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
     });
   }
   return groupmatesArray;
