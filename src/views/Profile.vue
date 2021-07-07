@@ -177,12 +177,65 @@
                      
                       "
                     >
-                    <span style="font-size: 30px; display:flex; font-weight: bold">
+                    <v-row style="margin-left:10px;">
+                    <span style="font-size: 30px; display:flex; font-weight: bold; color:white">
                        {{ this.$store.state.displayUser.name }}
                     </span>
-                    <span style="font-size: 20px; display:flex">
+                    <v-dialog
+                        v-model="dialogName"
+                        max-width="600px"
+                      >
+                        <template
+                          v-slot:activator="{ on, attrs }"
+                        >
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            icon
+                            
+                            style="
+                              margin-left: 12px;
+                              margin-top: 5px;
+                            "
+                            color="white"
+                            @click="dialogName = true"
+                          >
+                            <v-icon rounded>edit</v-icon>
+                          </v-btn>
+                        </template>
+                        <v-card style="padding: 20px">
+
+                          <v-text-field
+                            label="New username"
+                            v-model="newUsername"
+                            color="#ff9d66"
+                          ></v-text-field>
+                          <v-spacer></v-spacer>
+                          <v-card-actions style="dispaly:flex; justify-content:flex-end;"> 
+                            <v-btn
+                              color="#ff9d66"
+                              text
+                              @click="dialogName = false; clearUsername()"
+                            >
+                              Cancel
+                            </v-btn>
+                            <v-btn
+                              color="#ff9d66"
+                              text
+                              @click="dialogName = false; passinNewName()"
+                            >
+                              Save
+                            </v-btn>
+                          </v-card-actions>
+                          
+                        </v-card>
+                      </v-dialog>
+                    </v-row>
+                    <v-row style="margin-left:10px;">
+                    <span style="font-size: 20px; display:flex;  color:white">
                        {{ this.$store.state.displayUser.email }}
                     </span>
+                    </v-row>
                     
                   </v-col>
                         </v-row>
@@ -247,7 +300,9 @@ export default {
   // }),
   data: () => ({
     hover: false,
-     selectedFile: null,
+    dialogName: false,
+    newUsername: "",
+    selectedFile: null,
     isSelecting: false,
     profilepic: null,
     eventSettings: {
@@ -256,57 +311,6 @@ export default {
     selectedDate: new Date(2018, 7, 1),
     currentView: "TimelineDay",
     cssClass: "block-events",
-    group: {
-      enableCompactView: false,
-      resources: ["Employee"],
-    },
-    employeeDataSource: [
-      {
-        Text: "Alice",
-        Id: 1,
-        GroupId: 1,
-        Color: "#bbdc00",
-        Designation: "Content writer",
-      },
-      {
-        Text: "Nancy",
-        Id: 2,
-        GroupId: 2,
-        Color: "#9e5fff",
-        Designation: "Designer",
-      },
-      {
-        Text: "Robert",
-        Id: 3,
-        GroupId: 1,
-        Color: "#bbdc00",
-        Designation: "Software Engineer",
-      },
-      {
-        Text: "Robson",
-        Id: 4,
-        GroupId: 2,
-        Color: "#9e5fff",
-        Designation: "Support Engineer",
-      },
-      {
-        Text: "Laura",
-        Id: 5,
-        GroupId: 1,
-        Color: "#bbdc00",
-        Designation: "Human Resource",
-      },
-      {
-        Text: "Margaret",
-        Id: 6,
-        GroupId: 2,
-        Color: "#9e5fff",
-        Designation: "Content Analyst",
-      },
-    ],
-    // resourceHeaderTemplate: function (e) {
-    //     return { template: resourceHeaderVue }
-    // },
     dialog: false,
     nameRules: [(v) => !!v || "Todo title is required"],
     dialogEdit: false,
@@ -336,10 +340,10 @@ export default {
     tempGroupmates: [],
     navItems: [
       { title: "Dashboard", href: "./secret", icon: "dashboard" },
-      { title: "Todo", href: "./todo", icon: "done" },
+      { title: "Todo", href: "./todo", icon: "check_circle" },
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
-      { title: "Profile", href: "./profile", icon: "groups" },
+      { title: "Profile", href: "./profile", icon: "account_circle" },
     ],
     projects: [],
     input: {
@@ -438,6 +442,18 @@ export default {
   },
 
   methods: {
+    clearUsername(){
+      this.newUsername = ""
+    },
+
+    async passinNewName(){
+      await db.collection("user").doc(this.$store.state.user.uid).update({
+        name: this.newUsername
+
+      })
+      this.newUsername = ""
+      this.$store.dispatch("getDisplayUser")
+    },
     onButtonClick() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
