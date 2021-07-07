@@ -63,6 +63,7 @@ export interface User {
   email: string;
   task: [];
   project: [];
+  avatar: string;
 }
 
 export interface MeetingInvitations {

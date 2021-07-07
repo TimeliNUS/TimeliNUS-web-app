@@ -2554,17 +2554,21 @@ export default {
           meetingInv.endTime +
           ":00+08:00"
       ).toISOString();
-      findCommonTime(
+      console.log(link)
+      console.log(importStartDate)
+      console.log(importEndDate)
+      console.log(meetingInv.id)
+      await findCommonTime(
         link,
         importStartDate,
         importEndDate,
         meetingInv.id,
         this.$store.state.user.uid
       );
-      this.currMeetingInv = null
-      this.$store.dispatch("getMeetingInvitations")
-      this.$store.dispatch("getMeetingPendings")
-      this.$store.dispatch("getMeetingConfirmations")
+      // this.currMeetingInv = null
+      // this.$store.dispatch("getMeetingInvitations")
+      // this.$store.dispatch("getMeetingPendings")
+      // this.$store.dispatch("getMeetingConfirmations")
 
     },
   },
