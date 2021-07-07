@@ -450,18 +450,21 @@ export default {
     onFileChanged(e) {
       this.selectedFile = e.target.files[0]
       var storageRef = firebase.storage().ref();
-      console.log(storageRef)
-      console.log(this.selectedFile)
+      console.log('ref' + storageRef)
+      console.log(this.selectedFile.name)
+      console.log('hi');
 
 // Create a reference to 'mountains.jpg'
-      var updatedProfileName = storageRef.child(this.selectedFile.name);
-      console.log(updatedProfile)
-      var updatedProfile = updatedProfileName.put(this.selectedFile)
-      this.$store.state.user.updateProfile({
-        photoURL: updatedProfile
-      })
-      this.$store.dispatch("getDisplayUser")
-      
+      var updatedProfileName = storageRef.child("ProfilePicture/" + this.$store.state.user.uid + "_" + Date.now().toString() + "_" + this.selectedFile.name );
+      updatedProfileName.put(this.selectedFile).then(async (snapshot) => {
+        const url = await (snapshot.ref.getDownloadURL());
+        console.log(url);
+        await db.collection("user").doc(this.$store.state.user.uid).update({photoURL: url})
+        firebase.auth().currentUser.updateProfile({
+          photoURL: url
+        })
+        this.$store.dispatch("getDisplayUser")
+      });
       // do something
     },
     remove(item) {
