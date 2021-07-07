@@ -1785,10 +1785,10 @@ export default {
     tempGroupmates: [],
     navItems: [
       { title: "Dashboard", href: "./secret", icon: "dashboard" },
-      { title: "Todo", href: "./todo", icon: "done" },
+      { title: "Todo", href: "./todo", icon: "check_circle" },
       { title: "Project", href: "./project", icon: "work" },
       { title: "Meeting", href: "./meeting", icon: "groups" },
-      { title: "Profile", href: "./profile", icon: "groups" },
+      { title: "Profile", href: "./profile", icon: "account_circle" },
     ],
     projects: [],
     input: {
