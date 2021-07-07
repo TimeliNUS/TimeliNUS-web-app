@@ -1444,6 +1444,7 @@
                                 :eventSettings="eventSettings"
                                 :currentView="currentView"
                                 :readonly="readonly"
+                                :allowMultiple="allowMultiple"
                               ></ejs-schedule>
                             </div>
                           </div>
@@ -1623,8 +1624,8 @@
                         >
                           <div class="col-md-12 control-section">
                             <div class="content-wrapper" style="">
+                              <!-- <hi></hi> -->
                               <ejs-schedule
-                               
                               :startHour="currMeetingConfirmation.startTime"
                               :endHour="currMeetingConfirmation.endTime"
                               :minDate='new Date(currMeetingConfirmation.startDate)'
@@ -1639,6 +1640,9 @@
                                 :eventSettings="eventSettings"
                                 :currentView="currentView"
                                 :readonly="readonly"
+                                :showQuickInfo='readonly'
+                                :cellDoubleClick='onDoubleClick'
+                                :cellClick="onCellClick"
                               >
                                 </ejs-schedule
                               >
@@ -1727,7 +1731,7 @@ import _ from "lodash";
 import { findCommonTime } from "../services/firebaseService.ts";
 
 import Vue from "vue";
-import { extend } from "@syncfusion/ej2-base";
+import { extend } from '@syncfusion/ej2-base';
 // import { getBlockedTimeSlot } from '../services/dataSource';
 import {
   Schedule,
@@ -1752,7 +1756,8 @@ export default {
   // props: ['eventSettingsList'],
   data: () => ({
     selectedDate: new Date(),
-    readonly: true,
+    readonly: false,
+    selectedTarget: null,
     eventSettings: {},
     currentView: "Week",
     dialog: false,
@@ -1956,7 +1961,17 @@ export default {
   },
 
   methods: {
-    onResizeStart: function (args) {
+    onDoubleClick(args) {   
+      console.log(args)
+      args.cancel = true; 
+      return; 
+    },
+    onCellClick: function () {
+      const scheduleObj = document.querySelector(".e-schedule").ej2_instances[0];
+      let cellDetails = scheduleObj.getCellDetails(scheduleObj.getSelectedElements());
+      console.log(scheduleObj.getCellDetails(scheduleObj.activeCellsData.element));
+    },
+    onResizeStart(args) {
       console.log(this.currMeetingConfirmation.timeLength);
       args.interval = this.currMeetingConfirmation.timeLength * 60;
     },
