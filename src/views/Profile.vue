@@ -1,5 +1,11 @@
 <template>
-  <div style="background-color: #fff0df; font-family: DM Sans, sans-serif; min-height: 100vh;">
+  <div
+    style="
+      background-color: #fff0df;
+      font-family: DM Sans, sans-serif;
+      min-height: 100vh;
+    "
+  >
     <v-row>
       <v-col col="12" md="2">
         <v-navigation-drawer
@@ -83,10 +89,9 @@
         </v-navigation-drawer>
       </v-col>
 
-      <v-col col="12" md="10">
+      <v-col col="12" md="10" style="display:flex; justify-content: center; flex-direction: column">
         <div>
           <div>
-            
             <v-container style="padding-bottom: 0px">
               <span
                 style="
@@ -99,12 +104,23 @@
                 "
                 >Profile</span
               >
-                <div>
-                  <v-img src="@/assets/todo_dashboard.png" style="display: flex;
-                        justify-content: center; align-items:center">
-                        <v-row style="display: flex;
-                        justify-content: center; align-items:center">
-                  <v-col
+              <div>
+                <v-img
+                  src="@/assets/todo_dashboard.png"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <v-row
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-col
                       col="12"
                       md="6"
                       style="
@@ -113,143 +129,191 @@
                         justify-content: flex-end;
                       "
                     >
-                    
-                    
-                    
-                    <v-avatar
-                      left
-                      class="white--text"
-                      size="180"
-                      @mouseover="hover = true" @mouseleave="hover = false"
-                    >
-                   <!-- <template> -->
-                     
-                    
-                      <v-img
-                        :src="this.$store.state.displayUser.avatar"
-                      >      
-                      <v-expand-transition>
-                        <div
-                          v-if="hover"
-                          class="d-flex transition-fast-in-fast-out v-card--reveal text-h2 white--text"
-                          style="height: 100%;"
-                        >
-                         
-                               <!-- <v-btn icon > -->
-                                 
-                                <v-btn
-                                 
-                                  icon
-                                  depressed
-                                  :loading="isSelecting"
-                                  @click="onButtonClick"
-                                >
-                                  <v-icon>
-                                    cloud_upload
-                                  </v-icon>
-                                 
-                                </v-btn>
-                                <input
-                                  ref="uploader"
-                                  class="d-none"
-                                  type="file"
-                                  accept="image/*"
-                                  @change="onFileChanged"
-                                >
+                      <v-avatar
+                        left
+                        class="white--text"
+                        size="180"
+                        @mouseover="hover = true"
+                        @mouseleave="hover = false"
+                      >
+                        <!-- <template> -->
 
-                               <!-- </v-btn> -->
-                         
-                        </div>
-                      </v-expand-transition>
-                      </v-img>
-                      
-                    <!-- </template> -->
-                    </v-avatar>
-                   
-                  </v-col>
-                  <v-col
+                        <v-img :src="this.$store.state.displayUser.avatar">
+                          <v-expand-transition>
+                            <div
+                              v-if="hover"
+                              class="
+                                d-flex
+                                transition-fast-in-fast-out
+                                v-card--reveal
+                                text-h2
+                                white--text
+                              "
+                              style="height: 100%"
+                            >
+                              <!-- <v-btn icon > -->
+
+                              <v-btn
+                                icon
+                                depressed
+                                :loading="isSelecting"
+                                @click="onButtonClick"
+                              >
+                                <v-icon> cloud_upload </v-icon>
+                              </v-btn>
+                              <input
+                                ref="uploader"
+                                class="d-none"
+                                type="file"
+                                accept="image/*"
+                                @change="onFileChanged"
+                              />
+
+                              <!-- </v-btn> -->
+                            </div>
+                          </v-expand-transition>
+                        </v-img>
+
+                        <!-- </template> -->
+                      </v-avatar>
+                    </v-col>
+                    <v-col
                       col="12"
                       md="6"
                       style="
                         display: flex;
                         justify-content: flex-start;
-                        flex-direction: column
-                     
+                        flex-direction: column;
                       "
                     >
-                    <v-row style="margin-left:10px;">
-                    <span style="font-size: 30px; display:flex; font-weight: bold; color:white">
-                       {{ this.$store.state.displayUser.name }}
-                    </span>
-                    <v-dialog
-                        v-model="dialogName"
-                        max-width="600px"
-                      >
-                        <template
-                          v-slot:activator="{ on, attrs }"
+                      <v-row style="margin-left: 7px">
+                        <span
+                          style="
+                            font-size: 30px;
+                            display: flex;
+                            font-weight: bold;
+                            color: white;
+                          "
                         >
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            icon
-                            
-                            style="
-                              margin-left: 12px;
-                              margin-top: 5px;
-                            "
-                            color="white"
-                            @click="dialogName = true"
-                          >
-                            <v-icon rounded>edit</v-icon>
-                          </v-btn>
-                        </template>
-                        <v-card style="padding: 20px">
-
-                          <v-text-field
-                            label="New username"
-                            v-model="newUsername"
-                            color="#ff9d66"
-                          ></v-text-field>
-                          <v-spacer></v-spacer>
-                          <v-card-actions style="dispaly:flex; justify-content:flex-end;"> 
+                          {{ this.$store.state.displayUser.name }}
+                        </span>
+                        <v-dialog v-model="dialogName" max-width="600px">
+                          <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                              color="#ff9d66"
-                              text
-                              @click="dialogName = false; clearUsername()"
+                              v-bind="attrs"
+                              v-on="on"
+                              icon
+                              style="margin-left: 12px; margin-top: 5px"
+                              color="white"
+                              @click="dialogName = true"
                             >
-                              Cancel
+                              <v-icon rounded>edit</v-icon>
                             </v-btn>
+                          </template>
+                          <v-card style="padding: 20px">
+                            <v-text-field
+                              label="New username"
+                              v-model="newUsername"
+                              color="#ff9d66"
+                            ></v-text-field>
+                            <v-spacer></v-spacer>
+                            <v-card-actions
+                              style="dispaly: flex; justify-content: flex-end"
+                            >
+                              <v-btn
+                                color="#ff9d66"
+                                text
+                                @click="
+                                  dialogName = false;
+                                  clearUsername();
+                                "
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                color="#ff9d66"
+                                text
+                                @click="
+                                  dialogName = false;
+                                  passinNewName();
+                                "
+                              >
+                                Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                        
+                      </v-row>
+                      <v-row style="margin-left: 7px">
+                        
+                        <span
+                          style="font-size: 20px; display: flex; color: white"
+                        >
+                          {{ this.$store.state.displayUser.email }}
+                        </span>
+                      </v-row>
+                      <v-row style="margin-left: 7px; display:flex; align-items: center; padding-top:10px; padding-bottom:10px; max-width:15vw; ">
+                      <v-divider></v-divider>
+                      </v-row>
+                      <v-row style="margin-left: 7px; display:flex; align-items: center">
+                        <span  style="font-size: 16px; display: flex; color: white">Set default NUSMods calendar: </span>
+                      <v-dialog v-model="dialogCalendar" max-width="600px">
+                          <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                              color="#ff9d66"
-                              text
-                              @click="dialogName = false; passinNewName()"
+                              v-bind="attrs"
+                              v-on="on"
+                              icon
+                              
+                              color="white"
+                              @click="dialogCalendar = true; getCalendar()"
                             >
-                              Save
+                              <v-icon rounded>calendar_today</v-icon>
                             </v-btn>
-                          </v-card-actions>
-                          
-                        </v-card>
-                      </v-dialog>
-                    </v-row>
-                    <v-row style="margin-left:10px;">
-                    <span style="font-size: 20px; display:flex;  color:white">
-                       {{ this.$store.state.displayUser.email }}
-                    </span>
-                    </v-row>
-                    
-                  </v-col>
-                        </v-row>
-                    
-
-                  
-                  </v-img>
-                </div>
-
-          
+                          </template>
+                          <v-card style="padding: 20px">
+                            <v-text-field
+                              label="Set default NUSMods calendar"
+                              v-model="newCalendar"
+                              color="#ff9d66"
+                            ></v-text-field>
+                            <v-spacer></v-spacer>
+                            <v-card-actions
+                              style="dispaly: flex; justify-content: flex-end"
+                            >
+                              <v-btn
+                                color="#ff9d66"
+                                text
+                                @click="
+                                  dialogCalendar = false;
+                                  clearCalendar();
+                                "
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                color="#ff9d66"
+                                text
+                                @click="
+                                  dialogCalendar = false;
+                                  passinNewCalendar();
+                                "
+                              >
+                                Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                      </v-row>
+                      
+                      
+                    </v-col>
+                  </v-row>
+                </v-img>
+              </div>
             </v-container>
           </div>
           
-
           <div></div>
         </div>
       </v-col>
@@ -382,11 +446,12 @@ export default {
     },
     colors: ["#1867c0", "#fb8c00", "#000000"],
     category: ["Development", "Meetings", "Slacking"],
+    dialogCalendar: false,
+    newCalendar: "",
+    
   }),
 
   computed: {
-  
-    
     items() {
       return Array.from({ length: this.length }, (k, v) => v + 1);
     },
@@ -425,7 +490,7 @@ export default {
     schedule: [Day, TimelineViews, TimelineMonth, Resize, DragAndDrop],
   },
 
-  created() {
+  async created() {
     firebase.auth().onAuthStateChanged((user) => {
       this.loggedIn = !!user;
       if (user) {
@@ -435,6 +500,7 @@ export default {
       }
     });
     // this.$store.dispatch('getTasks');
+   
   },
 
   mounted() {
@@ -442,44 +508,75 @@ export default {
   },
 
   methods: {
-    clearUsername(){
-      this.newUsername = ""
+    async getCalendar() {
+      const docRef = await db.collection("user").doc(this.$store.state.user.uid).get()
+      const calendar = docRef.get("calendar") ? docRef.get("calendar") : "No default calendar"
+      this.newCalendar =calendar
+},
+
+    clearUsername() {
+      this.newUsername = "";
     },
 
-    async passinNewName(){
-      await db.collection("user").doc(this.$store.state.user.uid).update({
-        name: this.newUsername
+     clearCalendar() {
+      this.newCalendar = "";
+    },
 
-      })
-      this.newUsername = ""
-      this.$store.dispatch("getDisplayUser")
+    async passinNewCalendar() {
+      await db.collection("user").doc(this.$store.state.user.uid).update({
+        calendar: this.newCalendar,
+      });
+      this.newCalendar = "";
+      this.$store.dispatch("getDisplayUser");
+    },
+
+    async passinNewName() {
+      await db.collection("user").doc(this.$store.state.user.uid).update({
+        name: this.newUsername,
+      });
+      this.newUsername = "";
+      this.$store.dispatch("getDisplayUser");
     },
     onButtonClick() {
-      this.isSelecting = true
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
+      this.isSelecting = true;
+      window.addEventListener(
+        "focus",
+        () => {
+          this.isSelecting = false;
+        },
+        { once: true }
+      );
 
-      this.$refs.uploader.click()
+      this.$refs.uploader.click();
     },
 
     onFileChanged(e) {
-      this.selectedFile = e.target.files[0]
+      this.selectedFile = e.target.files[0];
       var storageRef = firebase.storage().ref();
-      console.log('ref' + storageRef)
-      console.log(this.selectedFile.name)
-      console.log('hi');
+      console.log("ref" + storageRef);
+      console.log(this.selectedFile.name);
+      console.log("hi");
 
-// Create a reference to 'mountains.jpg'
-      var updatedProfileName = storageRef.child("ProfilePicture/" + this.$store.state.user.uid + "_" + Date.now().toString() + "_" + this.selectedFile.name );
+      // Create a reference to 'mountains.jpg'
+      var updatedProfileName = storageRef.child(
+        "ProfilePicture/" +
+          this.$store.state.user.uid +
+          "_" +
+          Date.now().toString() +
+          "_" +
+          this.selectedFile.name
+      );
       updatedProfileName.put(this.selectedFile).then(async (snapshot) => {
-        const url = await (snapshot.ref.getDownloadURL());
+        const url = await snapshot.ref.getDownloadURL();
         console.log(url);
-        await db.collection("user").doc(this.$store.state.user.uid).update({photoURL: url})
+        await db
+          .collection("user")
+          .doc(this.$store.state.user.uid)
+          .update({ photoURL: url });
         firebase.auth().currentUser.updateProfile({
-          photoURL: url
-        })
-        this.$store.dispatch("getDisplayUser")
+          photoURL: url,
+        });
+        this.$store.dispatch("getDisplayUser");
       });
       // do something
     },
@@ -489,7 +586,6 @@ export default {
       console.log(this.groupmatesChips);
     },
 
-    
     validate() {
       this.$refs.form.validate();
     },
@@ -504,8 +600,6 @@ export default {
         console.log(err);
       }
     },
-    
-    
   },
 };
 </script>
@@ -521,7 +615,6 @@ export default {
   position: absolute;
   width: 100%;
   background-color: #ffdb8f;
-
 }
 
 .todo-item {

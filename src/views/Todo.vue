@@ -256,20 +256,37 @@
                                   v-model="myTodo"
                                 ></v-text-field>
                               </v-col>
-                              <v-col cols="12" :class="`rounded-xl`">
-                                <v-select
-                                  :items="projects"
-                                  item-text="title"
-                                  item-value="id"
-                                  label="Module Project*"
-                                  required
-                                  color="#ff9d66"
-                                  v-model="myProject"
-                                  @input="renderGroupmates()"
-                                  :rules="[(v) => !!v || 'Project is required']"
-                                >
-                                </v-select>
-                              </v-col>
+                             <v-col cols="12">
+                            
+                              <v-select
+                                v-if="projects.length >0"
+                                :items="projects"
+                                item-text="title"
+                                item-value="id"
+                                label="Module Project*"
+                                required
+                                @input="renderGroupmates()"
+                                color="#ff9d66"
+                                v-model="myProject"
+                                :rules="[
+                                  (v) =>
+                                    !!v ||
+                                    'Project is required',
+                                ]"
+                              ></v-select>
+                              <div v-else style="color: #4b4b4b">
+                              <span >You do not have any project yet. </span><br/>
+                              <span> Create a project or accept a project invitation here: 
+                                <router-link
+                                  style="font-weight: bold; color: #ff9d66"
+                                  :to="{
+                                    name: 'Project'
+                                    
+                                  }"
+                                  >Project</router-link
+                                ></span>
+                              </div>
+                            </v-col>
                               <v-col
                                 cols="12"
                                 align="left"
@@ -558,9 +575,10 @@
                               >
                               </v-divider>
                             </v-col>
+
                             <v-col
                               cols="12"
-                              md="5"
+                              md="3"
                               align="left"
                               class="leftAlign"
                               style="padding-top: 20px; padding-bottom: 20px"
@@ -586,6 +604,50 @@
                                   v-bind:class="{ completed: task.complete }"
                                   >{{ task.note }}</span
                                 >
+                              </v-row>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              md="2"
+                              align="right"
+                              class="centerAlign"
+                              style="padding-top: 20px; padding-bottom: 20px"
+                            >
+                              <v-row style="margin: 0px">
+                                <div
+                                  class="centerAlign"
+                                  style="
+                                    padding-top: 3px;
+                                    padding-bottom: 0px !important;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    flex-direction: row-reverse;
+                                    justify-content: flex-end;
+                                    padding-left: 12px;
+                                  "
+                                >
+                                  <div
+                                    v-for="avatar in task.PICavatar"
+                                    :key="avatar.id"
+                                  >
+                                    <div
+                                      style="
+                                        margin-left: -15px;
+                                        padding-bottom: 0px !important;
+                                        padding-top: 3px !important;
+                                        padding-left: 3px !important;
+                                        padding-right: 3px !important;
+                                      "
+                                    >
+                                      <v-avatar
+                                        :size="30"
+                                        style="border: 2px solid #fff"
+                                      >
+                                        <v-img :src="avatar"></v-img
+                                      ></v-avatar>
+                                    </div>
+                                  </div>
+                                </div>
                               </v-row>
                             </v-col>
                             <v-col
@@ -648,7 +710,9 @@
                                                 ></v-text-field>
                                               </v-col>
                                               <v-col cols="12">
+                                                {{projects.length}}
                                                 <v-select
+                                                  v-if="projects.length >0"
                                                   :items="projects"
                                                   item-text="title"
                                                   item-value="id"
@@ -663,6 +727,15 @@
                                                       'Project is required',
                                                   ]"
                                                 ></v-select>
+                                                <span v-else>You do not have any project yet. Add a project or accept a project invitation here: 
+                                                  <router-link
+                                                    style="text-decoration: none; color: inherit"
+                                                    :to="{
+                                                      name: 'Project'
+                                                      
+                                                    }"
+                                                    >Project</router-link
+                                                  ></span>
                                               </v-col>
                                               <v-col
                                                 cols="12"
@@ -1134,7 +1207,9 @@ export default {
           id: docRef.id,
           name: docRef.get("name"),
           object: docRef,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          avatar: docRef.get("photoURL")
+            ? docRef.get("photoURL")
+            : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
         });
       }
       console.log(this.varPIC);
@@ -1219,6 +1294,7 @@ export default {
         });
       }
       console.log(this.projects);
+      
     },
 
     async signOut() {
@@ -1264,6 +1340,10 @@ export default {
 
       await this.$store.dispatch("getProjects");
       await this.$store.dispatch("getTasks");
+      this.$store.dispatch("getTodayProjects");
+      this.$store.dispatch("getCalendarProjects");
+      this.$store.dispatch("assignTodoDashboardCalendar");
+
 
       this.myTodo = "";
       this.myProject = "";
@@ -1352,6 +1432,10 @@ export default {
       }
 
       this.$store.dispatch("getTasks");
+     this.$store.dispatch("getProjects");
+      this.$store.dispatch("getTodayProjects");
+      this.$store.dispatch("getCalendarProjects");
+      this.$store.dispatch("assignTodoDashboardCalendar");
       this.myTodo = "";
       this.myProject = "";
       this.myNote = "";
@@ -1387,7 +1471,9 @@ export default {
           id: currGroupmate.id,
           name: currGroupmate.get("name"),
           object: currGroupmate,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          avatar: currGroupmate.get("photoURL")
+            ? currGroupmate.get("photoURL")
+            : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
         });
       }
 

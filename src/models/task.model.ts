@@ -16,7 +16,8 @@ export interface Task {
   switchValue: boolean;
   displayDeadline: string | Date;
   dateSwitchValue: boolean;
-  PIC: User;
+  PIC: any[];
+  PICavatar: any[];
 }
 
 export interface Project {
@@ -34,8 +35,11 @@ export interface Project {
   switchValue: boolean;
   groupmates: [];
   groupmatesName: string[];
+  groupmatesAvatar: any[];
   displayDeadline: string | Date;
   dateSwitchValue: boolean;
+  confirmedMeetingLength: Number;
+  incompletedTodoLength: Number;
 }
 
 export interface TodayProject {
@@ -64,6 +68,7 @@ export interface User {
   task: [];
   project: [];
   avatar: string;
+  calendar: string;
 }
 
 export interface MeetingInvitations {
@@ -80,6 +85,7 @@ export interface MeetingInvitations {
   venue: string;
   creator: User;
   displayMeetingDateRange: string;
+  groupmates: User[];
 }
 
 export interface MeetingPendings {
@@ -96,6 +102,7 @@ export interface MeetingPendings {
   timeLength: number;
   venue: string;
   creator: User;
+  groupmates: User[];
 }
 
 export interface MeetingConfirmations {
@@ -111,4 +118,25 @@ export interface MeetingConfirmations {
   timeLength: number;
   venue: string;
   creator: User;
+  groupmates: User[];
+  creatorID: string;
+}
+
+export interface ConfirmedMeetings {
+  id: string;
+  title: string;
+  invited_groupmates: User[];
+  project: Project;
+  projectTitle: string;
+  startDate: Date;
+  endDate: Date;
+  startTime: string;
+  endTime: string;
+  timeLength: number;
+  venue: string;
+  creator: User;
+  selectedStartDate: Date;
+  selectedEndDate: Date;
+  groupmates: User[];
+  meetingLink: string;
 }

@@ -3,8 +3,11 @@ import { Project } from "@/models/task.model";
 import { TodayProject } from "@/models/task.model";
 import { User } from "@/models/task.model";
 import { MeetingInvitations } from "@/models/task.model";
+import { ConfirmedMeetings } from "@/models/task.model";
 import { MeetingPendings } from "@/models/task.model";
 import { MeetingConfirmations } from "@/models/task.model";
+import Store from "devextreme/data/abstract_store";
+import dxPolarChart from "devextreme/viz/polar_chart";
 
 import Vue from "vue";
 import Vuex from "vuex";
@@ -25,9 +28,12 @@ export default new Vuex.Store({
     meetingInvitations: [] as MeetingInvitations[],
     meetingPendings: [] as MeetingPendings[],
     meetingConfirmations: [] as MeetingConfirmations[],
+    confirmedMeetings: [] as ConfirmedMeetings[],
     todayProjects: [] as TodayProject[],
     calendarProjects: [] as TodayProject[],
     displayUser: {} as User,
+    meetingCalendar: [] as any[],
+    todoDashboardCalendar: [] as any[],
   },
   getters: {
     todayRemaining(state) {
@@ -113,6 +119,10 @@ export default new Vuex.Store({
       state.meetingConfirmations = await getMeetingConfirmations(state);
     },
 
+    getConfirmedMeeting: async (state) => {
+      state.confirmedMeetings = await getConfirmedMeeting(state);
+    },
+
     getTodayProjects: async (state) => {
       state.todayProjects = await getTodayProjects(state);
     },
@@ -120,36 +130,16 @@ export default new Vuex.Store({
     getDisplayUser: async (state) => {
       state.displayUser = await getDisplayUser(state);
     },
-  },
-  mutations: {
-    setItems: (state) => {
-      state.snapshot = db
-        .collection("todo")
-        .orderBy("created_at")
-        .onSnapshot((snapshot) => {
-          const tasks: Task[] = [];
-          snapshot.forEach((doc) => {
-            tasks.push({
-              id: doc.id,
-              task: doc.data().task,
-              complete: doc.data().complete,
-              _createdAt: doc.data().dateTime,
-              note: doc.data().note,
-              project: doc.data().project,
-              projectTitle: doc.data().project.data().title,
-              deadline: doc.data().deadline,
-              deadlineDate: doc.data().deadlineDate,
-              deadlineTime: doc.data().deadlineTime,
-              switchValue: doc.data().switchValue,
-              dateSwitchValue: doc.data().dateSwitchValue,
-              displayDeadline: doc.data().displayDeadline,
-              PIC: doc.data().PIC,
-            });
-          });
-          state.tasks = tasks;
-        });
+
+    assignMeetingCalendar: async (state) => {
+      state.meetingCalendar = await assignMeetingCalendar(state);
     },
 
+    assignTodoDashboardCalendar: async (state) => {
+      state.todoDashboardCalendar = await assignTodoDashboardCalendar(state);
+    },
+  },
+  mutations: {
     setUser: (state, { user }) => {
       state.user = user;
       console.log("state user : " + JSON.stringify(state.user));
@@ -185,6 +175,11 @@ export default new Vuex.Store({
       console.log(state.meetingConfirmations);
     },
 
+    getConfirmedMeeting: (state, { confirmedMeetings }) => {
+      state.confirmedMeetings = confirmedMeetings;
+      console.log(state.confirmedMeetings);
+    },
+
     getTodayProjects: (state, { todayProjects }) => {
       state.todayProjects = todayProjects;
       console.log(state.todayProjects);
@@ -198,6 +193,16 @@ export default new Vuex.Store({
     getDisplayUser: (state, { displayUser }) => {
       state.displayUser = displayUser;
       console.log(state.displayUser);
+    },
+
+    assignMeetingCalendar: (state, { meetingCalendar }) => {
+      state.meetingCalendar = meetingCalendar;
+      console.log(state.meetingCalendar);
+    },
+
+    assignTodoDashboardCalendar: (state, { todoCalendar }) => {
+      state.todoDashboardCalendar = todoCalendar;
+      console.log(state.todoDashboardCalendar);
     },
     // setUser: state => {
     //   db.collection('user').orderBy('created_at').onSnapshot((snapshot) => {
@@ -260,6 +265,13 @@ export default new Vuex.Store({
       context.commit("getMeetingConfirmations", { meetingConfirmations });
     },
 
+    getConfirmedMeeting: async (context, payload) => {
+      console.log("start");
+      const confirmedMeetings = await getConfirmedMeeting(context.state);
+      console.log(confirmedMeetings);
+      context.commit("getConfirmedMeeting", { confirmedMeetings });
+    },
+
     getTodayProjects: async (context, payload) => {
       console.log("start");
       const todayProjects = await getTodayProjects(context.state);
@@ -278,6 +290,20 @@ export default new Vuex.Store({
       context.commit("getDisplayUser", { displayUser });
     },
 
+    assignMeetingCalendar: async (context, payload) => {
+      console.log("start");
+      const meetingCalendar = await assignMeetingCalendar(context.state);
+      console.log(meetingCalendar);
+      context.commit("assignMeetingCalendar", { meetingCalendar });
+    },
+
+    assignTodoDashboardCalendar: async (context, payload) => {
+      console.log("start");
+      const todoCalendar = await assignTodoDashboardCalendar(context.state);
+      console.log(todoCalendar);
+      context.commit("assignTodoDashboardCalendar", { todoCalendar });
+    },
+
     setUser: (context, user) => {
       context.commit("setUser", { user });
     },
@@ -285,7 +311,7 @@ export default new Vuex.Store({
   modules: {},
 });
 
-async function getDisplayUser(state: any): Promise<User>{
+async function getDisplayUser(state: any): Promise<User> {
   const displayUser: User = {
     uid: "",
     name: "",
@@ -293,18 +319,20 @@ async function getDisplayUser(state: any): Promise<User>{
     task: [],
     project: [],
     avatar: "",
-  }
-  const data= await db.collection("user").doc(state.user.uid).get()
-  displayUser.uid =state.user.uid,
-  displayUser.name = data.get("name")
-  displayUser.email = data.get("email")
-  displayUser.avatar = data.get("photoURL") ? data.get("photoURL") : 
-  "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
-  displayUser.task = data.get("task")
-  displayUser.project = data.get("project")
-  console.log(displayUser)
-  console.log(state.user.photoURL)
-  return displayUser
+    calendar: "",
+  };
+  const data = await db.collection("user").doc(state.user.uid).get();
+  (displayUser.uid = state.user.uid), (displayUser.name = data.get("name"));
+  displayUser.email = data.get("email");
+  (displayUser.avatar = data.get("photoURL")
+    ? data.get("photoURL")
+    : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1"),
+    (displayUser.task = data.get("task"));
+  displayUser.project = data.get("project");
+  displayUser.calendar = data.get("calendar") ? data.get("calendar") : "No default calendar"
+  console.log(displayUser);
+  console.log(state.user.photoURL);
+  return displayUser;
 }
 
 async function getTasks(state: any): Promise<Task[]> {
@@ -326,22 +354,33 @@ async function getTasks(state: any): Promise<Task[]> {
     console.log(doc.get("complete"));
 
     console.log(doc.data());
-    tasks.push({
-      id: doc.id,
-      task: doc.data().task ?? "",
-      complete: doc.data().complete,
-      _createdAt: doc.data().dateTime,
-      note: doc.data().note,
-      project: doc.data().project,
-      projectTitle: await getTaskProject(doc.data().project),
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadlineDate,
-      deadlineTime: doc.data().deadlineTime,
-      switchValue: doc.data().switchValue,
-      dateSwitchValue: doc.data().dateSwitchValue,
-      displayDeadline: doc.data().displayDeadline,
-      PIC: doc.data().PIC,
-    });
+    const PICid = []
+          for(let j=0; j< doc.data().PIC.length; j++){
+            const pplID = doc.data().PIC[j].id
+            console.log(pplID)
+            PICid.push(pplID)
+          }
+          console.log(PICid)
+    if(PICid.includes(state.user.uid)){
+      tasks.push({
+        id: doc.id,
+        task: doc.data().task ?? "",
+        complete: doc.data().complete,
+        _createdAt: doc.data().dateTime,
+        note: doc.data().note,
+        project: doc.data().project,
+        projectTitle: await getTaskProject(doc.data().project),
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadlineDate,
+        deadlineTime: doc.data().deadlineTime,
+        switchValue: doc.data().switchValue,
+        dateSwitchValue: doc.data().dateSwitchValue,
+        displayDeadline: doc.data().displayDeadline,
+        PIC: doc.data().PIC,
+        PICavatar: await getGroupmatesAvatar(doc.data().PIC),
+      });
+    }
+    
   }
   console.log(tasks);
   return tasks;
@@ -374,7 +413,10 @@ async function getProjectInvitations(state: any): Promise<Project[]> {
       dateSwitchValue: doc.data().dateSwitchValue,
       displayDeadline: doc.data().displayDeadline,
       groupmates: doc.data().groupmates ?? "",
+      groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
+      confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
+      incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
     });
   }
   console.log(projectInvitations);
@@ -411,6 +453,8 @@ async function getProjects(state: any): Promise<Project[]> {
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
       meetings: doc.data().meetings,
+      confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
+      incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
       todos: doc.data().todos ?? [],
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
@@ -423,6 +467,7 @@ async function getProjects(state: any): Promise<Project[]> {
       dateSwitchValue: doc.data().dateSwitchValue,
       displayDeadline: doc.data().displayDeadline,
       groupmates: doc.data().groupmates ?? "",
+      groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
   }
@@ -437,6 +482,19 @@ async function getGroupmatesName(groupmates: any) {
     groupmatesNameArray.push(docRef.get("name"));
   }
   return groupmatesNameArray;
+}
+
+async function getGroupmatesAvatar(groupmates: any) {
+  const groupmatesAvatarArray: any[] = [];
+  for (let i = 0; i < groupmates.length; i++) {
+    const docRef = await db.collection("user").doc(groupmates[i].id).get();
+    groupmatesAvatarArray.push(
+      docRef.get("photoURL")
+        ? docRef.get("photoURL")
+        : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1"
+    );
+  }
+  return groupmatesAvatarArray;
 }
 
 async function getProjectProgress(todos: any) {
@@ -477,7 +535,7 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
       meetings: doc.data().meetings,
-      todos: await getTodayTodos(doc),
+      todos: await getTodayTodos(state, doc),
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
       progress: await getProjectProgress(doc.data().todos),
@@ -513,7 +571,7 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
       meetings: doc.data().meetings,
-      todos: await getCalendarTodos(doc),
+      todos: await getCalendarTodos(state, doc),
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
       progress: await getProjectProgress(doc.data().todos),
@@ -532,13 +590,20 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
   return projects;
 }
 
-async function getTodayTodos(project: any) {
+async function getTodayTodos(state: any, project: any) {
   const docRef = await db.collection("project").doc(project.id).get();
   const data = await docRef.get("todos");
   const pushTodos: Task[] = [];
   for (let i = 0; i < data.length; i++) {
     const doc = await db.collection("todo").doc(data[i].id).get();
-    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10)) {
+    const PICid = []
+          for(let j=0; j< doc.get("PIC").length; j++){
+            const pplID = doc.get("PIC")[j].id
+            console.log(pplID)
+            PICid.push(pplID)
+          }
+          console.log(PICid)
+    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10) && PICid.includes(state.user.uid)) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
@@ -554,6 +619,7 @@ async function getTodayTodos(project: any) {
         dateSwitchValue: doc.get("dateSwitchValue"),
         displayDeadline: doc.get("displayDeadline"),
         PIC: doc.get("PIC"),
+        PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
     }
   }
@@ -561,29 +627,40 @@ async function getTodayTodos(project: any) {
   return pushTodos;
 }
 
-async function getCalendarTodos(project: any) {
+async function getCalendarTodos(state:any, project: any) {
   const docRef = await db.collection("project").doc(project.id).get();
   const data = await docRef.get("todos");
   const pushTodos: Task[] = [];
   for (let i = 0; i < data.length; i++) {
     const doc = await db.collection("todo").doc(data[i].id).get();
+    const PICid = []
+          for(let j=0; j< doc.get("PIC").length; j++){
+            const pplID = doc.get("PIC")[j].id
+            console.log(pplID)
+            PICid.push(pplID)
+          }
+          console.log(PICid)
+    if(PICid.includes(state.user.uid)){
+      pushTodos.push({
+        id: doc.id,
+        task: doc.get("task") ?? "",
+        complete: doc.get("complete"),
+        _createdAt: doc.get("dateTime"),
+        note: doc.get("note"),
+        project: doc.get("project"),
+        projectTitle: await getTaskProject(doc.get("project")),
+        deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
+        deadlineDate: doc.get("deadlineDate"),
+        deadlineTime: doc.get("deadlineTime"),
+        switchValue: doc.get("switchValue"),
+        dateSwitchValue: doc.get("dateSwitchValue"),
+        displayDeadline: doc.get("displayDeadline"),
+        PIC: doc.get("PIC"),
+        PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
+      });
 
-    pushTodos.push({
-      id: doc.id,
-      task: doc.get("task") ?? "",
-      complete: doc.get("complete"),
-      _createdAt: doc.get("dateTime"),
-      note: doc.get("note"),
-      project: doc.get("project"),
-      projectTitle: await getTaskProject(doc.get("project")),
-      deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
-      deadlineDate: doc.get("deadlineDate"),
-      deadlineTime: doc.get("deadlineTime"),
-      switchValue: doc.get("switchValue"),
-      dateSwitchValue: doc.get("dateSwitchValue"),
-      displayDeadline: doc.get("displayDeadline"),
-      PIC: doc.get("PIC"),
-    });
+    }
+    
   }
   console.log(pushTodos);
   return pushTodos;
@@ -609,7 +686,7 @@ async function getMeetingInvitations(
       id: doc.id,
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
-      project: doc.data().project.get(),
+      project: await doc.data().project.get(),
       projectTitle: await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
@@ -619,6 +696,7 @@ async function getMeetingInvitations(
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
       displayMeetingDateRange: doc.data().displayMeetingDateRange,
+      groupmates: await getPendingGroupmates(doc.data().groupmates),
     });
   });
   console.log(meetingInvitations);
@@ -647,7 +725,7 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
       confirmed_groupmates: await getPendingGroupmates(
         doc.data().confirmedInvitations
       ),
-      project: doc.data().project.get(),
+      project: await doc.data().project.get(),
       projectTitle: await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
@@ -656,6 +734,7 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
+      groupmates: await getPendingGroupmates(doc.data().groupmates),
     });
   });
   console.log(meetingPendings);
@@ -676,6 +755,7 @@ async function getMeetingConfirmations(
       db.collection("user").doc(state.user.uid)
     )
     .where("invitations", "==", [])
+    .where("isConfirmed", "==", false)
     .get();
   console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
@@ -683,7 +763,7 @@ async function getMeetingConfirmations(
       id: doc.id,
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
-      project: doc.data().project.get(),
+      project: await doc.data().project.get(),
       projectTitle: await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
@@ -692,10 +772,60 @@ async function getMeetingConfirmations(
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
+      groupmates: await getPendingGroupmates(doc.data().groupmates),
+      creatorID: doc.data().author.id
     });
+    console.log(doc.data().author.id)
   });
+
   console.log(meetingConfirmations);
   return meetingConfirmations;
+}
+
+async function getConfirmedMeeting(state: any): Promise<ConfirmedMeetings[]> {
+  console.log(state);
+  const ConfirmedMeetings: ConfirmedMeetings[] = [];
+
+  const querySnapshot = await db
+    .collection("meeting")
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
+    .where("invitations", "==", [])
+    .where("isConfirmed", "==", true)
+    .get();
+  await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+      console.log(doc.data());
+      const test = {
+        id: doc.id,
+        title: doc.data().title,
+        invited_groupmates: doc.data().invitations,
+        project: await doc.data().project.get(),
+        projectTitle: await getTaskProject(doc.data().project),
+        startDate: doc.data().startDate.toDate(),
+        endDate: doc.data().endDate.toDate(),
+        startTime: doc.data().startTime,
+        endTime: doc.data().endTime,
+        timeLength: doc.data().timeLength,
+        venue: doc.data().meetingVenue,
+        creator: await getCreator(doc.data().author),
+        selectedStartDate: doc.data().selectedStartDate,
+        selectedEndDate: doc.data().selectedEndDate,
+        groupmates: await getPendingGroupmates(doc.data().confirmedInvitations),
+        meetingLink: doc.data().meetingLink ? doc.data().meetingLink : "No meeting link"
+      };
+      // console.log("test: " + JSON.stringify(test));
+      ConfirmedMeetings.push(test);
+      console.log("after test: " + JSON.stringify(ConfirmedMeetings));
+    })
+  );
+  console.log(ConfirmedMeetings);
+  console.log("confirmed meetings: " + JSON.stringify(ConfirmedMeetings));
+
+  return ConfirmedMeetings;
 }
 
 async function getPendingGroupmates(groupmates: any): Promise<User[]> {
@@ -708,9 +838,142 @@ async function getPendingGroupmates(groupmates: any): Promise<User[]> {
       email: docRef.get("email"),
       task: docRef.get("todo"),
       project: docRef.get("project"),
-      avatar:  docRef.get("photoURL") ? docRef.get("photoURL") : 
-      "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
-    });
+      avatar: docRef.get("photoURL")
+        ? docRef.get("photoURL")
+        : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
+      calendar: docRef.get("calendar") ? docRef.get("calendar") : "No default calendar"
+      });
   }
   return groupmatesArray;
+}
+
+async function assignMeetingCalendar(state: any) {
+  await getConfirmedMeeting(state);
+  const meetingCalendar: any[] = [];
+  console.log(state.confirmedMeetings);
+  state.confirmedMeetings.map((meeting: any) => {
+    if (meeting !== null) {
+      const currLocalDate = meeting.selectedStartDate
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      const newDate = currYear + "-" + currMonth + "-" + currDate;
+      console.log(newDate);
+      meetingCalendar.push(newDate);
+    }
+  });
+  console.log(meetingCalendar);
+  return meetingCalendar;
+}
+
+async function assignTodoDashboardCalendar(state: any) {
+  const todoCalendar: any[] = [];
+  await getTasks(state);
+  state.tasks.map((todo: Task) => {
+    if (todo !== null && todo.deadline !== null) {
+      console.log(todo);
+      console.log(todo.deadline);
+      console.log(todo.deadline.toLocaleDateString().substr(0, 10));
+
+      const currLocalDate = todo.deadline.toLocaleDateString().substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      const newDate = currYear + "-" + currMonth + "-" + currDate;
+      console.log(newDate);
+      console.log(todo.PIC.includes(db.collection('user').doc(state.user.uid)))
+      const PICid = []
+          for(let j=0; j< todo.PIC.length; j++){
+            const pplID = todo.PIC[j].id
+            console.log(pplID)
+            PICid.push(pplID)
+          }
+          console.log(PICid)
+      if(PICid.includes(state.user.uid)){
+        todoCalendar.push({
+          date: newDate,
+          type: "todo",
+        });
+      }
+
+    }
+  });
+
+  console.log(todoCalendar);
+
+  await getConfirmedMeeting(state);
+  console.log(state.confirmedMeetings);
+  state.confirmedMeetings.map((meeting: any) => {
+    if (meeting !== null) {
+      const currLocalDate = meeting.selectedStartDate
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      const newDate = currYear + "-" + currMonth + "-" + currDate;
+      console.log(newDate);
+      todoCalendar.push({
+        date: newDate,
+        type: "meeting",
+      });
+    }
+  });
+  return todoCalendar;
+}
+
+async function findScheduledMeetingLength(meetings: any){
+  let counter = 0
+  console.log(meetings)
+  console.log(meetings.length)
+  
+  for(let i=0; i<meetings.length; i++){
+    const meeting = await meetings[i].get()
+    const data = meeting.data()
+    if(data !== undefined){
+      if(data.isConfirmed == true){
+        counter += 1
+      }
+    }
+    
+
+  }
+  console.log(counter)
+  return counter
+  // meetings.forEach((meeting) => await meeting.get()).filter('isConfirmed' == true)
+}
+
+async function findIncompletedTodoLength(todos: any){
+  let counter = 0
+  
+  for(let i=0; i<todos.length; i++){
+    const todo = await todos[i].get()
+    const data = todo.data()
+    if(data !== undefined) {
+      if(data.complete == false){
+        counter += 1
+      }
+    }
+
+
+  }
+  console.log(counter)
+  return counter
+  // meetings.forEach((meeting) => await meeting.get()).filter('isConfirmed' == true)
 }
