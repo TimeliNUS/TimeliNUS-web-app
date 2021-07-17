@@ -304,8 +304,11 @@
                             </v-card-actions>
                           </v-card>
                         </v-dialog>
+                      </v-row>  
+                      <v-row style="margin-left: 7px; display:flex; align-items: center">
+                        <div v-if="zoomRefreshToken == null" style="font-size: 16px; display: flex; color: white" @click="redirectToZoomLogin()">Not Linked with Zoom</div>
+                        <div v-if="zoomRefreshToken != null" style="font-size: 16px; display: flex; color: white">Linked with Zoom</div>
                       </v-row>
-                      
                       
                     </v-col>
                   </v-row>
@@ -448,7 +451,8 @@ export default {
     category: ["Development", "Meetings", "Slacking"],
     dialogCalendar: false,
     newCalendar: "",
-    
+    zoomRefreshToken: null,
+    googleRefreshToken: null,
   }),
 
   computed: {
@@ -504,6 +508,10 @@ export default {
   },
 
   mounted() {
+    const docRef = db.collection("accounts").doc(this.$store.state.user.uid).get().then(
+      (docRef) =>  this.zoomRefreshToken = docRef.get("zoomRefreshToken")
+    )
+    // console.log('refreshtoken ' + this.zoomRefreshToken ?? 'null ' )
     // this.$store.dispatch("getTasks");
   },
 
@@ -511,8 +519,18 @@ export default {
     async getCalendar() {
       const docRef = await db.collection("user").doc(this.$store.state.user.uid).get()
       const calendar = docRef.get("calendar") ? docRef.get("calendar") : "No default calendar"
-      this.newCalendar =calendar
-},
+      this.newCalendar = calendar
+    },
+
+    redirectToZoomLogin() {
+      window.location.href = 
+      'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "' + this.$store.state.user.uid + '"}';
+    },
+    // async getZoomRefreshToken() {
+    //   const docRef = await db.collection("accounts").doc(this.$store.state.user.uid).get()
+    //   const zoomRefreshToken = docRef.get("zoomRefreshToken")
+    //   this.zoomRefreshToken = zoomRefreshToken
+    // },
 
     clearUsername() {
       this.newUsername = "";
