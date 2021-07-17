@@ -127,6 +127,7 @@
 <script>
 import firebase from "firebase";
 import { db } from "../main.ts";
+import axios from "axios";
 // import googleSignInFunction from "../services/firebaseService"
 
 export default {
@@ -159,23 +160,20 @@ export default {
     },
 
     async googleSignIn() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      let user;
-      await firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          /** @type {firebase.auth.OAuthCredential} */
+      const authCode = await this.$gAuth.getAuthCode();
+      const response = await axios.post('http://localhost:5001/timelinus-2021/asia-east2/getGoogleToken', {}, {
+        headers: {
+          "auth_code": authCode,
+        }
+      })
+      const credential = firebase.auth.GoogleAuthProvider.credential(response.data.id_token, response.data.access_token);
+      await firebase.auth().signInWithCredential(credential).then((result) => {
+          this.$router.push({ name: "Secret" });
           const credential = result.credential;
-
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          const token = credential.accessToken;
-          // The signed-in user info.
-          user = result.user;
+          const user = result.user;
           console.log("google sign in");
           console.log(user);
-          console.log(user.displayName);
-          const findUser = db.collection("user").doc(user.uid);
+          console.log(user.uid);
           if (result.additionalUserInfo.isNewUser) {
             db.collection("user").doc(user.uid).set({
               email: user.email,
@@ -184,16 +182,19 @@ export default {
               project: [],
               created_at: Date.now(),
               photoURL: user.photoURL,
+              googleRefreshToken: response.data['refresh_token'],
+              googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in']  * 1000 - 5),
+              googleAccessToken: response.data['access_token'],
             });
+          } else {
+            db.collection("user").doc(user.uid).update({
+              googleRefreshToken: response.data['refresh_token'],
+              googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in']  * 1000 - 5),
+              googleAccessToken: response.data['access_token'],
+            })
           }
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          const email = error.email;
-          const credential = error.credential;
-        });
-      this.$router.replace({ name: "Secret" });
+          
+      })
     },
 
     addUser() {

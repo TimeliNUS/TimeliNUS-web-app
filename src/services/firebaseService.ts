@@ -91,3 +91,54 @@ export const findCommonTime = (
     obj
   );
 };
+
+export const findGoogleCommonTime = (
+  // googleToken: string,
+  startDateString: string,
+  endDateString: string,
+  id: string,
+  user: string
+) => {
+  const obj = {
+    timeMin: startDateString,
+    timeMax: endDateString,
+    id: id,
+    user: user,
+  };
+  axios.post(
+    "http://localhost:5001/timelinus-2021/asia-east2/findCommon",
+    obj
+    // {
+    //   headers: {
+    //     "google-token": googleToken,
+    //   },
+    // }
+  );
+};
+
+// https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "j1JiHkaJkLNO2o19VtTKl76qhgi1"}
+
+export const createZoomMeeting = async (
+  startDateString: string,
+  durationInMins: number,
+  id: string,
+  user: string
+) => {
+  const obj = {
+    startTime: startDateString,
+    duration: durationInMins,
+    id: id,
+    user: user,
+  };
+  const res = await axios.post(
+    "https://asia-east2-timelinus-2021.cloudfunctions.net/findcommon",
+    obj
+  );
+  return res;
+};
+
+export const isLinkedToZoom = async (user: string): Promise<boolean> => {
+  const doc = await firebase.firestore().collection("user").doc(user).get();
+  return doc.get("zoomRefreshToken") != null;
+};
+

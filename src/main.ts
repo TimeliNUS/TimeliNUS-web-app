@@ -6,6 +6,13 @@ import firebase from "firebase/app";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import vuetify from "./plugins/vuetify";
 import { SchedulePlugin } from "@syncfusion/ej2-vue-schedule";
+import GAuth from "vue-google-oauth2";
+
+const gauthOption = {
+  clientId: "114066663509-j11htpbtn3u1p7dulr22bpjldopg3d11.apps.googleusercontent.com",
+  scope: "profile email https://www.googleapis.com/auth/calendar",
+  prompt: "consent",
+};
 
 Vue.config.productionTip = false;
 
@@ -25,6 +32,7 @@ export const db = firebase.firestore();
 
 let app;
 Vue.use(SchedulePlugin);
+Vue.use(GAuth, gauthOption);
 firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
   store.dispatch("setUser", user);

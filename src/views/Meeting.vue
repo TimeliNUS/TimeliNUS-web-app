@@ -4050,8 +4050,9 @@
                               outlined
                               color="white"
                               style="padding-left: 10px"
+                              @click="isLinkedToGoogle ? importGoogleCalendar() : linkWithGoogle()"
                             >
-                              Login to Google
+                              {{isLinkedToGoogle ? "Use synced Google Calendar" : "Login to Google"}}
                             </v-btn>
                           </v-card-actions>
                         </v-row>
@@ -5044,8 +5045,8 @@ import firebase from "firebase";
 import { db } from "../main.ts";
 // import BlockEvent from "../components/block-event.vue"
 import _ from "lodash";
-import { findCommonTime } from "../services/firebaseService.ts";
-
+import { findCommonTime, findGoogleCommonTime } from "../services/firebaseService.ts";
+import axios from "axios";
 import Vue from "vue";
 import { extend } from "@syncfusion/ej2-base";
 // import { getBlockedTimeSlot } from '../services/dataSource';
@@ -5189,6 +5190,7 @@ export default {
     tempImportStartDate: null,
     tempImportEndDate: null,
     tempImportLink: null,
+    isLinkedToGoogle: false,
   }),
 
   // created: async function(){
@@ -5443,6 +5445,7 @@ export default {
     
     async checkExistingCalendar(){
       const user = await db.collection('user').doc(this.$store.state.user.uid).get()
+      this.isLinkedToGoogle = (user.get("googleRefreshToken") != null)
       console.log(user)
       const calendar = user.get("calendar") ? user.get("calendar") : null
       console.log(calendar)
@@ -6404,9 +6407,46 @@ export default {
         this.currMeetingInv.id,
         this.$store.state.user.uid
       );
+    },
 
-      
-      
+    async importGoogleCalendar() {
+      console.log(this.currMeetingInv)
+      const res = await findGoogleCommonTime(
+         new Date(
+        this.currMeetingInv.displayMeetingDateRange.substr(0, 10) +
+          "T" +
+          this.currMeetingInv.startTime +
+          ":00+08:00"
+      ).toISOString(),
+        new Date(
+        this.currMeetingInv.displayMeetingDateRange.substr(13) +
+          "T" +
+          this.currMeetingInv.endTime +
+          ":00+08:00"
+      ).toISOString(),
+        this.currMeetingInv.id,
+        this.$store.state.user.uid
+      );
+      console.log(res);
+    },
+
+    async linkWithGoogle() {
+      const authCode = await this.$gAuth.getAuthCode()
+      const response = await axios.post('http://localhost:5001/timelinus-2021/asia-east2/getGoogleToken', {}, {
+        headers: {
+          "auth_code": authCode,
+        }
+      })
+      console.log(response);
+      const credential = firebase.auth.GoogleAuthProvider.credential(response.data.id_token, response.data.access_token);
+      await firebase.auth().currentUser?.linkWithCredential(credential).then((result) => {
+        db.collection("user").doc(this.$store.state.user.uid).update({
+          googleRefreshToken: response.data['refresh_token'],
+          googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in'] * 1000 - 5),
+          googleAccessToken: response.data['access_token'],
+        })  
+      })
+      this.isLinkedToGoogle = true;
     },
   },
 };
