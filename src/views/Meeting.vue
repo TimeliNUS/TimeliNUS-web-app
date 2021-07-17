@@ -1191,7 +1191,7 @@
                             font-size: 14px;
                           "
                           :class="`rounded-xl`"
-                          @click="popupMeetingDetails(meeting); popupMeeting[meeting.title] = true"
+                          @click="popupMeetingDetails(meeting); "
                         >
                           <span
                             >{{ meeting.project.get("modCode") }}
@@ -1263,7 +1263,7 @@
                           <!-- <span><v-icon color="#ff9d66">place</v-icon> 
                   {{meeting.venue}} </span> -->
                         </v-card>
-                        <v-dialog v-if="currSelectedPopupMeeting !== null" v-model="popupMeeting[meeting.title]" content-class="elevation-0"
+                        <v-dialog v-if="currSelectedPopupMeeting !== null && currSelectedPopupMeeting == meeting" v-model="currSelectedPopupMeeting" content-class="elevation-0"
                         persistent
                           max-width="600px"
                           min-height="300px"
@@ -1298,10 +1298,10 @@
                                 flex-direction: column;
                               "
                             >
-                           
+                          
                            <div style="display:flex; align-items: center; justify-content: space-between; min-width: 520px">
                             <span style="font-weight: bold; padding:5px; font-size: 36px; margin-bottom: -10px;">{{ meeting.title }}</span>
-                           <v-btn icon color="#ff9d66" @click="popupMeeting[meeting.title] = false; updateMeetingLink = ''; tempUpdateMeetingLink = ''">
+                           <v-btn icon color="#ff9d66" @click="closePopUpMeeting()">
                                   <v-icon color="#ff9d66">mdi-close</v-icon>
                                 </v-btn>
                            </div>
@@ -1418,16 +1418,18 @@
                         >
 
                         <div style="max-width: 500px;word-break:break-all; display:flex; align-items: flex-start; text-align: initial; font-size: 14px!important">
-                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b"
-                          ><v-icon color="#ff9d66">link</v-icon>
+                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                          ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
+                          
                           {{ meeting.meetingLink }}</span
                         >
                         <span v-else style="padding: 5px; color: #4b4b4b; 
                         display:flex; 
                         align-items: flex-start; 
+                        text-align: initial;
                         font-size:14px !important; 
                         "
-                          ><v-icon color="#ff9d66">link</v-icon>
+                          ><v-icon color="#ff9d66" style="padding-right:5px">link</v-icon>
                          {{ updateMeetingLink }}</span
                         >
                         
@@ -1437,21 +1439,26 @@
                             <v-btn
                               v-bind="attrs"
                               v-on="on"
-                              icon
-                              style=""
+                              outlined
+                              
+                              small
+                              style="margin-left: 25px"
                               color="#ff9d66"
-                              @click="dialogNewLink[meeting.title] = true"
+                              
                             >
-                              <v-icon rounded>edit</v-icon>
+                              <v-icon rounded small >edit</v-icon> <span style="color: #ff9d66"> Edit Meeting Link</span>
                             </v-btn>
                           </template>
                           <v-card style="padding: 20px">
+                          
                             <v-text-field
                               label="New Meeting Link"
                               v-model="tempUpdateMeetingLink"
                               color="#ff9d66"
                             ></v-text-field>
+                        
                             <v-spacer></v-spacer>
+                            
                             <v-card-actions
                               style="dispaly: flex; justify-content: flex-end"
                             >
@@ -1529,7 +1536,7 @@
                         font-size: 14px;
                       "
                       :class="`rounded-xl`"
-                      @click="popupMeetingDetails(meeting); popupMeeting2[meeting.title] = true"
+                      @click="popupMeetingDetails(meeting); "
                     >
                       <span
                         >{{ meeting.project.get("modCode") }}
@@ -1641,7 +1648,7 @@
                   {{meeting.venue}} </span> -->
                   
                     </v-card>
-                    <v-dialog v-if="currSelectedPopupMeeting !== null" v-model="popupMeeting2[meeting.title]" content-class="elevation-0"
+                    <v-dialog v-if="currSelectedPopupMeeting !== null && currSelectedPopupMeeting == meeting" v-model="currSelectedPopupMeeting" content-class="elevation-0"
                         persistent
                           max-width="600px"
                           min-height="300px"
@@ -1679,7 +1686,7 @@
                            
                            <div style="display:flex; align-items: center; justify-content: space-between; min-width: 520px">
                             <span style="font-weight: bold; padding:5px; font-size: 36px; margin-bottom: -10px;">{{ meeting.title }}</span>
-                           <v-btn icon color="#ff9d66" @click="consoleLog(); popupMeeting2[meeting.title] = false; updateMeetingLink = ''; tempUpdateMeetingLink = ''">
+                           <v-btn icon color="#ff9d66" @click="closePopUpMeeting()">
                                   <v-icon color="#ff9d66">mdi-close</v-icon>
                                 </v-btn>
                            </div>
@@ -1795,33 +1802,35 @@
                           {{ meeting.venue }}</span
                         >
 
-                        <div style="max-width: 500px;word-break:break-all; display:flex; align-items: flex-start; 
-                        text-align: initial !important; font-size: 14px !important;">
-                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b"
-                          ><v-icon color="#ff9d66">link</v-icon>
+                        <div style="max-width: 500px;word-break:break-all; display:flex; align-items: flex-start; text-align: initial; font-size: 14px!important">
+                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                          ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
                           {{ meeting.meetingLink }}</span
                         >
                         <span v-else style="padding: 5px; color: #4b4b4b; 
                         display:flex; 
                         align-items: flex-start; 
+                        text-align: initial;
                         font-size:14px !important; 
                         "
-                          ><v-icon color="#ff9d66">link</v-icon>
+                          ><v-icon color="#ff9d66" style="padding-right:5px">link</v-icon>
                          {{ updateMeetingLink }}</span
                         >
                         
                         </div>
-                        <v-dialog v-if="currSelectedPopupMeeting" v-model="dialogNewLink2[meeting.title]" max-width="600px">
+                        <v-dialog v-model="dialogNewLink2[meeting.title]" max-width="600px">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
                               v-bind="attrs"
                               v-on="on"
-                              icon
-                              style=""
+                              outlined
+                              
+                              small
+                              style="margin-left: 25px"
                               color="#ff9d66"
-                              @click="dialogNewLink2[meeting.title] = true"
+                              
                             >
-                              <v-icon rounded>edit</v-icon>
+                              <v-icon rounded small >edit</v-icon> <span style="color: #ff9d66"> Edit Meeting Link</span>
                             </v-btn>
                           </template>
                           <v-card style="padding: 20px">
@@ -3724,7 +3733,7 @@
                 <v-card
                   outlined
                   color="#FFE4CB"
-                  style="max-height: 70vh;min-width:51vw; max-width: 51vw"
+                  style="max-height: 70vh;min-width:51vw; max-width: 51vw; margin-bottom:20px"
                   :class="`rounded-xl`"
                 >
                   <div
@@ -3802,13 +3811,46 @@
                                   height: 450px !important;
                                   overflow-y: scroll;
                                 "
-                                id="Schedule"
+                                id="ScheduleConfirmed"
                                 :selectedDate="selectedDate"
                                 :eventSettings="eventSettings"
                                 :currentView="currentView"
                                 :readonly="readonly"
                               ></ejs-schedule>
                             </div>
+                            <v-row style="padding-left: 10px; margin-top: 20px;">
+                          <v-card-title
+                            style="
+                              font-weight: bold !important;
+                              color: white;
+                              display: flex;
+                              padding-top: 0px !important;
+                              padding-bottom: 3px !important;
+                              padding-left: 10px !important;
+                              padding-right: 3px !important;
+                              font-size: 18px !important;
+                            "
+                          >
+                            Quick Links:
+                          </v-card-title>
+                          <v-card-actions>
+                            <a href="https://www.google.com" target="_blank">
+                              <v-img
+                                width="50px"
+                                src="@/assets/google_calendar.png"
+                              ></v-img>
+                            </a>
+                            <a
+                              href="https://nusmods.com/timetable/sem-1"
+                              target="_blank"
+                            >
+                              <v-img
+                                width="50px"
+                                src="@/assets/NUSMods_logo.png"
+                              ></v-img>
+                            </a>
+                          </v-card-actions>
+                        </v-row>
                           </div>
                         </div>
                       </v-col>
@@ -3824,7 +3866,7 @@
                             color: white;
                             font-size: 18px !important;
                             font-weight: bold !important;
-                            margin-bottom: 20px;
+                            margin-bottom: 10px;
                           "
                         >
                           Import Calendar
@@ -3878,10 +3920,10 @@
                                 color="white"
                                 :disabled="
                                   importCalendarChoice == 'newCalendar' ||
-                                  importCalendarChoice == null
+                                  importCalendarChoice == null || importedCalendar == true
                                 "
                                 @click="
-                                  importCalendar(
+                                  tempImportCalendar(
                                     existingCalendarURL,
                                     currMeetingInv
                                   )
@@ -3917,10 +3959,10 @@
                                 color="white"
                                 :disabled="
                                   importCalendarChoice == 'existingCalendar' ||
-                                  importCalendarChoice == null
+                                  importCalendarChoice == null || importedCalendar == true
                                 "
                                 @click="
-                                  importCalendar(newCalendarURL, currMeetingInv); assignExistingCalendar()
+                                  tempImportCalendar(newCalendarURL, currMeetingInv); assignExistingCalendar()
                                 "
                               >
                                 Import
@@ -3928,7 +3970,7 @@
                             </v-row>
                             <v-row style="margin-top: 5px; padding-left: 10px">
                               <span style="color: white; font-size: 14px; ">Save it as default calendar?</span>
-                              <v-switch :disabled="
+                              <v-switch hide-details :disabled="
                                   importCalendarChoice == 'existingCalendar' ||
                                   importCalendarChoice == null || newCalendarURL == null
                                 " style="padding-left: 15px " color="white" v-model="assignExistingCalendarSwitch" 
@@ -3936,7 +3978,58 @@
                               ></v-switch>
                             </v-row>
                           </v-radio-group>
+                          <v-dialog
+                          v-model="tempImportedCalendar"
+                          content-class="elevation-0"
+                          max-width="600px"
+                          min-height="300px"
+                          :class="`rounded-lg`"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          "
+                        >
+                          <v-sheet
+                            outlined
+                            color="#ff9d66"
+                            style="
+                              padding: 3px;
+                              min-width: 600px;
+                              max-width: 600px;
+                              min-height: 300px;
+                            "
+                            :class="`rounded-xl`"
+                          >
+                            <v-card
+                              outlined
+                              :class="`rounded-xl`"
+                              style="
+                                padding: 40px;
+                                min-height: 300px;
+                                max-width: 600px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                              "
+                            >
+                              <span style="margin-bottom: 10px; color: #4b4b4b"
+                                >Calendar has been imported and uploaded to the server. 
+                                Click "Done" button after all timeslots and the latest calendar is imported. Changes will be updated by then.</span
+                              >
+                              <v-btn
+                                text
+                                color="#ff9d66"
+                                @click="tempImportedCalendar = false"
+                                >Close</v-btn
+                              >
+                            </v-card>
+                          </v-sheet>
+                        </v-dialog>
+
                         </v-card-actions>
+                        
                         <v-row style="padding-left: 10px">
                           <v-card-title
                             style="
@@ -3962,39 +4055,365 @@
                             </v-btn>
                           </v-card-actions>
                         </v-row>
-                        <v-row style="padding-left: 10px">
+                        <v-row style="margin-top: 20px; padding-left: 20px; padding-right:20px; margin-botton: 10px;">
+                          
+                          
+                          
+                          
+                          <v-dialog
+                  v-model="dialogExtraSlot"
+                  readonly
+                  content-class="elevation-0"
+                  max-width="700px"
+                  min-width="700px"
+                  :class="`rounded-lg`"
+                >
+                  <template
+                    v-slot:activator="{ on, attrs }"
+                    :class="`rounded-lg`"
+                  >
+                    
+                      <v-btn
+                        :class="`rounded-lg`"
+                        style="padding-right: 0px; padding-left: 20px; padding-right:20px; margin-bottom:15px;"
+                        color="white"
+                        block
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="
+                          dialogExtraSlot = true;
+                          
+                        "
+                      >
+                        Manage Extra Timeslot
+                      </v-btn>
+                    
+                  </template>
+                  <v-sheet
+                    outlined
+                    color="#ff9d66"
+                    style="padding: 3px"
+                    :class="`rounded-xl`"
+                  >
+                    <v-card outlined :class="`rounded-xl`">
+                      <v-form ref="form">
+                        <div>
                           <v-card-title
+                            :class="`rounded-xl`"
                             style="
-                              font-weight: bold !important;
-                              color: white;
                               display: flex;
-                              padding-top: 0px !important;
-                              padding-bottom: 3px !important;
-                              padding-left: 10px !important;
-                              padding-right: 3px !important;
-                              font-size: 18px !important;
+                              justify-content: space-between;
                             "
                           >
-                            Quick Links:
-                          </v-card-title>
-                          <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
-                              <v-img
-                                width="50px"
-                                src="@/assets/google_calendar.png"
-                              ></v-img>
-                            </a>
-                            <a
-                              href="https://nusmods.com/timetable/sem-1"
-                              target="_blank"
+                            <span style="color: #ff9d66" class="headline"
+                              >Add Extra Occupied Timeslot</span
                             >
-                              <v-img
-                                width="50px"
-                                src="@/assets/NUSMods_logo.png"
-                              ></v-img>
-                            </a>
-                          </v-card-actions>
-                        </v-row>
+
+                           
+                          </v-card-title>
+                          
+                          <div >
+                            <v-card-text>
+                              <v-container :class="`rounded-xl`">
+                                <v-row>
+                                
+                                 
+                                  
+                                  <v-col
+                                    cols="12"
+                                    :class="`rounded-xl`"
+                                    style="padding-bottom: 12px"
+                                  >
+                                    <v-menu
+                                      required
+                                      v-model="menuExtraDate"
+                                      :close-on-content-click="false"
+                                      :nudge-right="40"
+                                      transition="scale-transition"
+                                      offset-y
+                                      color="#ff9d66"
+                                      min-width="auto"
+                                    >
+                                      <template
+                                        v-slot:activator="{ on, attrs }"
+                                      >
+                                        <v-text-field
+                                          style="padding-bottom: 20px"
+                                          required
+                                          
+                                          v-model="displayExtraDate"
+                                          label="Date of the extra timeslot*"
+                                          prepend-icon="mdi-calendar"
+                                          v-bind="attrs"
+                                          v-on="on"
+                                          color="#ff9d66"
+                                        ></v-text-field>
+                                      </template>
+                                      <v-date-picker
+                                        color="#ff9d66"
+                                        :max="currMeetingInv.displayMeetingDateRange.substr(13)"
+                                        :min="currMeetingInv.displayMeetingDateRange.substr(0,10)"
+                                        
+                                        v-model="meetingExtraDate"
+                                      >
+                                      
+                                        <v-btn
+                                          outlined
+                                          color="#ff9d66"
+                                          @click="menuExtraDate = false"
+                                        >
+                                          Close
+                                        </v-btn>
+                                      </v-date-picker>
+                                    </v-menu>
+                                    <v-row style="padding-top: 5px">
+                                      <v-col
+                                        cols="12"
+                                        md="6"
+                                        style="display: flex"
+                                      >
+                                        <v-menu
+                                          ref="menuExtraStartTime"
+                                          v-model="menuExtraStartTime"
+                                          color="#ff9d66"
+                                          :close-on-content-click="false"
+                                          :nudge-right="40"
+                                          :return-value.sync="meetingExtraStartTime"
+                                          transition="scale-transition"
+                                          offset-y
+                                          max-width="290px"
+                                          min-width="290px"
+                                        >
+                                          <template
+                                            v-slot:activator="{ on, attrs }"
+                                          >
+                                            <v-text-field
+                                              v-model="meetingExtraStartTime"
+                                              label="Start*"
+                                              color="#ff9d66"
+                                              prepend-icon="mdi-clock-time-four-outline"
+                                              readonly
+                                              v-bind="attrs"
+                                              v-on="on"
+                                              :rules="[
+                                                (v) =>
+                                                  !!v ||
+                                                  'Start Time is required',
+                                              ]"
+                                            ></v-text-field>
+                                          </template>
+                                          <v-time-picker
+                                            scrollable
+                                            v-if="menuExtraStartTime"
+                                            v-model="meetingExtraStartTime"
+                                            full-width
+                                            color="#ff9d66"
+                                            format="24hr"
+                                            :max="meetingExtraEndTime"
+                                            @click:minute="
+                                              $refs.menuExtraStartTime.save(
+                                                meetingExtraStartTime
+                                              )
+                                            "
+                                          ></v-time-picker>
+                                        </v-menu>
+                                      </v-col>
+                                      <v-col cols="12" md="6">
+                                        <v-menu
+                                          ref="menuExtraEndTime"
+                                          v-model="menuExtraEndTime"
+                                          color="#ff9d66"
+                                          :close-on-content-click="false"
+                                          :nudge-right="40"
+                                          :return-value.sync="meetingExtraEndTime"
+                                          transition="scale-transition"
+                                          offset-y
+                                          max-width="290px"
+                                          min-width="290px"
+                                        >
+                                          <template
+                                            v-slot:activator="{ on, attrs }"
+                                          >
+                                            <v-text-field
+                                              v-model="meetingExtraEndTime"
+                                              label="End*"
+                                              color="#ff9d66"
+                                              prepend-icon="mdi-clock-time-four-outline"
+                                              readonly
+                                              v-bind="attrs"
+                                              v-on="on"
+                                              :rules="[
+                                                (v) =>
+                                                  !!v ||
+                                                  'Meeting End Time is required',
+                                              ]"
+                                            ></v-text-field>
+                                          </template>
+                                          <v-time-picker
+                                            scrollable
+                                            v-if="menuExtraEndTime"
+                                            :min="meetingExtraStartTime"
+                                            v-model="meetingExtraEndTime"
+                                            full-width
+                                            color="#ff9d66"
+                                            format="24hr"
+                                            @click:minute="
+                                              $refs.menuExtraEndTime.save(
+                                                meetingExtraEndTime
+                                              )
+                                            "
+                                          ></v-time-picker>
+                                        </v-menu>
+                                      </v-col>
+                                     
+                                    </v-row>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                            </v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                             {{meetingExtraDate}}
+                             {{meetingExtraStartTime}}
+                             {{meetingExtraEndTime}}
+                              <v-btn
+                                color="#ff9d66"
+                                :disabled="this.meetingExtraDate == null"
+                                @click="addTempExtraTimeslot()"
+                                text
+                                
+                              >
+                                Add
+                              </v-btn>
+                            </v-card-actions>
+                          </div>
+
+                          <v-divider></v-divider>
+                          <div>
+                          <v-card-title
+                            :class="`rounded-xl`"
+                            style="
+                              display: flex;
+                              justify-content: space-between;
+                            "
+                          >
+                            <span style="color: #ff9d66" 
+                              >Extra timeslot added</span
+                            >
+                            
+                            
+
+                           
+                          </v-card-title>
+                          <div v-if="this.tempTimeslots.length !== 0">
+                    
+                          <div v-for="timeslot in orderedTimeslots" :key="timeslot.id">
+                            
+                            <span>{{timeslot.start.substr(0,10)}}    {{timeslot.start.substr(10)}} - {{timeslot.end.substr(10)}}</span>
+                            <v-btn icon color="#ff9d66" @click="removeTimeslot(timeslot)"><v-icon>mdi-close</v-icon></v-btn>
+
+                          </div>
+                          </div>
+                          <div v-else>
+                            <span>No any extra timeslot added.</span>
+
+                          </div>
+                          </div>
+
+                          <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                justify="center"
+                                color="#ff9d66"
+                                text
+                                @click="
+                                  dialogExtraSlot = false;
+                                  clearTimeSlot();
+                                "
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                color="#ff9d66"
+                                :disabled="
+                                this.tempTimeslots.length == 0
+                                  
+                                "
+                                text
+                                @click="
+                                  dialogExtraSlot = false;
+                                  addTimeSlot();
+                                "
+                              >
+                                Save
+                              </v-btn>
+                            </v-card-actions>
+
+                          
+                        </div>
+                        
+                      </v-form>
+                    </v-card>
+                  </v-sheet>
+                </v-dialog>
+                         
+
+                          </v-row>
+<v-dialog
+                          v-model="savedTimeSlot"
+                          content-class="elevation-0"
+                          max-width="600px"
+                          min-height="300px"
+                          :class="`rounded-lg`"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          "
+                        >
+                          <v-sheet
+                            outlined
+                            color="#ff9d66"
+                            style="
+                              padding: 3px;
+                              min-width: 600px;
+                              max-width: 600px;
+                              min-height: 300px;
+                            "
+                            :class="`rounded-xl`"
+                          >
+                            <v-card
+                              outlined
+                              :class="`rounded-xl`"
+                              style="
+                                padding: 40px;
+                                min-height: 300px;
+                                max-width: 600px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                              "
+                            >
+                              <span style="margin-bottom: 10px; color: #4b4b4b"
+                                >Additional occupied timeslots have been added successfully and uploaded to the server.</span
+                              >
+                              <v-btn
+                                text
+                                color="#ff9d66"
+                                @click="savedTimeSlot = false"
+                                >Close</v-btn
+                              >
+                            </v-card>
+                          </v-sheet>
+                        </v-dialog>
+                           
+                        
+                        <v-row style="display:flex; justify-content:center; margin-top: 20px; padding-left: 10px; margin-botton: 10px;">
+                             <v-btn color="white" :class="`elevation-0`" @click="doneMeetingInv()">
+                               <span style="color:#ff9d66; font-weight:bold">Done and confirm</span></v-btn>
+                             </v-row>
                       </v-col>
                     </v-row>
                   </v-card>
@@ -4006,7 +4425,7 @@
                 <v-card
                   outlined
                   color="#FFE4CB"
-                  style="max-height: 70vh; min-width:51vw; max-width: 51vw"
+                  style="max-height: 70vh; min-width:51vw; max-width: 51vw; margin-bottom:20px"
                   :class="`rounded-xl`"
                 >
                   <div
@@ -4084,7 +4503,7 @@
                                   height: 450px !important;
                                   overflow-y: scroll;
                                 "
-                                id="Schedule"
+                                id="ScheduleConfirmed"
                                 :selectedDate="selectedDate"
                                 :eventSettings="eventSettings"
                                 :currentView="currentView"
@@ -4092,6 +4511,39 @@
                                 :allowMultiple="allowMultiple"
                               ></ejs-schedule>
                             </div>
+                            <v-row style="padding-left: 10px; margin-top: 20px;">
+                          <v-card-title
+                            style="
+                              font-weight: bold !important;
+                              color: white;
+                              display: flex;
+                              padding-top: 0px !important;
+                              padding-bottom: 3px !important;
+                              padding-left: 10px !important;
+                              padding-right: 3px !important;
+                              font-size: 18px !important;
+                            "
+                          >
+                            Quick Links:
+                          </v-card-title>
+                          <v-card-actions>
+                            <a href="https://www.google.com" target="_blank">
+                              <v-img
+                                width="50px"
+                                src="@/assets/google_calendar.png"
+                              ></v-img>
+                            </a>
+                            <a
+                              href="https://nusmods.com/timetable/sem-1"
+                              target="_blank"
+                            >
+                              <v-img
+                                width="50px"
+                                src="@/assets/NUSMods_logo.png"
+                              ></v-img>
+                            </a>
+                          </v-card-actions>
+                        </v-row>
                           </div>
                         </div>
                       </v-col>
@@ -4208,39 +4660,7 @@
                             }}</span>
                           </v-row>
                         </div>
-                        <v-row style="padding-left: 10px">
-                          <v-card-title
-                            style="
-                              font-weight: bold !important;
-                              color: white;
-                              display: flex;
-                              padding-top: 0px !important;
-                              padding-bottom: 3px !important;
-                              padding-left: 10px !important;
-                              padding-right: 3px !important;
-                              font-size: 18px !important;
-                            "
-                          >
-                            Quick Links:
-                          </v-card-title>
-                          <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
-                              <v-img
-                                width="50px"
-                                src="@/assets/google_calendar.png"
-                              ></v-img>
-                            </a>
-                            <a
-                              href="https://nusmods.com/timetable/sem-1"
-                              target="_blank"
-                            >
-                              <v-img
-                                width="50px"
-                                src="@/assets/NUSMods_logo.png"
-                              ></v-img>
-                            </a>
-                          </v-card-actions>
-                        </v-row>
+                        
                       </v-col>
                     </v-row>
                   </v-card>
@@ -4252,7 +4672,7 @@
                 <v-card
                   outlined
                   color="#FFE4CB"
-                  style="max-height: 70vh;min-width:51vw; max-width: 51vw"
+                  style="max-height: 70vh;min-width:51vw; max-width: 51vw; margin-bottom:20px"
                   :class="`rounded-xl`"
                 >
                   <div
@@ -4344,6 +4764,39 @@
                               >
                               </ejs-schedule>
                             </div>
+                            <v-row style="padding-left: 10px; margin-top: 20px;">
+                          <v-card-title
+                            style="
+                              font-weight: bold !important;
+                              color: white;
+                              display: flex;
+                              padding-top: 0px !important;
+                              padding-bottom: 3px !important;
+                              padding-left: 10px !important;
+                              padding-right: 3px !important;
+                              font-size: 18px !important;
+                            "
+                          >
+                            Quick Links:
+                          </v-card-title>
+                          <v-card-actions>
+                            <a href="https://www.google.com" target="_blank">
+                              <v-img
+                                width="50px"
+                                src="@/assets/google_calendar.png"
+                              ></v-img>
+                            </a>
+                            <a
+                              href="https://nusmods.com/timetable/sem-1"
+                              target="_blank"
+                            >
+                              <v-img
+                                width="50px"
+                                src="@/assets/NUSMods_logo.png"
+                              ></v-img>
+                            </a>
+                          </v-card-actions>
+                        </v-row>
                           </div>
                         </div>
                       </v-col>
@@ -4540,39 +4993,7 @@
                             </div>
                           </v-row>
                        
-                        <v-row style="padding-left: 10px">
-                          <v-card-title
-                            style="
-                              font-weight: bold !important;
-                              color: white;
-                              display: flex;
-                              padding-top: 0px !important;
-                              padding-bottom: 3px !important;
-                              padding-left: 10px !important;
-                              padding-right: 3px !important;
-                              font-size: 18px !important;
-                            "
-                          >
-                            Quick Links:
-                          </v-card-title>
-                          <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
-                              <v-img
-                                width="50px"
-                                src="@/assets/google_calendar.png"
-                              ></v-img>
-                            </a>
-                            <a
-                              href="https://nusmods.com/timetable/sem-1"
-                              target="_blank"
-                            >
-                              <v-img
-                                width="50px"
-                                src="@/assets/NUSMods_logo.png"
-                              ></v-img>
-                            </a>
-                          </v-card-actions>
-                        </v-row>
+                       
                         </div>
                         <div v-else>
                           <v-row style="padding-left:10px">
@@ -4650,6 +5071,7 @@ export default {
   // },
   // props: ['eventSettingsList'],
   data: () => ({
+    dialogExtraSlot: false,
     calOrList: undefined,
     timeScale: {
       enable: true,
@@ -4686,6 +5108,12 @@ export default {
     valid: true,
     time: [],
     menuAdd: false,
+    menuExtraDate: false,
+    menuExtraStartTime: false,
+    menuExtraEndTime: false,
+    meetingExtraDate: null,
+    meetingExtraStartTime: "00:00",
+    meetingExtraEndTime: "23:59",
     dateSwitchValue: false,
     meetingVenue: "",
     tempGroupmates: [],
@@ -4754,6 +5182,13 @@ export default {
     dialogNewLink: {},
     dialogNewLink2: {},
     popupMeeting2: {},
+    tempTimeslots: [],
+    savedTimeSlot: false,
+    importedCalendar: false,
+    tempImportedCalendar: false,
+    tempImportStartDate: null,
+    tempImportEndDate: null,
+    tempImportLink: null,
   }),
 
   // created: async function(){
@@ -4779,6 +5214,14 @@ export default {
           return newMeetingDateRange.join("~");
         }
         return this.meetingDateRange.join(" ~ ");
+      }
+    },
+
+     displayExtraDate() {
+      if (this.meetingExtraDate == null) {
+        return "Date of the extra timeslot"
+      } else {
+        return this.meetingExtraDate
       }
     },
 
@@ -4838,6 +5281,10 @@ export default {
         ["startDate", "projectTitle", "endDate"],
         ["asc", "asc", "asc"]
       );
+    },
+
+    orderedTimeslots: function(){
+      return _.orderBy(this.tempTimeslots, ["start","end"])
     },
 
     remaining() {
@@ -4910,15 +5357,77 @@ export default {
   },
 
   methods: {
-    consoleLog(){
-      console.log('popupMeeting: ');
+    doneMeetingInv(){
+      this.importCalendar()
+      this.currMeetingInv = null;
+      this.$store.dispatch("getMeetingInvitations");
+      this.$store.dispatch("getMeetingPendings");
+      this.$store.dispatch("getMeetingConfirmations");
+      this.importedCalendar = false;
+      this.tempImportedCalendar = false;
+      this.savedTimeSlot = false
+    },
+
+    removeTimeslot: function(timeslot){
+              var index = _.findIndex(this.tempTimeslots, timeslot);
+              this.tempTimeslots.splice(index, 1);
+            },
+
+    async addTimeSlot(){
+      for(let i=0; i<this.tempTimeslots.length; i++){
+        
+        await db.collection('meeting').doc(this.currMeetingInv.id).update({
+        timeslot: firebase.firestore.FieldValue.arrayUnion(
+          {start: firebase.firestore.Timestamp.fromDate(
+          new Date(this.tempTimeslots[i].start.substr(0,10) + "T" + this.tempTimeslots[i].start.substr(10) + ":00+08:00")
+          ),
+          end: firebase.firestore.Timestamp.fromDate(
+          new Date(this.tempTimeslots[i].end.substr(0,10) + "T" + this.tempTimeslots[i].end.substr(10) + ":00+08:00")
+          )}
+        )
+      })
+      }
+      this.getBlockedTimeSlot(this.currMeetingInv)
+      this.clearTimeSlot()
+      this.savedTimeSlot = true
+      
+    },
+
+    clearTimeSlot(){
+      this.tempTimeslots = []
+      this.meetingExtraStartTime = "00:00"
+      this.meetingExtraEndTime = "23:59"
+      this.meetingExtraDate = null
+      
+
+    },
+
+    addTempExtraTimeslot(){
+      this.tempTimeslots.push({
+        start: this.displayExtraDate + this.meetingExtraStartTime,
+        end: this.displayExtraDate + this.meetingExtraEndTime
+      })
+
+      console.log("meetingExtraStartTime")
+      this.meetingExtraStartTime = "00:00"
+      this.meetingExtraEndTime = "23:59"
+      this.meetingExtraDate = null
+      this.orderedTimeslots()
+
+
+      
+    },
+    closePopUpMeeting(){
+      this.$store.dispatch("getConfirmedMeeting")
+      this.currSelectedPopupMeeting = null;
+      this.tempUpdateMeetingLink = "";
+      this.updateMeetingLink = "";
     },
     async passinNewMeetingLink() {
       this.updateMeetingLink = this.tempUpdateMeetingLink
       await db.collection("meeting").doc(this.currSelectedPopupMeeting.id).update({
         meetingLink: this.updateMeetingLink,
       });
-      this.$store.dispatch("getConfirmedMeeting")
       this.tempUpdateMeetingLink = ""
     },
 
@@ -5866,34 +6375,38 @@ export default {
 
     },
 
-    async importCalendar(link, meetingInv) {
-      let importStartDate = new Date(
+    async tempImportCalendar(link,meetingInv){
+      this.tempImportStartDate = new Date(
         meetingInv.displayMeetingDateRange.substr(0, 10) +
           "T" +
           meetingInv.startTime +
           ":00+08:00"
       ).toISOString();
-      let importEndDate = new Date(
+
+      this.tempImportEndDate = new Date(
         meetingInv.displayMeetingDateRange.substr(13) +
           "T" +
           meetingInv.endTime +
           ":00+08:00"
       ).toISOString();
-      console.log(link);
-      console.log(importStartDate);
-      console.log(importEndDate);
-      console.log(meetingInv.id);
+      this.tempImportLink = link;
+      this.importedCalendar = true;
+      this.tempImportedCalendar = true
+
+    },
+
+    async importCalendar() {
+     
       await findCommonTime(
-        link,
-        importStartDate,
-        importEndDate,
-        meetingInv.id,
+        this.tempImportLink,
+        this.tempImportStartDate,
+        this.tempImportEndDate,
+        this.currMeetingInv.id,
         this.$store.state.user.uid
       );
-      this.currMeetingInv = null;
-      this.$store.dispatch("getMeetingInvitations");
-      this.$store.dispatch("getMeetingPendings");
-      this.$store.dispatch("getMeetingConfirmations");
+
+      
+      
     },
   },
 };
