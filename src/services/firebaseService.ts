@@ -92,7 +92,7 @@ export const findCommonTime = (
   );
 };
 
-export const findGoogleCommonTime = (
+export const findGoogleCommonTime = async (
   // googleToken: string,
   startDateString: string,
   endDateString: string,
@@ -105,7 +105,7 @@ export const findGoogleCommonTime = (
     id: id,
     user: user,
   };
-  axios.post(
+  await axios.post(
     "http://localhost:5001/timelinus-2021/asia-east2/findCommon",
     obj
     // {
@@ -124,6 +124,7 @@ export const createZoomMeeting = async (
   id: string,
   user: string
 ) => {
+  console.log(durationInMins);
   const obj = {
     startTime: startDateString,
     duration: durationInMins,
@@ -131,7 +132,7 @@ export const createZoomMeeting = async (
     user: user,
   };
   const res = await axios.post(
-    "https://asia-east2-timelinus-2021.cloudfunctions.net/findcommon",
+    "https://asia-east2-timelinus-2021.cloudfunctions.net/createZoomMeeting",
     obj
   );
   return res;

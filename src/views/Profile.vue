@@ -306,8 +306,9 @@
                         </v-dialog>
                       </v-row>  
                       <v-row style="margin-left: 7px; display:flex; align-items: center">
-                        <div v-if="zoomRefreshToken == null" style="font-size: 16px; display: flex; color: white" @click="redirectToZoomLogin()">Not Linked with Zoom</div>
-                        <div v-if="zoomRefreshToken != null" style="font-size: 16px; display: flex; color: white">Linked with Zoom</div>
+                        <div v-if=" this.$store.state.displayUser.zoomRefreshToken == null" style="font-size: 16px; display: flex; color: white" >
+                          <span>Not Linked with Zoom</span><v-btn text small color="white" @click="redirectToZoomLogin()">Click here to link with zoom</v-btn></div>
+                        <div v-if="this.$store.state.displayUser.zoomRefreshToken != null" style="font-size: 16px; display: flex; color: white">Linked with Zoom</div>
                       </v-row>
                       
                     </v-col>
@@ -508,9 +509,9 @@ export default {
   },
 
   mounted() {
-    const docRef = db.collection("accounts").doc(this.$store.state.user.uid).get().then(
-      (docRef) =>  this.zoomRefreshToken = docRef.get("zoomRefreshToken")
-    )
+    // const docRef = db.collection("accounts").doc(this.$store.state.user.uid).get().then(
+    //   (docRef) =>  this.zoomRefreshToken = docRef.get("zoomRefreshToken")
+    // )
     // console.log('refreshtoken ' + this.zoomRefreshToken ?? 'null ' )
     // this.$store.dispatch("getTasks");
   },

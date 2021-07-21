@@ -161,14 +161,14 @@ export default {
 
     async googleSignIn() {
       const authCode = await this.$gAuth.getAuthCode();
-      const response = await axios.post('http://localhost:5001/timelinus-2021/asia-east2/getGoogleToken', {}, {
+      const response = await axios.post('https://asia-east2-timelinus-2021.cloudfunctions.net/getGoogleToken', {}, {
         headers: {
           "auth_code": authCode,
         }
       })
       const credential = firebase.auth.GoogleAuthProvider.credential(response.data.id_token, response.data.access_token);
       await firebase.auth().signInWithCredential(credential).then((result) => {
-          this.$router.push({ name: "Secret" });
+          this.$router.replace({ name: "Secret" });
           const credential = result.credential;
           const user = result.user;
           console.log("google sign in");

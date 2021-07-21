@@ -320,6 +320,7 @@ async function getDisplayUser(state: any): Promise<User> {
     project: [],
     avatar: "",
     calendar: "",
+    zoomRefreshToken: "",
   };
   const data = await db.collection("user").doc(state.user.uid).get();
   (displayUser.uid = state.user.uid), (displayUser.name = data.get("name"));
@@ -329,8 +330,9 @@ async function getDisplayUser(state: any): Promise<User> {
     : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1"),
     (displayUser.task = data.get("task"));
   displayUser.project = data.get("project");
-  displayUser.calendar = data.get("calendar") ? data.get("calendar") : "No default calendar"
-  console.log(displayUser);
+  displayUser.calendar = data.get("calendar") ? data.get("calendar") : "No default calendar";
+  displayUser.zoomRefreshToken =  data.get("zoomRefreshToken") ? data.get("zoomRefreshToken") : null
+
   console.log(state.user.photoURL);
   return displayUser;
 }
@@ -841,7 +843,8 @@ async function getPendingGroupmates(groupmates: any): Promise<User[]> {
       avatar: docRef.get("photoURL")
         ? docRef.get("photoURL")
         : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
-      calendar: docRef.get("calendar") ? docRef.get("calendar") : "No default calendar"
+      calendar: docRef.get("calendar") ? docRef.get("calendar") : "No default calendar",
+      zoomRefreshToken: docRef.get("zoomRefreshToken") ? docRef.get("zoomRefreshToken") : null
       });
   }
   return groupmatesArray;
