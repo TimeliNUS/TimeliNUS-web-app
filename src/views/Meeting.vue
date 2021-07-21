@@ -2473,6 +2473,7 @@
                                                         getBlockedTimeSlot(
                                                           meetingInv
                                                         );
+                                                         checkExistingCalendar();
                                                         invitationTableView = false;
                                                       "
                                                     >
@@ -3923,8 +3924,8 @@
                                   importCalendarChoice == null || importedCalendar == true
                                 "
                                 @click="
-                                  tempImportCalendar(
-                                    existingCalendarURL,
+                                  importCalendar(
+                                    link,
                                     currMeetingInv
                                   )
                                 "
@@ -3962,7 +3963,10 @@
                                   importCalendarChoice == null || importedCalendar == true
                                 "
                                 @click="
-                                  tempImportCalendar(newCalendarURL, currMeetingInv); assignExistingCalendar()
+                                  importCalendar(
+                                    link,
+                                    currMeetingInv
+                                  ); assignExistingCalendar()
                                 "
                               >
                                 Import
@@ -4015,8 +4019,8 @@
                               "
                             >
                               <span style="margin-bottom: 10px; color: #4b4b4b"
-                                >Calendar has been imported and uploaded to the server. 
-                                Click "Done" button after all timeslots and the latest calendar is imported. Changes will be updated by then.</span
+                                >Calendar has been imported and uploaded to server. 
+                                Click "Done" button after you have imported Google calendar (if any) and added extra timeslot (if any) to confirm that you have finished the importing process. </span
                               >
                               <v-btn
                                 text
@@ -4054,6 +4058,56 @@
                             >
                               {{isLinkedToGoogle ? "Use synced Google Calendar" : "Login to Google"}}
                             </v-btn>
+                            <v-dialog
+                          v-model="googleSyncedDialog"
+                          content-class="elevation-0"
+                          max-width="600px"
+                          min-height="300px"
+                          :class="`rounded-lg`"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          "
+                        >
+                          <v-sheet
+                            outlined
+                            color="#ff9d66"
+                            style="
+                              padding: 3px;
+                              min-width: 600px;
+                              max-width: 600px;
+                              min-height: 300px;
+                            "
+                            :class="`rounded-xl`"
+                          >
+                            <v-card
+                              outlined
+                              :class="`rounded-xl`"
+                              style="
+                                padding: 40px;
+                                min-height: 300px;
+                                max-width: 600px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                              "
+                            >
+                              <span style="margin-bottom: 10px; color: #4b4b4b"
+                                >The dates and time of your busy events in Google calendar has been uploaded to the server.
+                                Click "Done" button after you have imported NUSMods calendar (if any) and added extra timeslot (if any) to confirm that you have finished the importing process.</span
+                              >
+                              <v-btn
+                                text
+                                color="#ff9d66"
+                                @click="googleSyncedDialog = false"
+                                >Close</v-btn
+                              >
+                            </v-card>
+                          </v-sheet>
+                        </v-dialog>
+                           
                           </v-card-actions>
                         </v-row>
                         <v-row style="margin-top: 20px; padding-left: 20px; padding-right:20px; margin-botton: 10px;">
@@ -4398,7 +4452,8 @@
                               "
                             >
                               <span style="margin-bottom: 10px; color: #4b4b4b"
-                                >Additional occupied timeslots have been added successfully and uploaded to the server.</span
+                                >Additional occupied timeslots have been added successfully and uploaded to the server.
+                                Click "Done" button after you have imported NUSMods Calendar (if any) and Google calendar (if any) to confirm that you have finished the importing process.</span
                               >
                               <v-btn
                                 text
@@ -4412,9 +4467,59 @@
                            
                         
                         <v-row style="display:flex; justify-content:center; margin-top: 20px; padding-left: 10px; margin-botton: 10px;">
-                             <v-btn color="white" :class="`elevation-0`" @click="doneMeetingInv()">
-                               <span style="color:#ff9d66; font-weight:bold">Done and confirm</span></v-btn>
+                             <v-btn color="white" :class="`elevation-0`" @click="doneMeetingInv(); doneMeetingDialog = true">
+                               <span style="color:#ff9d66; font-weight:bold" >Done and confirm</span></v-btn>
                              </v-row>
+                              <v-dialog
+                          v-model="doneMeetingDialog"
+                          content-class="elevation-0"
+                          max-width="600px"
+                          min-height="300px"
+                          readonly
+                          :class="`rounded-lg`"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          "
+                        >
+                          <v-sheet
+                            outlined
+                            color="#ff9d66"
+                            style="
+                              padding: 3px;
+                              min-width: 600px;
+                              max-width: 600px;
+                              min-height: 300px;
+                            "
+                            :class="`rounded-xl`"
+                          >
+                            <v-card
+                              outlined
+                              :class="`rounded-xl`"
+                              style="
+                                padding: 40px;
+                                min-height: 300px;
+                                max-width: 600px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                              "
+                            >
+                              <span style="margin-bottom: 10px; color: #4b4b4b"
+                                >Import process has been done. The meeting will be a pending meeting waiting for other groupmates to complete the import process.
+                                It will be a meeting confirmation otherwise waiting for confirming the actual meeting date and time.</span
+                              >
+                              <v-btn
+                                text
+                                color="#ff9d66"
+                                @click=" dispatchFunctions()"
+                                >Close</v-btn
+                              >
+                            </v-card>
+                          </v-sheet>
+                        </v-dialog>
                       </v-col>
                     </v-row>
                   </v-card>
@@ -4578,7 +4683,7 @@
                             color: white;
                             font-size: 16px !important;
                             font-weight: bold !important;
-                            margin-bottom: 20px;
+                        
                           "
                           v-for="groupmate in currMeetingPending.confirmed_groupmates"
                           :key="groupmate.id"
@@ -4634,7 +4739,7 @@
                             color: white;
                             font-size: 16px !important;
                             font-weight: bold !important;
-                            margin-bottom: 20px;
+                            
                           "
                           v-for="groupmate in currMeetingPending.invited_groupmates"
                           :key="groupmate.id"
@@ -4963,11 +5068,70 @@
                                   }}
                                 </span>
                               </v-card-text>
+                              <div v-if="currMeetingConfirmation.venue == 'Zoom'">
+                              <v-card-actions style="display:flex; flex-direction:column">
+                                <v-checkbox dark outlined v-model="automateZoomLink" @change="checkZoom()" label="Generate zoom link automatically"
+                                  />
+                                <span v-if="automateZoomLink == true && linkedToZoom == false " style="color:white"> You have not linked to zoom yet</span>
+                                <v-btn v-if="automateZoomLink == true && linkedToZoom == false" text small color="white" @click="redirectToZoomLogin()">Click here to link with zoom</v-btn>
+                              </v-card-actions>
+                              </div>
                               <v-card-actions>
-                                <v-btn dark outlined @click="confirmMeeting"
+                                <v-btn dark outlined @click="confirmMeeting() ; confirmedMeetingDialog = true " :disabled="(automateZoomLink == true && linkedToZoom == false)"
                                   >Confirm</v-btn
                                 >
                               </v-card-actions>
+                              <v-dialog
+                          v-model="confirmedMeetingDialog"
+                          content-class="elevation-0"
+                          max-width="600px"
+                          min-height="300px"
+                          readonly
+                          :class="`rounded-lg`"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          "
+                        >
+                          <v-sheet
+                            outlined
+                            color="#ff9d66"
+                            style="
+                              padding: 3px;
+                              min-width: 600px;
+                              max-width: 600px;
+                              min-height: 300px;
+                            "
+                            :class="`rounded-xl`"
+                          >
+                            <v-card
+                              outlined
+                              :class="`rounded-xl`"
+                              style="
+                                padding: 40px;
+                                min-height: 300px;
+                                max-width: 600px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                              "
+                            >
+                              <span style="margin-bottom: 10px; color: #4b4b4b"
+                                >Meeting has been confirmed. It is added to the meeting calendar and meeting list on the left.</span
+                              >
+                              <v-btn
+                                text
+                                color="#ff9d66"
+                                @click="dispatchFunctions()"
+                                >Close</v-btn
+                              >
+                            </v-card>
+                          </v-sheet>
+                        </v-dialog>
+                           
+                        
                             </div>
                             <div v-else>
                               <v-card-text
@@ -5045,7 +5209,7 @@ import firebase from "firebase";
 import { db } from "../main.ts";
 // import BlockEvent from "../components/block-event.vue"
 import _ from "lodash";
-import { findCommonTime, findGoogleCommonTime } from "../services/firebaseService.ts";
+import { findCommonTime, findGoogleCommonTime, createZoomMeeting, isLinkedToZoom } from "../services/firebaseService.ts";
 import axios from "axios";
 import Vue from "vue";
 import { extend } from "@syncfusion/ej2-base";
@@ -5147,6 +5311,8 @@ export default {
     invitationsSlide: null,
     meetingCalendar: [],
     notes: [],
+    automateZoomLink: false,
+    linkedToZoom: null,
 
     displayMeetingCalendar: new Date(
       Date.now() - new Date().getTimezoneOffset() * 60000
@@ -5191,6 +5357,9 @@ export default {
     tempImportEndDate: null,
     tempImportLink: null,
     isLinkedToGoogle: false,
+    googleSyncedDialog: false,
+    confirmedMeetingDialog: false,
+    doneMeetingDialog: false,
   }),
 
   // created: async function(){
@@ -5239,6 +5408,8 @@ export default {
       const Difference_In_Time =
         this.selectedEndTime.getTime() - this.selectedStartTime.getTime();
       console.log(Difference_In_Time);
+              console.log(this.selectedStartTime.toISOString())
+
       return Difference_In_Time;
     },
 
@@ -5359,15 +5530,55 @@ export default {
   },
 
   methods: {
-    doneMeetingInv(){
-      this.importCalendar()
-      this.currMeetingInv = null;
+     redirectToZoomLogin() {
+      window.location.href = 
+      'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "' + this.$store.state.user.uid + '"}';
+    },
+    
+    dispatchFunctions(){
+      if(this.doneMeetingDialog == true){
+      this.doneMeetingDialog = false; 
       this.$store.dispatch("getMeetingInvitations");
       this.$store.dispatch("getMeetingPendings");
       this.$store.dispatch("getMeetingConfirmations");
+      this.currMeetingInv = null;
       this.importedCalendar = false;
       this.tempImportedCalendar = false;
       this.savedTimeSlot = false
+      } else { 
+      this.confirmedMeetingDialog = false;
+      this.currMeetingConfirmation = null; 
+      this.$store.dispatch("getConfirmedMeeting")
+      this.$store.dispatch("getMeetingConfirmations")
+      this.$store.dispatch("assignMeetingCalendar")
+      this.$store.dispatch("getTodayProjects");
+      this.$store.dispatch("getCalendarProjects");
+      this.$store.dispatch("assignTodoDashboardCalendar");
+      }
+
+
+      
+
+    },
+
+    async checkZoom(){
+      if(this.automateZoomLink == true){
+        this.linkedToZoom = await isLinkedToZoom(this.$store.state.user.uid)
+
+      }
+      console.log(this.automateZoomLink)
+      console.log(this.linkedToZoom)
+    },
+
+    doneMeetingInv(){
+      db.collection('meeting').doc(this.currMeetingInv.id).update({
+        invitations: firebase.firestore.FieldValue.arrayRemove(db.collection('user').doc(this.$store.state.user.uid))
+      })
+      db.collection('meeting').doc(this.currMeetingInv.id).update({
+        confirmedInvitations: firebase.firestore.FieldValue.arrayUnion(db.collection('user').doc(this.$store.state.user.uid))
+      })
+     
+      
     },
 
     removeTimeslot: function(timeslot){
@@ -5515,6 +5726,13 @@ export default {
       return false;
     },
     async confirmMeeting() {
+     if(this.automateZoomLink == true && this.linkedToZoom == true){
+       const Difference_In_Time =
+        this.selectedEndTime.getTime() - this.selectedStartTime.getTime()
+        console.log(Difference_In_Time)
+        console.log(this.selectedStartTime.toISOString())
+      const zoomLink = await createZoomMeeting(this.selectedStartTime.toISOString(), Difference_In_Time/60/1000, this.currMeetingConfirmation.id, this.$store.state.user.uid )
+     }
       db.collection("meeting")
         .doc(this.currMeetingConfirmation.id)
         .update({
@@ -5527,13 +5745,7 @@ export default {
           isConfirmed: true,
         });
       console.log(this.currMeetingConfirmation);
-      this.currMeetingConfirmation = null;
-      this.$store.dispatch("getConfirmedMeeting")
-      this.$store.dispatch("getMeetingConfirmations")
-      this.$store.dispatch("assignMeetingCalendar")
-      this.$store.dispatch("getTodayProjects");
-      this.$store.dispatch("getCalendarProjects");
-      this.$store.dispatch("assignTodoDashboardCalendar");
+      
 
     },
     meetingMinDate(meeting) {
@@ -6392,14 +6604,15 @@ export default {
           meetingInv.endTime +
           ":00+08:00"
       ).toISOString();
+      
       this.tempImportLink = link;
       this.importedCalendar = true;
       this.tempImportedCalendar = true
 
     },
 
-    async importCalendar() {
-     
+    async importCalendar(link,meeting) {
+      this.tempImportCalendar(link,meeting);
       await findCommonTime(
         this.tempImportLink,
         this.tempImportStartDate,
@@ -6428,11 +6641,13 @@ export default {
         this.$store.state.user.uid
       );
       console.log(res);
+      this.googleSyncedDialog = true;
+      this.getBlockedTimeSlot(this.currMeetingInv)
     },
 
     async linkWithGoogle() {
       const authCode = await this.$gAuth.getAuthCode()
-      const response = await axios.post('http://localhost:5001/timelinus-2021/asia-east2/getGoogleToken', {}, {
+      const response = await axios.post('https://asia-east2-timelinus-2021.cloudfunctions.net/getGoogleToken', {}, {
         headers: {
           "auth_code": authCode,
         }
@@ -6444,7 +6659,7 @@ export default {
           googleRefreshToken: response.data['refresh_token'],
           googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in'] * 1000 - 5),
           googleAccessToken: response.data['access_token'],
-        })  
+        })
       })
       this.isLinkedToGoogle = true;
     },

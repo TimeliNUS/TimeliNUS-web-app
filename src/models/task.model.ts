@@ -69,6 +69,7 @@ export interface User {
   project: [];
   avatar: string;
   calendar: string;
+  zoomRefreshToken: string;
 }
 
 export interface MeetingInvitations {
