@@ -7,90 +7,86 @@
     "
   >
     <v-row>
-      <v-col col="12" md="2">
-        <v-navigation-drawer
-          absolute
-          permanent
-          floating
-          left
-          align="center"
-          class="v-navigation-drawer__border"
-          style="
-            padding: 18px;
-            font-size: 8px;
-            font-weight: bold;
-            border-color: white;
-            text-align: left;
-            font-color: #4b4b4b;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-          "
-        >
-          <div style="display: flex; flex-direction: column; height: 100%">
-            <v-img
-              width="10vw"
-              src="@/assets/orbital_logo_latest.png"
-              alt=""
-              style="flex: none; top: 20%"
-            ></v-img>
-            <br />
+      <v-navigation-drawer
+        permanent
+        floating
+        left
+        align="center"
+        class="v-navigation-drawer__border"
+        style="
+          padding: 18px;
+          font-size: 8px;
+          font-weight: bold;
+          border-color: white;
+          text-align: left;
+          font-color: #4b4b4b;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div style="display: flex; flex-direction: column; min-height: 100%">
+          <v-img
+            width="160"
+            src="@/assets/orbital_logo_latest.png"
+            alt=""
+            style="flex: none; top: 50px; margin-bottom: 50px"
+          ></v-img>
+          <br />
 
-            <v-list
-              :class="`rounded-xl`"
-              rounded
-              nav
-              style="display: flex; flex-direction: column; margin: auto"
+          <v-list
+            :class="`rounded-xl`"
+            rounded
+            nav
+            style="display: flex; flex-direction: column; margin: auto"
+          >
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.title"
+              link
+              :to="item.href"
+              color="#ff7200"
+              style="
+                display: flex;
+                justify-content: center;
+                font-size: 12px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+              "
             >
-              <v-list-item
-                v-for="item in navItems"
-                :key="item.title"
-                link
-                :to="item.href"
-                color="#ff7200"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  font-size: 12px;
-                  margin-top: 4px;
-                  margin-bottom: 4px;
-                "
+              <v-list-item-icon
+                style="display: flex; justify-content: center; margin: 12px"
               >
-                <v-list-item-icon
-                  style="display: flex; justify-content: center; margin: 12px"
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title
+                  style="
+                    font-color: #4b4b4b;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                  "
+                  >{{ item.title }}</v-list-item-title
                 >
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-icon>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-btn
+            color="#ff9d66"
+            depressed
+            large
+            type="submit"
+            v-on:click="signOut"
+          >
+            <span style="color: #ffffff">Sign Out</span>
+          </v-btn>
+        </div>
+      </v-navigation-drawer>
 
-                <v-list-item-content>
-                  <v-list-item-title
-                    style="
-                      font-color: #4b4b4b;
-                      margin-right: 5px;
-                      margin-top: 5px;
-                      margin-bottom: 5px;
-                    "
-                  >
-                    {{ item.title }}
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-btn
-              color="#ff9d66"
-              depressed
-              large
-              type="submit"
-              v-on:click="signOut"
-            >
-              <span style="color: #ffffff">Sign Out</span>
-            </v-btn>
-          </div>
-        </v-navigation-drawer>
-      </v-col>
-
-      <v-col col="12" md="10">
+      <v-row>
         <div>
           <div>
             <v-container style="padding-bottom: 0px; margin-left: 1vw">
@@ -4679,7 +4675,7 @@
             </div>
           </v-dialog>
         </div>
-      </v-col>
+      </v-row>
     </v-row>
   </div>
 </template>
@@ -6108,6 +6104,8 @@ export default {
   background-color: rgba(255, 255, 255, 1);
   border-color: white;
   color: white;
+  height: 100vh !important;
+  position: sticky;
 }
 
 .v-list--rounded .v-list-item,
