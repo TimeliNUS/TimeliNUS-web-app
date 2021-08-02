@@ -1312,15 +1312,15 @@ export default {
 
       const response = await db.collection("todo").add({
         task: this.myTodo,
-        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         complete: this.complete,
-        deadlineTime: this.myDeadlineTime,
-        deadlineDate: this.myDeadline,
-        switchValue: this.switchValue,
-        dateSwitchValue: this.dateSwitchValue,
+        // deadlineTime: this.myDeadlineTime,
+        // deadlineDate: this.myDeadline,
+        includeTime: this.switchValue,
+        // dateSwitchValue: this.dateSwitchValue,
         // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
         deadline: this.finalDeadline,
-        displayDeadline: this.displayDeadline,
+        // displayDeadline: this.displayDeadline,
         PIC: [],
         note: this.myNote,
         project: db.collection("project").doc(this.myProject),
@@ -1395,15 +1395,15 @@ export default {
         .doc(task.id)
         .update({
           task: this.myTodo,
-          created_at: firebase.firestore.FieldValue.serverTimestamp(),
+          _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           complete: this.complete,
-          deadlineTime: this.myDeadlineTime,
-          deadlineDate: this.myDeadline,
+          // deadlineTime: this.myDeadlineTime,
+          // deadlineDate: this.myDeadline,
           switchValue: this.switchValue,
-          dateSwitchValue: this.dateSwitchValue,
+          // dateSwitchValue: this.dateSwitchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
           deadline: this.finalDeadline,
-          displayDeadline: this.displayDeadline,
+          // displayDeadline: this.displayDeadline,
           note: this.myNote,
           project: db.collection("project").doc(this.myProject),
           PIC: [],
@@ -1429,9 +1429,9 @@ export default {
           })
           .catch((error) => console.log(error));
       }
-
+this.$store.dispatch("getProjects");
       this.$store.dispatch("getTasks");
-     this.$store.dispatch("getProjects");
+     
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");

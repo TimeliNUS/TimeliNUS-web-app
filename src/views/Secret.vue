@@ -627,11 +627,13 @@
                                   </span>
 
                                   <v-btn
+                                  v-if="meeting.isOnlineVenue == true && (meeting.meetingLink !== 'No meeting link')"
                                     style="margin-left: 2vw"
                                     outlined
                                     rounded
                                     color="#ff9d66"
                                     small
+                                    :href="meeting.meetingLink"
                                     >Join Now</v-btn
                                   >
                                 </div>
@@ -746,6 +748,7 @@
                             :key="project.id"
                             style="margin-left: 0.5vw; margin-right: 0.5vw"
                           >
+                          
                             <div v-if="project.todos.length !== 0">
                               <v-card
                                 outlined
