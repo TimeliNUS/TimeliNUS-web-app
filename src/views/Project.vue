@@ -5525,21 +5525,21 @@ export default {
       this.addSubmit = true;
       this.errors = "";
       const response = await db.collection("project").add({
-        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         creator: db.collection("user").doc(this.$store.state.user.uid),
         title: this.title,
         todos: [],
         progress: 0,
-        deadlineTime: this.myDeadlineTime,
-        deadlineDate: this.myDeadline,
-        switchValue: this.switchValue,
-        dateSwitchValue: this.dateSwitchValue,
+        // deadlineTime: this.myDeadlineTime,
+        // deadlineDate: this.myDeadline,
+        includeTime: this.switchValue,
+        // dateSwitchValue: this.dateSwitchValue,
         deadline: this.finalDeadline,
-        displayDeadline: this.displayDeadline,
+        // displayDeadline: this.displayDeadline,
         groupmates: [],
         groupmates_invited: [],
         groupmates_declined: [],
-        modCode: this.modCode,
+        moduleCode: this.modCode,
       });
       await this.addGroupmatesToProject(response);
       await this.addForGroupmates(response);
@@ -5605,15 +5605,15 @@ export default {
       const response = await db.collection("project").doc(project.id).update({
         title: this.title,
         progress: this.progress,
-        created_at: firebase.firestore.FieldValue.serverTimestamp(),
-        deadlineTime: this.myDeadlineTime,
-        deadlineDate: this.myDeadline,
-        switchValue: this.switchValue,
+        _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        // deadlineTime: this.myDeadlineTime,
+        // deadlineDate: this.myDeadline,
+        includeTime: this.switchValue,
         groupmates: [],
-        dateSwitchValue: this.dateSwitchValue,
+        // dateSwitchValue: this.dateSwitchValue,
         deadline: this.finalDeadline,
-        displayDeadline: this.displayDeadline,
-        modCode: this.modCode,
+        // displayDeadline: this.displayDeadline,
+        moduleCode: this.modCode,
         todos: this.todos,
       });
 

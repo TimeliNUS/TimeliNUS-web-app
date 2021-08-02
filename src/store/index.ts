@@ -344,9 +344,27 @@ async function getTasks(state: any): Promise<Task[]> {
     .get();
   const tasks: Task[] = [];
   console.log(querySnapshot)
+
   await Promise.all(
   querySnapshot.docs.map(async (doc) => {
+  console.log(doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString(): "00:00")
+  let newDate = ""
+  if(doc.data().deadline){
 
+  
+  const currLocalDate = doc.data().deadline
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      newDate = currYear + "-" + currMonth + "-" + currDate;
+  } 
     tasks.push({
       id: doc.id,
       task: doc.data().task ?? "",
@@ -356,11 +374,11 @@ async function getTasks(state: any): Promise<Task[]> {
       project: doc.data().project,
       projectTitle: await getTaskProject(doc.data().project),
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadlineDate,
-      deadlineTime: doc.data().deadlineTime,
-      switchValue: doc.data().switchValue,
-      dateSwitchValue: doc.data().dateSwitchValue,
-      displayDeadline: doc.data().displayDeadline,
+      deadlineDate: doc.data().deadline ? newDate : "",
+      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
+      switchValue: doc.data().includeTime ? doc.data().includeTime : doc.data().switchValue,
+      dateSwitchValue: doc.data().deadline ? false : true,
+      displayDeadline: doc.data().deadline ? newDate : "Someday",
       PIC: doc.data().PIC,
       PICavatar: await getGroupmatesAvatar(doc.data().PIC),
     });
@@ -399,6 +417,8 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
           }
           console.log(PICid)
     if(PICid.includes(state.user.uid)){
+    
+
       tasks.push({
         id: doc.id,
         task: doc.data().task ?? "",
@@ -408,8 +428,8 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
         project: doc.data().project,
         projectTitle: await getTaskProject(doc.data().project),
         deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-        deadlineDate: doc.data().deadlineDate,
-        deadlineTime: doc.data().deadlineTime,
+        deadlineDate: doc.data().deadline.toDate().substr(0,10),
+        deadlineTime: doc.data().deadline.toDate().substr(12,5),
         switchValue: doc.data().switchValue,
         dateSwitchValue: doc.data().dateSwitchValue,
         displayDeadline: doc.data().displayDeadline,
@@ -482,6 +502,23 @@ async function getProjects(state: any): Promise<Project[]> {
   const projects: Project[] = [];
   await Promise.all(
   querySnapshot.docs.map(async (doc) => {
+    let newDate = ""
+  if(doc.data().deadline){
+
+  
+  const currLocalDate = doc.data().deadline
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      newDate = currYear + "-" + currMonth + "-" + currDate;
+  } 
 
     projects.push({
       id: doc.id,
@@ -493,13 +530,13 @@ async function getProjects(state: any): Promise<Project[]> {
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
       progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().modCode,
+      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadlineDate,
-      deadlineTime: doc.data().deadlineTime,
-      switchValue: doc.data().switchValue,
-      dateSwitchValue: doc.data().dateSwitchValue,
-      displayDeadline: doc.data().displayDeadline,
+      deadlineDate: doc.data().deadline ? newDate : "",
+      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
+      switchValue: doc.data().includeTime ? doc.data().includeTime : doc.data().switchValue,
+      dateSwitchValue: doc.data().deadline ? false : true,
+      displayDeadline: doc.data().deadline ? newDate : "Someday",
       groupmates: doc.data().groupmates ?? "",
       groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
@@ -561,6 +598,23 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
   const projects: TodayProject[] = [];
   await Promise.all(
   querySnapshot.docs.map(async (doc) => {
+    let newDate = ""
+  if(doc.data().deadline){
+
+  
+  const currLocalDate = doc.data().deadline
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      newDate = currYear + "-" + currMonth + "-" + currDate;
+  } 
   
     projects.push({
       id: doc.id,
@@ -570,13 +624,13 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
       progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().modCode,
+      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadlineDate,
-      deadlineTime: doc.data().deadlineTime,
-      switchValue: doc.data().switchValue,
-      dateSwitchValue: doc.data().dateSwitchValue,
-      displayDeadline: doc.data().displayDeadline,
+      deadlineDate: doc.data().deadline ? newDate : "",
+      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
+      switchValue: doc.data().includeTime ? doc.data().includeTime : doc.data().switchValue,
+      dateSwitchValue: doc.data().deadline ? false : true,
+      displayDeadline: doc.data().deadline ? newDate : "Someday",
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
@@ -594,6 +648,24 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
   const projects: TodayProject[] = [];
   await Promise.all(
   querySnapshot.docs.map(async (doc) => {
+    let newDate = ""
+  if(doc.data().deadline){
+
+  
+  const currLocalDate = doc.data().deadline
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      newDate = currYear + "-" + currMonth + "-" + currDate;
+  } 
+  
     projects.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -602,13 +674,13 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
       _createdAt: doc.data().dateTime,
       title: doc.data().title,
       progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().modCode,
+      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
       deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadlineDate,
-      deadlineTime: doc.data().deadlineTime,
-      switchValue: doc.data().switchValue,
-      dateSwitchValue: doc.data().dateSwitchValue,
-      displayDeadline: doc.data().displayDeadline,
+      deadlineDate: doc.data().deadline ? newDate : "",
+      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
+      switchValue: doc.data().includeTime ? doc.data().includeTime : doc.data().switchValue,
+      dateSwitchValue: doc.data().deadline ? false : true,
+      displayDeadline: doc.data().deadline ? newDate : "Someday",
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
@@ -626,8 +698,25 @@ async function getTodayTodos(state: any, project: any) {
     .get();
     await Promise.all(
     querySnapshot.docs.map(async (doc) => {
-  
-    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10)) {
+      let newDate = ""
+      if(doc.get("deadline")){
+    
+      
+      const currLocalDate = doc.data().deadline
+            .toDate()
+            .toLocaleDateString()
+            .substr(0, 10);
+          const currYear = currLocalDate.substr(6);
+          const currMonth = currLocalDate.substr(3, 2);
+          const currDate = currLocalDate.substr(0, 2);
+          console.log(currLocalDate);
+          console.log(currYear);
+          console.log(currMonth);
+          console.log(currDate);
+          newDate = currYear + "-" + currMonth + "-" + currDate;
+      } 
+      
+    if (newDate === new Date().toISOString().substr(0, 10)) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
@@ -637,11 +726,11 @@ async function getTodayTodos(state: any, project: any) {
         project: doc.get("project"),
         projectTitle: await getTaskProject(doc.get("project")),
         deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
-        deadlineDate: doc.get("deadlineDate"),
-        deadlineTime: doc.get("deadlineTime"),
-        switchValue: doc.get("switchValue"),
-        dateSwitchValue: doc.get("dateSwitchValue"),
-        displayDeadline: doc.get("displayDeadline"),
+        deadlineDate: doc.get("deadline") ? newDate : "",
+        deadlineTime: doc.get("deadline") ? doc.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
+        switchValue: doc.get("includeTime") ? doc.get("includeTime") : doc.get("switchValue"),
+      dateSwitchValue: doc.get("deadline") ? false : true,
+      displayDeadline: doc.get("deadline")  ? newDate : "Someday",
         PIC: doc.get("PIC"),
         PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
