@@ -7,7 +7,7 @@
             align="center"
             justify="center"
             cols="6"
-            class="orangeorange centerAlign"
+            class="login__image centerAlign"
           >
             <div class="image-container">
               <v-img
@@ -22,7 +22,7 @@
             </div>
           </v-col>
 
-          <v-col cols="6" class="blueblue leftAlign">
+          <v-col cols="6" class="login__form leftAlign">
             <div style="max-height: 100%">
               <div>
                 <h1 style="color: #ff6f1e">Login.</h1>
@@ -69,7 +69,7 @@
                 <form @submit.prevent="pressed">
                   <v-row>
                     <v-col>
-                      <div class="error" v-if="error">
+                      <div class="login__form--error" v-if="error">
                         {{ error }}
                       </div>
 
@@ -148,13 +148,23 @@ export default {
 
     async googleSignIn() {
       const authCode = await this.$gAuth.getAuthCode();
-      const response = await axios.post('https://asia-east2-timelinus-2021.cloudfunctions.net/getGoogleToken', {}, {
-        headers: {
-          "auth_code": authCode,
+      const response = await axios.post(
+        "https://asia-east2-timelinus-2021.cloudfunctions.net/getGoogleToken",
+        {},
+        {
+          headers: {
+            auth_code: authCode,
+          },
         }
-      })
-      const credential = firebase.auth.GoogleAuthProvider.credential(response.data.id_token, response.data.access_token);
-      await firebase.auth().signInWithCredential(credential).then((result) => {
+      );
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        response.data.id_token,
+        response.data.access_token
+      );
+      await firebase
+        .auth()
+        .signInWithCredential(credential)
+        .then((result) => {
           this.$router.replace({ name: "Secret" });
           const credential = result.credential;
           const user = result.user;
@@ -162,26 +172,35 @@ export default {
           console.log(user);
           console.log(user.uid);
           if (result.additionalUserInfo.isNewUser) {
-            db.collection("user").doc(user.uid).set({
-              email: user.email,
-              name: user.displayName,
-              todo: [],
-              project: [],
-              created_at: Date.now(),
-              photoURL: user.photoURL,
-              googleRefreshToken: response.data['refresh_token'],
-              googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in']  * 1000 - 5),
-              googleAccessToken: response.data['access_token'],
-            });
+            db.collection("user")
+              .doc(user.uid)
+              .set({
+                email: user.email,
+                name: user.displayName,
+                todo: [],
+                project: [],
+                created_at: Date.now(),
+                photoURL: user.photoURL,
+                googleRefreshToken: response.data["refresh_token"],
+                googleAccessTokenExpiry:
+                  firebase.firestore.Timestamp.fromMillis(
+                    Date.now() + response.data["expires_in"] * 1000 - 5
+                  ),
+                googleAccessToken: response.data["access_token"],
+              });
           } else {
-            db.collection("user").doc(user.uid).update({
-              googleRefreshToken: response.data['refresh_token'],
-              googleAccessTokenExpiry: firebase.firestore.Timestamp.fromMillis(Date.now() + response.data['expires_in']  * 1000 - 5),
-              googleAccessToken: response.data['access_token'],
-            })
+            db.collection("user")
+              .doc(user.uid)
+              .update({
+                googleRefreshToken: response.data["refresh_token"],
+                googleAccessTokenExpiry:
+                  firebase.firestore.Timestamp.fromMillis(
+                    Date.now() + response.data["expires_in"] * 1000 - 5
+                  ),
+                googleAccessToken: response.data["access_token"],
+              });
           }
-          
-      })
+        });
     },
   },
 };
@@ -190,24 +209,24 @@ export default {
 <style scoped>
 .test {
   /*width: 80vw;*/
-  height: 60vh;
+  min-height: 60vh;
   margin: auto;
 }
 
-.error {
+.login__form--error {
   color: white;
   /*font-size: 18px;*/
 }
 
-.orangeorange {
+.login__image {
   width: 40vw;
-  height: 60vh;
+  min-height: 60vh;
   background-color: #ffd0a5;
 }
 
-.blueblue {
+.login__form {
   width: 40vw;
-  height: 60vh;
+  min-height: 60vh;
   background-color: white;
 }
 
