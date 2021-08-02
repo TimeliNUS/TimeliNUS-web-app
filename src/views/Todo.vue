@@ -710,7 +710,7 @@
                                                 ></v-text-field>
                                               </v-col>
                                               <v-col cols="12">
-                                                {{projects.length}}
+                                             
                                                 <v-select
                                                   v-if="projects.length >0"
                                                   :items="projects"
@@ -1282,8 +1282,7 @@ export default {
     },
 
     async getProjectMenu() {
-      let data = await this.$store.getters.getProjects;
-      data = this.$store.state.projects;
+      let data = this.$store.state.projects
       console.log(this.$store.state.projects);
       for (let i = 0; i < data.length; i++) {
         const doc = await data[i];

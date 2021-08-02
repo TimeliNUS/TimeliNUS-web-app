@@ -338,6 +338,41 @@ async function getDisplayUser(state: any): Promise<User> {
 }
 
 async function getTasks(state: any): Promise<Task[]> {
+  const querySnapshot = await db
+    .collection("todo")
+    .where("PIC", "array-contains",db.collection("user").doc(state.user.uid))
+    .get();
+  const tasks: Task[] = [];
+  console.log(querySnapshot)
+  await Promise.all(
+  querySnapshot.docs.map(async (doc) => {
+
+    tasks.push({
+      id: doc.id,
+      task: doc.data().task ?? "",
+      complete: doc.data().complete,
+      _createdAt: doc.data().dateTime,
+      note: doc.data().note,
+      project: doc.data().project,
+      projectTitle: await getTaskProject(doc.data().project),
+      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+      deadlineDate: doc.data().deadlineDate,
+      deadlineTime: doc.data().deadlineTime,
+      switchValue: doc.data().switchValue,
+      dateSwitchValue: doc.data().dateSwitchValue,
+      displayDeadline: doc.data().displayDeadline,
+      PIC: doc.data().PIC,
+      PICavatar: await getGroupmatesAvatar(doc.data().PIC),
+    });
+
+  })
+  )
+  console.log(tasks)
+  return tasks;
+}
+
+
+async function getTasksOriginal(state: any): Promise<Task[]> {
   const documentSnapshot = await db
     .collection("user")
     .doc(state.user.uid)
@@ -389,16 +424,15 @@ async function getTasks(state: any): Promise<Task[]> {
 }
 
 async function getProjectInvitations(state: any): Promise<Project[]> {
-  const documentSnapshot = await db
-    .collection("user")
-    .doc(state.user.uid)
+  const querySnapshot = await db
+    .collection("project")
+    .where("groupmates_invited", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
-  console.log(documentSnapshot);
-  const data = await documentSnapshot.get("project_invited");
+  console.log(state);
   const projectInvitations: Project[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const doc = await data[i].get();
-    console.log(doc.data().creator);
+  await Promise.all(
+  querySnapshot.docs.map(async (doc) => {
+    
     projectInvitations.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -420,7 +454,7 @@ async function getProjectInvitations(state: any): Promise<Project[]> {
       confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
       incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
     });
-  }
+  }))
   console.log(projectInvitations);
   return projectInvitations;
 }
@@ -439,18 +473,16 @@ async function getCreator(creator: any) {
 }
 
 async function getProjects(state: any): Promise<Project[]> {
-  console.log(state);
-  const documentSnapshot = await db
-    .collection("user")
-    .doc(state.user.uid)
+  const querySnapshot = await db
+    .collection("project")
+    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
-  console.log(documentSnapshot.exists);
-  const data = await documentSnapshot.get("project");
+  console.log(state);
+ 
   const projects: Project[] = [];
-  console.log(data);
-  console.log(state.user.uid);
-  for (let i = 0; i < data.length; i++) {
-    const doc = await data[i].get();
+  await Promise.all(
+  querySnapshot.docs.map(async (doc) => {
+
     projects.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -472,7 +504,7 @@ async function getProjects(state: any): Promise<Project[]> {
       groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
-  }
+  }))
   console.log(projects);
   return projects;
 }
@@ -521,18 +553,15 @@ async function getProjectProgress(todos: any) {
 }
 
 async function getTodayProjects(state: any): Promise<TodayProject[]> {
-  console.log(state);
-  const documentSnapshot = await db
-    .collection("user")
-    .doc(state.user.uid)
+  const querySnapshot = await db
+    .collection("project")
+    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
-  console.log(documentSnapshot.exists);
-  const data = await documentSnapshot.get("project");
+  console.log(state);
   const projects: TodayProject[] = [];
-  console.log(data);
-  console.log(state.user.uid);
-  for (let i = 0; i < data.length; i++) {
-    const doc = await data[i].get();
+  await Promise.all(
+  querySnapshot.docs.map(async (doc) => {
+  
     projects.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -551,24 +580,20 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
-  }
+  }))
   console.log(projects);
   return projects;
 }
 
 async function getCalendarProjects(state: any): Promise<TodayProject[]> {
-  console.log(state);
-  const documentSnapshot = await db
-    .collection("user")
-    .doc(state.user.uid)
+  const querySnapshot = await db
+    .collection("project")
+    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
-  console.log(documentSnapshot.exists);
-  const data = await documentSnapshot.get("project");
+  console.log(state);
   const projects: TodayProject[] = [];
-  console.log(data);
-  console.log(state.user.uid);
-  for (let i = 0; i < data.length; i++) {
-    const doc = await data[i].get();
+  await Promise.all(
+  querySnapshot.docs.map(async (doc) => {
     projects.push({
       id: doc.id,
       creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
@@ -587,25 +612,22 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
       groupmates: doc.data().groupmates ?? "",
       groupmatesName: await getGroupmatesName(doc.data().groupmates),
     });
-  }
+  }))
   console.log(projects);
   return projects;
 }
 
 async function getTodayTodos(state: any, project: any) {
-  const docRef = await db.collection("project").doc(project.id).get();
-  const data = await docRef.get("todos");
   const pushTodos: Task[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const doc = await db.collection("todo").doc(data[i].id).get();
-    const PICid = []
-          for(let j=0; j< doc.get("PIC").length; j++){
-            const pplID = doc.get("PIC")[j].id
-            console.log(pplID)
-            PICid.push(pplID)
-          }
-          console.log(PICid)
-    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10) && PICid.includes(state.user.uid)) {
+  const querySnapshot = await db
+    .collection("todo")
+    .where("project", "==",db.collection("project").doc(project.id))
+    .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
+    .get();
+    await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+  
+    if (doc.get("deadlineDate") === new Date().toISOString().substr(0, 10)) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
@@ -624,25 +646,22 @@ async function getTodayTodos(state: any, project: any) {
         PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
     }
-  }
+  }))
   console.log(pushTodos);
   return pushTodos;
 }
 
 async function getCalendarTodos(state:any, project: any) {
-  const docRef = await db.collection("project").doc(project.id).get();
-  const data = await docRef.get("todos");
+  
   const pushTodos: Task[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const doc = await db.collection("todo").doc(data[i].id).get();
-    const PICid = []
-          for(let j=0; j< doc.get("PIC").length; j++){
-            const pplID = doc.get("PIC")[j].id
-            console.log(pplID)
-            PICid.push(pplID)
-          }
-          console.log(PICid)
-    if(PICid.includes(state.user.uid)){
+  const querySnapshot = await db
+    .collection("todo")
+    .where("project", "==",db.collection("project").doc(project.id))
+    .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
+    .get();
+    await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+  
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
@@ -661,9 +680,9 @@ async function getCalendarTodos(state:any, project: any) {
         PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
 
-    }
+    }))
     
-  }
+  
   console.log(pushTodos);
   return pushTodos;
 }
@@ -813,6 +832,7 @@ async function getConfirmedMeeting(state: any): Promise<ConfirmedMeetings[]> {
         endTime: doc.data().endTime,
         timeLength: doc.data().timeLength,
         venue: doc.data().meetingVenue,
+        isOnlineVenue: doc.data().isOnlineVenue ? doc.data().isOnlineVenue : null,
         creator: await getCreator(doc.data().author),
         selectedStartDate: doc.data().selectedStartDate,
         selectedEndDate: doc.data().selectedEndDate,
@@ -821,11 +841,9 @@ async function getConfirmedMeeting(state: any): Promise<ConfirmedMeetings[]> {
       };
       // console.log("test: " + JSON.stringify(test));
       ConfirmedMeetings.push(test);
-      console.log("after test: " + JSON.stringify(ConfirmedMeetings));
     })
   );
   console.log(ConfirmedMeetings);
-  console.log("confirmed meetings: " + JSON.stringify(ConfirmedMeetings));
 
   return ConfirmedMeetings;
 }
@@ -879,7 +897,11 @@ async function assignMeetingCalendar(state: any) {
 async function assignTodoDashboardCalendar(state: any) {
   const todoCalendar: any[] = [];
   await getTasks(state);
-  state.tasks.map((todo: Task) => {
+  console.log(state.tasks)
+  console.log(state.tasks.length)
+  state.tasks.map((todo: any) => {
+    console.log(todo.deadline)
+    console.log(todo)
     if (todo !== null && todo.deadline !== null) {
       console.log(todo);
       console.log(todo.deadline);

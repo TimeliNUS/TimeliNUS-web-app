@@ -404,7 +404,7 @@
                               .confirmedMeetings"
                             :key="meeting.id"
                           >
-                            <div v-if="checkMeetingDate(meeting)">
+                            <div v-if="checkTodayMeetingOrNot(meeting)">
                               <v-card
                                 color="white"
                                 outlined
@@ -413,25 +413,26 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: flex-start;
-                        align-items: flex-start
-                        margin-bottom:16px
+                        align-items: stretch;
+                      
                      
                       "
                                 :class="`rounded-xl`"
                               >
-                                <span
+                                <span style="display:flex; justify-content:flex-start; padding-bottom:5px"
                                   >{{ meeting.project.get("modCode") }}
                                   {{ meeting.project.get("title") }}</span
                                 >
-                                <span>{{ meeting.title }}</span>
+                                <span style="display:flex; justify-content:flex-start;  padding-bottom:5px; ">{{ meeting.title }}</span>
                                 <div
                                     style="
                                       padding-top: 3px;
-                                      padding-bottom: 0px !important;
+                                       padding-bottom:5px; 
                                       display: inline-flex;
                                       flex-direction: row-reverse;
                                       justify-content: flex-end;
                                       padding-left: 12px;
+
                                     "
                                   >
                                     <div
@@ -459,7 +460,8 @@
                                 <div
                                   style="
                                     display: flex;
-                                    justify-content: flex-start;
+                                    justify-content: space-between;
+                                     padding-bottom:5px;
                                   "
                                 >
                                   <span
@@ -495,6 +497,7 @@
                                   style="
                                     display: flex;
                                     justify-content: flex-start;
+                                     
                                   "
                                 >
                                   <span
@@ -512,7 +515,7 @@
                                       ) > 0
                                     "
                                     ><v-icon color="#ff9d66"
-                                      >mdi-clock-time-four-outline</v-icon
+                                      >hourglass_bottom</v-icon
                                     >
 
                                     In
@@ -544,7 +547,7 @@
                                       ) == 0
                                     "
                                     ><v-icon color="#ff9d66"
-                                      >mdi-clock-time-four-outline</v-icon
+                                      >hourglass_bottom</v-icon
                                     >
 
                                     In
@@ -575,7 +578,7 @@
                                       ) == 0
                                     "
                                     ><v-icon color="#ff9d66"
-                                      >mdi-clock-time-four-outline</v-icon
+                                      >hourglass_bottom</v-icon
                                     >
 
                                     Expired by
@@ -606,7 +609,7 @@
                                       ) !== 0
                                     "
                                     ><v-icon color="#ff9d66"
-                                      >mdi-clock-time-four-outline</v-icon
+                                      >hourglass_bottom</v-icon
                                     >
 
                                     Expired by
@@ -637,10 +640,10 @@
                             </div>
                           </div>
                           <br />
-                          <span> You don't have other meetings today </span>
+                          <span> You do not have other meetings today </span>
                         </div>
                         <div v-else style="padding-top: 18vh">
-                          <span> You don't have any meeting this day. </span>
+                          <span style="font-weight:bold; color: #4b4b4b"> You do not have any meeting this day. </span>
                         </div>
                       </v-card>
                     </v-container>
@@ -848,7 +851,7 @@
                       "
                       :class="`rounded-b-xl`"
                     >
-                      <v-card-text> Meetings on {{ date }} </v-card-text>
+                      <v-card-text style="font-weight:bold; font-size: 18px; display:flex"> Meetings on {{ date }} </v-card-text>
                       <div v-if="checkThisDayMeetingLength()">
                         <div
                           v-for="meeting in this.$store.state.confirmedMeetings"
@@ -864,17 +867,17 @@
                                 display: flex;
                                 flex-direction: column;
                                 justify-content: flex-start;
-                                align-items: flex-start !important;
+                                align-items: stretch !important;
                                 margin-bottom: 16px !important;
                                 font-size: 15px;
                               "
                               :class="`rounded-xl`"
                             >
-                              <span
+                              <span style="display: flex; justify-content: flex-start"
                                 >{{ meeting.project.get("modCode") }}
                                 {{ meeting.project.get("title") }}</span
                               >
-                              <span>{{ meeting.title }}</span>
+                              <span style="text-align:left; display:flex; justify-content:flex-start">{{ meeting.title }}</span>
                               <div
                                     style="
                                       padding-top: 3px;
@@ -910,7 +913,7 @@
                               <div
                                 style="
                                   display: flex;
-                                  justify-content: flex-start;
+                                  justify-content: space-between;
                                 "
                               >
 
@@ -948,11 +951,11 @@
                           </div>
                         </div>
                       </div>
-                      <div v-else>
+                      <div v-else style="display:flex; padding-left:16px; padding-bottom:16px">
                         <span> You don't have any meeting this day. </span>
                       </div>
-                      <v-card-text> Todos on {{ date }} </v-card-text>
-                      <v-card-text>
+                      <v-card-text style="font-weight:bold; font-size: 18px; display:flex"> Todos on {{ date }} </v-card-text>
+                     
                         <div v-if="checkTodayTaskLength()">
                         
                           <div
@@ -1061,10 +1064,10 @@
                             <!-- </div> -->
                           </div>
                         </div>
-                        <div v-else>
+                        <div v-else  style="display:flex; padding-left:16px;">
                           <span>You don't have any todo this day.</span>
                         </div>
-                      </v-card-text>
+                     
                     </v-card>
                   </div>
                   <div></div>
@@ -1201,6 +1204,33 @@ export default {
   },
 
   methods: {
+    checkTodayMeetingOrNot(meeting){
+      const currLocalDate = meeting.selectedStartDate
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      const newDate = currYear + "-" + currMonth + "-" + currDate;
+      const today = new Date(
+          Date.now() - new Date().getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .substr(0, 10);
+      console.log(today)
+      if (newDate == today) {
+        return true;
+      }
+
+      return false;
+    
+
+    },
     displaySelectedTimeDifference(startTime) {
       console.log(startTime);
       const now = new Date();
@@ -1237,6 +1267,7 @@ export default {
         console.log(this.$store.state.tasks);
         const data = this.$store.state.tasks[i];
         console.log(data);
+        console.log(date)
         if (data.deadline !== null) {
           const currLocalDate = data.deadline
             .toLocaleDateString()
@@ -1250,13 +1281,17 @@ export default {
           console.log(currDate);
           const newDate = currYear + "-" + currMonth + "-" + currDate;
           const PICid = []
-          for(let j=0; j< data.PIC.length; j++){
-            const pplID = data.PIC[j].id
-            console.log(pplID)
-            PICid.push(pplID)
+          // for(let j=0; j< data.PIC.length; j++){
+          //   const pplID = data.PIC[j].id
+          //   console.log(pplID)
+          //   PICid.push(pplID)
+          // }
+          // console.log(PICid)
+          
+          if (newDate == date ) {
+            if(data.task == "try adding project"){
+            console.log("tryaddingproject")
           }
-          console.log(PICid)
-          if (newDate == date && PICid.includes(this.$store.state.user.uid)) {
             todo = true;
             break;
           }

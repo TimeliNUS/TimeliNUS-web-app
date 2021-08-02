@@ -140,4 +140,5 @@ export interface ConfirmedMeetings {
   selectedEndDate: Date;
   groupmates: User[];
   meetingLink: string;
+  isOnlineVenue: boolean;
 }
