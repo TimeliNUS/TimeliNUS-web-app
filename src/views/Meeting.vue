@@ -1169,7 +1169,7 @@
                   style="padding: 14px; display: flex; flex-direction: column"
                   :class="`rounded-b-xl`"
                 >
-                  <v-card-text>
+                  <v-card-text style="display:flex; font-size:20px; font-weight: bold">
                     {{ displayMeetingCalendar }}
                   </v-card-text>
                   <div v-if="checkTodayMeetingLength()">
@@ -1299,7 +1299,7 @@
                               "
                             >
                           
-                           <div style="display:flex; align-items: center; justify-content: space-between; min-width: 520px">
+                           <div style="text-align:left; display:flex; align-items: center; justify-content: space-between; min-width: 520px">
                             <span style="font-weight: bold; padding:5px; font-size: 36px; margin-bottom: -10px;">{{ meeting.title }}</span>
                            <v-btn icon color="#ff9d66" @click="closePopUpMeeting()">
                                   <v-icon color="#ff9d66">mdi-close</v-icon>
@@ -1418,12 +1418,13 @@
                         >
 
                         <div style="max-width: 500px;word-break:break-all; display:flex; align-items: flex-start; text-align: initial; font-size: 14px!important">
-                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                        <span v-if="updateMeetingLink == '' && meeting.isOnlineVenue == true" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
                           ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
                           
                           {{ meeting.meetingLink }}</span
                         >
-                        <span v-else style="padding: 5px; color: #4b4b4b; 
+                       
+                        <span v-if="updateMeetingLink !== '' && meeting.isOnlineVenue == true" style="padding: 5px; color: #4b4b4b; 
                         display:flex; 
                         align-items: flex-start; 
                         text-align: initial;
@@ -1432,9 +1433,15 @@
                           ><v-icon color="#ff9d66" style="padding-right:5px">link</v-icon>
                          {{ updateMeetingLink }}</span
                         >
+                        <span v-if="meeting.isOnlineVenue !== true" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                          ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
+                          
+                          <v-btn color="#ff9d66" outlined small  href="https://aces.nus.edu.sg/fbs/ADFSLogin" target="_blank">NUS Facility Booking System</v-btn></span
+                        >
+                        
                         
                         </div>
-                        <v-dialog v-model="dialogNewLink[meeting.title]" max-width="600px">
+                        <v-dialog v-model="dialogNewLink[meeting.title]" max-width="600px" v-if="meeting.isOnlineVenue == true">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
                               v-bind="attrs"
@@ -1493,7 +1500,7 @@
                       </div>
                     </div>
                   </div>
-                  <div v-else>
+                  <div v-else style="font-weight:bold; color: #4b4b4b">
                     <span> You do not have any meeting this day. </span>
                   </div>
                 </v-card>
@@ -1803,11 +1810,11 @@
                         >
 
                         <div style="max-width: 500px;word-break:break-all; display:flex; align-items: flex-start; text-align: initial; font-size: 14px!important">
-                        <span v-if="updateMeetingLink == ''" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                        <span v-if="updateMeetingLink == ''  && meeting.isOnlineVenue == true" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
                           ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
                           {{ meeting.meetingLink }}</span
                         >
-                        <span v-else style="padding: 5px; color: #4b4b4b; 
+                        <span v-if="updateMeetingLink !== '' && meeting.isOnlineVenue == true" style="padding: 5px; color: #4b4b4b; 
                         display:flex; 
                         align-items: flex-start; 
                         text-align: initial;
@@ -1816,9 +1823,14 @@
                           ><v-icon color="#ff9d66" style="padding-right:5px">link</v-icon>
                          {{ updateMeetingLink }}</span
                         >
+                        <span v-if="meeting.isOnlineVenue !== true" style="padding: 5px; color: #4b4b4b; display:flex; align-items: flex-start; text-align: initial;"
+                          ><v-icon color="#ff9d66" style="padding-right: 5px">link</v-icon>
+                          
+                          <v-btn color="#ff9d66" outlined small  href="https://aces.nus.edu.sg/fbs/ADFSLogin" target="_blank">NUS Facility Booking System</v-btn></span
+                        >
                         
                         </div>
-                        <v-dialog v-model="dialogNewLink2[meeting.title]" max-width="600px">
+                        <v-dialog v-model="dialogNewLink2[meeting.title]" max-width="600px" v-if="meeting.isOnlineVenue == true">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
                               v-bind="attrs"
@@ -2203,15 +2215,14 @@
                               v-else
                               style="padding:85px; display:flex' align-items: center; justify-content: center"
                             >
-                              <span
-                                style="
-                                  font-color: #4b4b4b;
-                                  font-weight: bold;
-                                  font-size: 16px;
-                                "
-                                >You do have any project yet. Create a new one
-                                or accept any project invitation</span
-                              >
+                             <span
+                                        style="
+                                          color: #4b4b4b;
+                                          font-weight: bold;
+                                          font-size: 16px;
+                                        "
+                                        >You do not have any meeting invitation yet.</span
+                                      >
                             </div>
 
                             <v-dialog
@@ -2505,13 +2516,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any meeting invitation yet.</span
                                       >
                                     </div>
                                   </v-card>
@@ -2806,14 +2815,13 @@
                               style="padding:85px; display:flex' align-items: center; justify-content: center"
                             >
                               <span
-                                style="
-                                  font-color: #4b4b4b;
-                                  font-weight: bold;
-                                  font-size: 16px;
-                                "
-                                >You do have any project yet. Create a new one
-                                or accept any project invitation</span
-                              >
+                                        style="
+                                          color: #4b4b4b;
+                                          font-weight: bold;
+                                          font-size: 16px;
+                                        "
+                                        >You do not have any pending meeting yet.</span
+                                      >
                             </div>
                           </v-card>
 
@@ -3099,14 +3107,13 @@
                                     style="padding:85px; display:flex' align-items: center; justify-content: center"
                                   >
                                     <span
-                                      style="
-                                        font-color: #4b4b4b;
-                                        font-weight: bold;
-                                        font-size: 16px;
-                                      "
-                                      >You do have any project yet. Create a new
-                                      one or accept any project invitation</span
-                                    >
+                                        style="
+                                          color: #4b4b4b;
+                                          font-weight: bold;
+                                          font-size: 16px;
+                                        "
+                                        >You do not have any pending meeting yet.</span
+                                      >
                                   </div>
                                 </v-card>
                               </v-container>
@@ -3406,12 +3413,11 @@
                             >
                               <span
                                 style="
-                                  font-color: #4b4b4b;
+                                  color: #4b4b4b;
                                   font-weight: bold;
                                   font-size: 16px;
                                 "
-                                >You do have any project yet. Create a new one
-                                or accept any project invitation</span
+                                >You do not have any meeting confirmation yet.</span
                               >
                             </div>
                             <v-dialog
@@ -3708,13 +3714,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any meeting confirmation yet.</span
                                       >
                                     </div>
                                   </v-card>
@@ -3835,7 +3839,7 @@
                             Quick Links:
                           </v-card-title>
                           <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
+                            <a href="https://calendar.google.com/calendar/u/0/r" target="_blank">
                               <v-img
                                 width="50px"
                                 src="@/assets/google_calendar.png"
@@ -4633,7 +4637,7 @@
                             Quick Links:
                           </v-card-title>
                           <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
+                            <a href="https://calendar.google.com/calendar/u/0/r" target="_blank">
                               <v-img
                                 width="50px"
                                 src="@/assets/google_calendar.png"
@@ -4886,7 +4890,7 @@
                             Quick Links:
                           </v-card-title>
                           <v-card-actions>
-                            <a href="https://www.google.com" target="_blank">
+                            <a href="https://calendar.google.com/calendar/u/0/r" target="_blank">
                               <v-img
                                 width="50px"
                                 src="@/assets/google_calendar.png"
@@ -6155,6 +6159,7 @@ export default {
         displayMeetingDateRange: this.displayMeetingDateRange,
         groupmates: await this.addGroupmatesToMeeting(response),
         meetingVenue: this.meetingTypeDetails,
+        isOnlineVenue: this.meetingVenue == "Online" ? true : false,
         timeslot: [],
         project: db.collection("project").doc(this.meetingProject),
         author: db.collection("user").doc(this.$store.state.user.uid),
@@ -6217,6 +6222,7 @@ export default {
         confirmedInvitations: await this.addGroupmatesToMeeting(response),
         invitations: [],
         meetingVenue: this.meetingTypeDetails,
+        isOnlineVenue: this.meetingVenue == "Online" ? true : false,
         timeslot: [],
         project: db.collection("project").doc(this.meetingProject),
         author: db.collection("user").doc(this.$store.state.user.uid),

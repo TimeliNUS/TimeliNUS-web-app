@@ -1495,7 +1495,7 @@
                           font-weight: bold;
                           font-size: 16px;
                         "
-                        >You do have any project yet. Create a new one or accept
+                        >You do not have any project yet. Create a new one or accept
                         any project invitation</span
                       >
                     </div>
@@ -1632,7 +1632,7 @@
                               ></v-btn
                             >
                           </div>
-                          <v-row>
+                          <v-row style="display:flex; justify-content:center">
                             <v-tabs
                               style="padding: 10px"
                               v-model="tabMeeting"
@@ -1929,13 +1929,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b !important;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any meeting invitation for this project yet.</span
                                       >
                                     </div>
                                   </v-card>
@@ -2216,13 +2214,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any pending meeting for this project yet.</span
                                       >
                                     </div>
                                   </v-card>
@@ -2511,13 +2507,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any meeting confirmation for this project yet.</span
                                       >
                                     </div>
                                   </v-card>
@@ -2746,13 +2740,11 @@
                                     >
                                       <span
                                         style="
-                                          font-color: #4b4b4b;
+                                          color: #4b4b4b;
                                           font-weight: bold;
                                           font-size: 16px;
                                         "
-                                        >You do have any project yet. Create a
-                                        new one or accept any project
-                                        invitation</span
+                                        >You do not have any confirmed meeting for this project yet.</span
                                       >
                                     </div>
                                   </v-card>
