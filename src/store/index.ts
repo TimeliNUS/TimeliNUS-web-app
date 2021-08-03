@@ -792,6 +792,35 @@ async function getMeetingInvitations(
     .get();
   console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
+    let newStartDate = ""
+    let newEndDate = ""
+    const currLocalDate = doc.data().startDate
+        .toDate()
+        .toLocaleDateString()
+        .substr(0, 10);
+      const currYear = currLocalDate.substr(6);
+      const currMonth = currLocalDate.substr(3, 2);
+      const currDate = currLocalDate.substr(0, 2);
+      console.log(currLocalDate);
+      console.log(currYear);
+      console.log(currMonth);
+      console.log(currDate);
+      newStartDate = currYear + "-" + currMonth + "-" + currDate;
+
+      const currLocalDateEnd = doc.data().endDate
+      .toDate()
+      .toLocaleDateString()
+      .substr(0, 10);
+    const currYearEnd = currLocalDateEnd.substr(6);
+    const currMonthEnd = currLocalDateEnd.substr(3, 2);
+    const currDateEnd = currLocalDateEnd.substr(0, 2);
+    console.log(currLocalDate);
+    console.log(currYear);
+    console.log(currMonth);
+    console.log(currDate);
+    newEndDate = currYearEnd + "-" + currMonthEnd + "-" + currDateEnd;
+
+  
     meetingInvitations.push({
       id: doc.id,
       title: doc.data().title,
@@ -805,7 +834,7 @@ async function getMeetingInvitations(
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
-      displayMeetingDateRange: doc.data().displayMeetingDateRange,
+      displayMeetingDateRange: newStartDate + "~" + newEndDate,
       groupmates: await getPendingGroupmates(doc.data().groupmates),
     });
   });
@@ -828,6 +857,8 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
     .get();
   console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
+    
+  
     meetingPendings.push({
       id: doc.id,
       title: doc.data().title,

@@ -6158,6 +6158,8 @@ export default {
         timeLength: this.meetingDuration,
         displayMeetingDateRange: this.displayMeetingDateRange,
         groupmates: await this.addGroupmatesToMeeting(response),
+        invitations: await this.addGroupmatesToMeeting(response),
+        confirmedInvitations: [],
         meetingVenue: this.meetingTypeDetails,
         isOnlineVenue: this.meetingVenue == "Online" ? true : false,
         timeslot: [],
