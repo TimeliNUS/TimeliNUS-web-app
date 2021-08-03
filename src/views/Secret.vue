@@ -6,283 +6,292 @@
       min-height: 100vh;
     "
   >
-    <v-row>
-      <v-col col="12" md="2">
-        <v-navigation-drawer
-          absolute
-          permanent
-          floating
-          left
-          align="center"
-          class="v-navigation-drawer__border"
-          style="
-            padding: 18px;
-            font-size: 8px;
-            font-weight: bold;
-            border-color: white;
-            text-align: left;
-            font-color: #4b4b4b;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-          "
-        >
-          <div style="display: flex; flex-direction: column; height: 100%">
-            <v-img
-              width="10vw"
-              src="@/assets/orbital_logo_latest.png"
-              alt=""
-              style="flex: none; top: 20%"
-            ></v-img>
-            <br />
+    <div style="display: flex">
+      <v-navigation-drawer
+        permanent
+        floating
+        left
+        align="center"
+        class="v-navigation-drawer__border"
+        style="
+          padding: 18px;
+          font-size: 8px;
+          font-weight: bold;
+          border-color: white;
+          text-align: left;
+          font-color: #4b4b4b;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div style="display: flex; flex-direction: column; min-height: 100%">
+          <v-img
+            width="160"
+            src="@/assets/orbital_logo_latest.png"
+            alt=""
+            style="flex: none; top: 50px; margin-bottom: 50px"
+          ></v-img>
+          <br />
 
-            <v-list
-              :class="`rounded-xl`"
-              rounded
-              nav
-              style="display: flex; flex-direction: column; margin: auto"
+          <v-list
+            :class="`rounded-xl`"
+            rounded
+            nav
+            style="display: flex; flex-direction: column; margin: auto"
+          >
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.title"
+              link
+              :to="item.href"
+              color="#ff7200"
+              style="
+                display: flex;
+                justify-content: center;
+                font-size: 12px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+              "
             >
-              <v-list-item
-                v-for="item in navItems"
-                :key="item.title"
-                link
-                :to="item.href"
-                color="#ff7200"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  font-size: 12px;
-                  margin-top: 4px;
-                  margin-bottom: 4px;
-                "
+              <v-list-item-icon
+                style="display: flex; justify-content: center; margin: 12px"
               >
-                <v-list-item-icon
-                  style="display: flex; justify-content: center; margin: 12px"
-                >
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
 
-                <v-list-item-content>
-                  <v-list-item-title
-                    style="
-                      font-color: #4b4b4b;
-                      margin-right: 5px;
-                      margin-top: 5px;
-                      margin-bottom: 5px;
-                    "
-                    >{{ item.title }}</v-list-item-title
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-btn
-              color="#ff9d66"
-              depressed
-              large
-              type="submit"
-              v-on:click="signOut"
-            >
-              <span style="color: #ffffff">Sign Out</span>
-            </v-btn>
-          </div>
-        </v-navigation-drawer>
-      </v-col>
-
-      <v-col col="12" md="10">
-        <div>
-          <div>
-            <v-container style="padding-bottom: 0px">
-              <span
-                style="
-                  margin-top: 10px;
-                  color: #4b4b4b;
-                  font-size: 32px;
-                  display: flex;
-                  align-items: flex-start;
-                  font-weight: bold;
-                "
-                >Welcome! {{ this.$store.state.displayUser.name }}</span
-              >
-            </v-container>
-            <v-row>
-              <v-col col="12" md="8">
-                <v-container
+              <v-list-item-content>
+                <v-list-item-title
                   style="
-                    margin-right: auto;
-                    margin-left: auto;
-                    display: flex;
-                    justify-content: center;
+                    font-color: #4b4b4b;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
                   "
+                  >{{ item.title }}</v-list-item-title
                 >
-                  <v-card
-                    max-width="52vw"
-                    min-width="52vw"
-                    max-height="38vh"
-                    min-height="38vh"
-                    outlined
-                    color="#FFE4CB"
-                    style="padding: 14px; display: flex; flex-direction: column"
-                    :class="`rounded-xl`"
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-btn
+            color="#ff9d66"
+            depressed
+            large
+            type="submit"
+            v-on:click="signOut"
+          >
+            <span style="color: #ffffff">Sign Out</span>
+          </v-btn>
+        </div>
+      </v-navigation-drawer>
+
+      <v-row style="flex: 1; margin: 0; flex-direction: column; flex-wrap: nowrap; margin-left: 25px">
+        <v-row style="margin: 0">
+          <v-col col="12" md="12" style="align-items: flex-end; justify-content: flex-end; display: flex;">
+            <v-row
+              style="
+                margin: 0;
+                display: flex;
+                margin-bottom: 5px;
+              "
+            >
+             <v-col col="12" md="12">
+                <span
+                  style="
+                    margin-top: 10px;
+                    color: #4b4b4b;
+                    font-size: 32px;
+                    display: flex;
+                    align-items: flex-start;
+                    font-weight: bold;
+                  "
+                  >Welcome! {{ this.$store.state.displayUser.name }}</span
+                >
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row style="margin: 0">
+          <v-col col="12" md="8">
+            <v-row
+              style="
+                margin-right: auto;
+                margin-left: auto;
+                display: flex;
+                justify-content: center;
+              "
+            >
+              <v-col col="12">
+                <v-card
+                  min-height="38vh"
+                  outlined
+                  color="#FFE4CB"
+                  style="display: flex; flex-direction: column; flex: 1; "
+                  :class="`rounded-xl`"
+                  height="100%"
+                >
+                  <div
+                    style="
+                      padding: 8px;
+                      display: flex;
+                      flex-direction: row;
+                      justify-content: space-between;
+                    "
                   >
-                    <div
+                    <span
                       style="
-                        padding: 8px;
+                        margin-top: 10px;
+                        margin-left: 3vw;
+                        color: #4b4b4b;
+                        font-size: 20px;
                         display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
+                        align-items: flex-start;
+                        font-weight: bold;
                       "
+                      >Projects</span
                     >
-                      <span
-                        style="
-                          margin-top: 10px;
-                          margin-left: 3vw;
-                          color: #4b4b4b;
-                          font-size: 20px;
-                          display: flex;
-                          align-items: flex-start;
-                          font-weight: bold;
-                        "
-                        >Projects</span
-                      >
 
-                      <v-btn
-                        align="right"
-                        text
-                        style="
-                          margin-top: 10px;
-                          color: #4b4b4b;
-                          font-size: 16px;
-                          display: flex;
-                          align-items: center;
-                          font-weight: bold;
-                          margin-right: 3vw;
-                        "
-                        @click="$router.push('/project')"
-                      >
-                        View All
-                      </v-btn>
-                    </div>
-                    <div
-                      v-if="projectLength"
-                      style="display: flex; flex-direction: row"
+                    <v-btn
+                      align="right"
+                      text
+                      style="
+                        margin-top: 10px;
+                        color: #4b4b4b;
+                        font-size: 16px;
+                        display: flex;
+                        align-items: center;
+                        font-weight: bold;
+                        margin-right: 3vw;
+                      "
+                      @click="$router.push('/project')"
                     >
-                      <v-sheet
-                        :class="`rounded-xl`"
-                        class="mx-auto"
-                        elevation="0"
-                        max-width="50vw"
-                        style="background-color: #ffe4cb"
+                      View All
+                    </v-btn>
+                  </div>
+                  <div
+                    v-if="projectLength"
+                    style="display: flex; flex-direction: row; max-width: 60vw; height: 80%"
+                  >
+                    <v-sheet
+                      :class="`rounded-xl`"
+                      class="mx-auto"
+                      elevation="0"
+                      max-width="100%"
+                      height="100%"
+                      style="background-color: #ffe4cb"
+                    >
+                      <v-slide-group
+                        v-model="projectSlide"
+                        active-class="success"
+                        show-arrows
+                        style="height: 100%"
                       >
-                        <v-slide-group
-                          v-model="projectSlide"
-                          active-class="success"
-                          show-arrows
+                        <v-slide-item
+                          v-for="project in this.$store.state.projects"
+                          :key="project.id"
+                          v-slot="{ active }"
                         >
-                          <v-slide-item
-                            v-for="project in this.$store.state.projects"
-                            :key="project.id"
-                            v-slot="{ active }"
+                          <v-card
+                            :class="`rounded-xl`"
+                            :color="active ? undefined : 'white'"
+                            class="ma-2"
+                            height="100%"
+                            width="250"
+                            outlined
+                            style="padding: 10px; padding-left: 14px; display: flex; flex-direction: column;"
                           >
-                            <v-card
-                              :class="`rounded-xl`"
-                              :color="active ? undefined : 'white'"
-                              class="ma-2"
-                              height="230"
-                              width="250"
-                              outlined
-                              style="padding: 10px; padding-left: 14px"
-                            >
-                              <v-row style="padding: 5px">
-                                <v-col
-                                  col="12"
-                                  md="12"
-                                  style="display: flex; flex-direction: column"
+                            <v-row style="padding: 5px">
+                              <v-col
+                                col="12"
+                                md="12"
+                                style="display: flex; flex-direction: column"
+                              >
+                                <v-card-text
+                                  style="
+                                    display: flex;
+                                    padding-bottom: 0px !important;
+                                    padding-top: 3px !important;
+                                    padding-left: 3px !important;
+                                    padding-right: 3px !important;
+                                  "
                                 >
-                                  <v-card-text
-                                    style="
-                                      display: flex;
-                                      padding-bottom: 0px !important;
-                                      padding-top: 3px !important;
-                                      padding-left: 3px !important;
-                                      padding-right: 3px !important;
-                                    "
-                                  >
-                                    {{ project.modCode }}
-                                  </v-card-text>
-                                  <v-card-title
-                                    style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
-                                 padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
-                                  >
-                                    {{ project.title }}
-                                  </v-card-title>
-                                  <v-card-text
-                                    style="
-                                      display: flex;
-                                      padding: 2px !important;
-                                    "
-                                  >
-                                    <div v-if="project.deadline !== null">
-                                      <span style="">
-                                        <v-icon color="#ff9d66" width="20px;"
-                                          >calendar_today</v-icon
-                                        >
-                                        {{
-                                          project.deadline.toLocaleDateString(
-                                            "en-US",
-                                            {
-                                              month: "short",
-                                              day: "2-digit",
-                                              year: "numeric",
-                                            }
-                                          )
-                                        }}</span
+                                  {{ project.modCode }}
+                                </v-card-text>
+                                <v-card-title
+                                  style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
+                                padding-left :3px !important; padding-right :3px !important; font-size:15px; !important"
+                                >
+                                  {{ project.title }}
+                                </v-card-title>
+                                <v-card-text
+                                  style="
+                                    display: flex;
+                                    padding: 2px !important;
+                                  "
+                                >
+                                  <div v-if="project.deadline !== null">
+                                    <span style="">
+                                      <v-icon color="#ff9d66" width="20px;"
+                                        >calendar_today</v-icon
                                       >
-                                    </div>
-                                    <div v-else>
-                                      <span style="">
-                                        <v-icon color="#ff9d66" width="20px;">
-                                          calendar_today</v-icon
-                                        >
-                                        Someday
-                                      </span>
-                                    </div>
-                                  </v-card-text>
+                                      {{
+                                        project.deadline.toLocaleDateString(
+                                          "en-US",
+                                          {
+                                            month: "short",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                          }
+                                        )
+                                      }}</span
+                                    >
+                                  </div>
+                                  <div v-else>
+                                    <span style="">
+                                      <v-icon color="#ff9d66" width="20px;">
+                                        calendar_today</v-icon
+                                      >
+                                      Someday
+                                    </span>
+                                  </div>
+                                </v-card-text>
 
+                                <div
+                                  style="
+                                    padding-top: 3px;
+                                    padding-bottom: 0px !important;
+                                    display: inline-flex;
+                                    flex-direction: row-reverse;
+                                    justify-content: flex-end;
+                                    padding-left: 12px;
+                                  "
+                                >
                                   <div
-                                    style="
-                                      padding-top: 3px;
-                                      padding-bottom: 0px !important;
-                                      display: inline-flex;
-                                      flex-direction: row-reverse;
-                                      justify-content: flex-end;
-                                      padding-left: 12px;
-                                    "
+                                    v-for="avatar in project.groupmatesAvatar"
+                                    :key="avatar.id"
                                   >
                                     <div
-                                      v-for="avatar in project.groupmatesAvatar"
-                                      :key="avatar.id"
+                                      style="
+                                        margin-left: -15px;
+                                        padding-bottom: 0px !important;
+                                        padding-top: 3px !important;
+                                        padding-left: 3px !important;
+                                        padding-right: 3px !important;
+                                      "
                                     >
-                                      <div
-                                        style="
-                                          margin-left: -15px;
-                                          padding-bottom: 0px !important;
-                                          padding-top: 3px !important;
-                                          padding-left: 3px !important;
-                                          padding-right: 3px !important;
-                                        "
+                                      <v-avatar
+                                        :size="30"
+                                        style="border: 2px solid #fff"
                                       >
-                                        <v-avatar
-                                          :size="30"
-                                          style="border: 2px solid #fff"
-                                        >
-                                          <v-img :src="avatar"></v-img
-                                        ></v-avatar>
-                                      </div>
+                                        <v-img :src="avatar"></v-img
+                                      ></v-avatar>
                                     </div>
                                   </div>
-                                </v-col>
-                              </v-row>
+                                </div>
+                              </v-col>
+                            </v-row>
+                            <v-row style="padding: 13px; flex: 0; margin-bottom: 5px;">
                               <span
                                 style="
                                   display: flex;
@@ -299,7 +308,8 @@
                                   style="padding: 3px; padding-right: 10px"
                                   >groups</v-icon
                                 >
-                                {{project.confirmedMeetingLength}} Scheduled Meeting</span
+                                {{ project.confirmedMeetingLength }} Scheduled
+                                Meeting</span
                               >
 
                               <div
@@ -324,7 +334,8 @@
                                     style="padding: 3px; padding-right: 10px"
                                     >check_circle</v-icon
                                   >
-                                  {{project.incompletedTodoLength}} Incompleted Todo
+                                  {{ project.incompletedTodoLength }}
+                                  Incompleted Todo
                                 </span>
                               </div>
 
@@ -344,476 +355,38 @@
                                       Math.trunc(project.progress * 100) + "%"
                                     }}</span> -->
                               </v-progress-linear>
-                            </v-card>
-                          </v-slide-item>
-                        </v-slide-group>
-                      </v-sheet>
-                    </div>
-                    <div v-else style="display:flex; justify-content: center; align-items: center; padding: 11vh">
-                      <span style="color: #4b4b4b; font-weight:bold; font-size: 18px">You do not have any project yet. Create one or accept a project invitation.</span>
-                    </div>
-                  </v-card>
-                </v-container>
-
-                <v-row>
-                  <v-col col="12" md="6" style="padding-right:0px !important;">
-                    <v-container
+                            </v-row>
+                          </v-card>
+                        </v-slide-item>
+                      </v-slide-group>
+                    </v-sheet>
+                  </div>
+                  <div
+                    v-else
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      padding: 11vh;
+                    "
+                  >
+                    <span
                       style="
-                        margin-right: auto;
-                        margin-left: auto;
-                        display: flex;
-                        justify-content: flex-start;
-                        flex-direction: column;
-                        
+                        color: #4b4b4b;
+                        font-weight: bold;
+                        font-size: 18px;
                       "
+                      >You do not have any project yet. Create one or accept a
+                      project invitation.</span
                     >
-                      <div
-                        style="padding: 8px; display: flex; flex-direction: row"
-                      >
-                        <span
-                          style="
-                            margin-top: 10px;
-                            margin-left: 3vw;
-                            color: #4b4b4b;
-                            font-size: 20px;
-                            display: flex;
-                            align-items: flex-start;
-                            font-weight: bold;
-                          "
-                          >Today's Meetings</span
-                        >
-                      </div>
-
-                      <v-card
-                        color="white"
-                        outlined
-                        :class="`rounded-xl`"
-                        style="
-                          padding: 10px;
-                          font-size: 15px;
-                          display: flex;
-                          justify-content: center;
-                          overflow-y: scroll;
-                        "
-                        min-height="40vh"
-                        max-height="40vh"
-                      >
-                        <div v-if="checkTodayMeetingLength()">
-                          <div
-                            v-for="meeting in this.$store.state
-                              .confirmedMeetings"
-                            :key="meeting.id"
-                          >
-                            <div v-if="checkTodayMeetingOrNot(meeting)">
-                              <v-card
-                                color="white"
-                                outlined
-                                style="
-                        padding: 20px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: stretch;
-                      
-                     
-                      "
-                                :class="`rounded-xl`"
-                              >
-                                <span style="display:flex; justify-content:flex-start; padding-bottom:5px"
-                                  >{{ meeting.project.get("modCode") }}
-                                  {{ meeting.project.get("title") }}</span
-                                >
-                                <span style="display:flex; justify-content:flex-start;  padding-bottom:5px; ">{{ meeting.title }}</span>
-                                <div
-                                    style="
-                                      padding-top: 3px;
-                                       padding-bottom:5px; 
-                                      display: inline-flex;
-                                      flex-direction: row-reverse;
-                                      justify-content: flex-end;
-                                      padding-left: 12px;
-
-                                    "
-                                  >
-                                    <div
-                                      v-for="groupmate in meeting.groupmates"
-                                      :key="groupmate.id"
-                                    >
-                                      <div
-                                        style="
-                                          margin-left: -15px;
-                                          padding-bottom: 0px !important;
-                                          padding-top: 3px !important;
-                                          padding-left: 3px !important;
-                                          padding-right: 3px !important;
-                                        "
-                                      >
-                                        <v-avatar
-                                          :size="30"
-                                          style="border: 2px solid #fff"
-                                        >
-                                          <v-img :src="groupmate.avatar"></v-img
-                                        ></v-avatar>
-                                      </div>
-                                    </div>
-                                  </div>
-                                <div
-                                  style="
-                                    display: flex;
-                                    justify-content: space-between;
-                                     padding-bottom:5px;
-                                  "
-                                >
-                                  <span
-                                    ><v-icon color="#ff9d66"
-                                      >mdi-clock-time-four-outline</v-icon
-                                    >
-
-                                    {{
-                                      meeting.selectedStartDate
-                                        .toDate()
-                                        .toLocaleTimeString([], {
-                                          hour: "2-digit",
-                                          minute: "2-digit",
-                                        })
-                                    }}
-                                    -
-                                    {{
-                                      meeting.selectedEndDate
-                                        .toDate()
-                                        .toLocaleTimeString([], {
-                                          hour: "2-digit",
-                                          minute: "2-digit",
-                                        })
-                                    }} </span
-                                  ><span style="margin-left: 2vw"
-                                    ><v-icon color="#ff9d66">place</v-icon>
-                                    {{ meeting.venue }}</span
-                                  >
-                                </div>
-                                <!-- <span><v-icon color="#ff9d66">place</v-icon> 
-                  {{meeting.venue}} </span> -->
-                                <div
-                                  style="
-                                    display: flex;
-                                    justify-content: flex-start;
-                                     
-                                  "
-                                >
-                                  <span
-                                    v-if="
-                                      displaySelectedTimeDifference(
-                                        meeting.selectedStartDate
-                                      ) >= 0 &&
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) > 0
-                                    "
-                                    ><v-icon color="#ff9d66"
-                                      >hourglass_bottom</v-icon
-                                    >
-
-                                    In
-                                    {{
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      )
-                                    }}
-                                    hours
-                                  </span>
-
-                                  <span
-                                    v-if="
-                                      displaySelectedTimeDifference(
-                                        meeting.selectedStartDate
-                                      ) >= 0 &&
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) == 0
-                                    "
-                                    ><v-icon color="#ff9d66"
-                                      >hourglass_bottom</v-icon
-                                    >
-
-                                    In
-                                    {{
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60
-                                      )
-                                    }}
-                                    minutes
-                                  </span>
-
-                                  <span
-                                    v-if="
-                                      displaySelectedTimeDifference(
-                                        meeting.selectedStartDate
-                                      ) < 0 &&
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) == 0
-                                    "
-                                    ><v-icon color="#ff9d66"
-                                      >hourglass_bottom</v-icon
-                                    >
-
-                                    Expired by
-                                    {{
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60
-                                      ) * -1
-                                    }}
-                                    minutes
-                                  </span>
-
-                                  <span
-                                    v-if="
-                                      displaySelectedTimeDifference(
-                                        meeting.selectedStartDate
-                                      ) < 0 &&
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) !== 0
-                                    "
-                                    ><v-icon color="#ff9d66"
-                                      >hourglass_bottom</v-icon
-                                    >
-
-                                    Expired by
-                                    {{
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) * -1
-                                    }}
-                                    hours
-                                  </span>
-
-                                  <v-btn
-                                  v-if="meeting.isOnlineVenue == true && (meeting.meetingLink !== 'No meeting link')"
-                                    style="margin-left: 2vw"
-                                    outlined
-                                    rounded
-                                    color="#ff9d66"
-                                    small
-                                    :href="meeting.meetingLink"
-                                    >Join Now</v-btn
-                                  >
-                                </div>
-                              </v-card>
-                              <v-divider style="color: #ff9d66"></v-divider>
-                            </div>
-                          </div>
-                          <br />
-                          <span> You do not have other meetings today </span>
-                        </div>
-                        <div v-else style="padding-top: 18vh">
-                          <span style="font-weight:bold; color: #4b4b4b"> You do not have any meeting this day. </span>
-                        </div>
-                      </v-card>
-                    </v-container>
-                  </v-col>
-                  <v-col col="12" md="6" style="padding-left:0px !important">
-                    <v-container
-                      style="
-                        margin-right: auto;
-                        margin-left: auto;
-                        display: flex;
-                        justify-content: flex-start;
-                        flex-direction: column;
-                      "
-                    >
-                      <div
-                        style="padding: 8px; display: flex; flex-direction: row"
-                      >
-                        <span
-                          style="
-                            margin-top: 10px;
-                            margin-left: 3vw;
-                            color: #4b4b4b;
-                            font-size: 20px;
-                            display: flex;
-                            align-items: flex-start;
-                            font-weight: bold;
-                          "
-                          >Today's Todos</span
-                        >
-                      </div>
-                      <v-card
-                        color="#ff9d66"
-                        outlined
-                        :class="`rounded-xl`"
-                        style="padding: 10px; overflow-y: scroll"
-                        min-height="40vh"
-                        max-height="40vh"
-                      >
-                        <div v-if="checkTodayTaskDashboardLength()">
-                          <v-card-text
-                            style="
-                              color: white;
-                              display: flex;
-                              font-weight: bold;
-
-                              font-family: MuseoModerno, sans-serif;
-                            "
-                          >
-                            <v-col
-                              col="12"
-                              md="6"
-                              style="
-                                padding-bottom: 16px;
-                                display: flex;
-                                justify-content: flex-end;
-                              "
-                            >
-                              <v-progress-circular
-                                class="
-                                  progress-circular
-                                  v-progress-circular__underlay
-                                "
-                                :rotate="-90"
-                                :size="80"
-                                :width="10"
-                                :value="this.totalTaskProgress * 100"
-                                color="white"
-                              >
-                                <span style="font-size: 18px">{{
-                                  Math.trunc(this.totalTaskProgress * 100) + "%"
-                                }}</span>
-                              </v-progress-circular>
-                            </v-col>
-
-                            <v-col
-                              col="12"
-                              md="6"
-                              style="
-                                display: flex;
-                                justify-content: center;
-                                flex-direction: column;
-                              "
-                            >
-                              <span style="display: flex; font-size: 24px"
-                                >{{ totalTaskDone }} / {{ totalTask }}</span
-                              >
-                              <span
-                                style="
-                                  display: flex;
-                                  font-family: DM Sans, sans-serif;
-                                  font-size: 18px;
-                                  font-weight: bold;
-                                "
-                                >Completed</span
-                              >
-                            </v-col>
-                          </v-card-text>
-                          <div
-                            v-for="project in this.$store.state.todayProjects"
-                            :key="project.id"
-                            style="margin-left: 0.5vw; margin-right: 0.5vw"
-                          >
-                          
-                            <div v-if="project.todos.length !== 0">
-                              <v-card
-                                outlined
-                                color="white"
-                                :class="`rounded-xl`"
-                                style="text-align: left; padding: 20px"
-                              >
-                                <div style="padding: 5px">
-                                  <span style="color: #ff9d66"
-                                    >{{ project.modCode }}
-                                    {{ project.title }}</span
-                                  >
-                                </div>
-                                <v-divider style="padding: 5px"></v-divider>
-
-                                <div
-                                  v-for="todo in project.todos"
-                                  :key="todo.id"
-                                  style="
-                                    padding: 5px;
-                                    display: flex;
-                                    justify-content: space-between;
-                                  "
-                                >
-                                  <span
-                                    style="padding: 5px; color: #ff9d66"
-                                    v-bind:class="{ completed: todo.complete }"
-                                    >{{ todo.task }}</span
-                                  >
-                                  
-                                  <v-checkbox
-                                
-                                    class="centerAlign"
-                                    color="#ff9d66"
-                                    hide-details
-                                    style="margin-top: 0px !important"
-                                    v-model="todo.complete"
-                                    @click="completeTask(todo)"
-                                  />
-                                </div>
-                              </v-card>
-                              <br />
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          v-else
-                          style="
-                            padding-top: 18vh;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          <span style="color: white; font-weight: bold"
-                            >You don't have any todos today.</span
-                          >
-                        </div>
-                      </v-card>
-                    </v-container>
-                  </v-col>
-                </v-row>
+                  </div>
+                </v-card>
               </v-col>
-              <v-col col="12" md="4">
-                <div
+            </v-row>
+
+            <v-row>
+              <v-col col="12" md="6" style="padding-right: 0px !important">
+                <v-container
                   style="
                     margin-right: auto;
                     margin-left: auto;
@@ -823,267 +396,721 @@
                   "
                 >
                   <div
-                    style="
-                      display: flex;
-                      flex-direction: column;
-                      align-items: center;
-                    "
+                    style="padding: 8px; display: flex; flex-direction: row"
                   >
-                    <v-date-picker
-                      ref="picker"
-                      v-model="date"
-                      :events="dashboardCalendar()"
-                      :event-color="(date) => checkEvents(date)"
-                      color="#ff9d66"
-                      width="360"
-                      height="100"
-                    >
-                    </v-date-picker>
-                    <v-card
-                      width="360"
-                      max-height="45vh"
-                      min-height="45vh"
-                      outlined
-                      color="#FFE4CB"
+                    <span
                       style="
-                        padding: 14px;
+                        margin-top: 10px;
+                        color: #4b4b4b;
+                        font-size: 20px;
                         display: flex;
-                        flex-direction: column;
-                        font-size: 15px;
-                        overflow-y: scroll;
+                        align-items: flex-start;
+                        font-weight: bold;
                       "
-                      :class="`rounded-b-xl`"
+                      >Today's Meetings</span
                     >
-                      <v-card-text style="font-weight:bold; font-size: 18px; display:flex"> Meetings on {{ date }} </v-card-text>
-                      <div v-if="checkThisDayMeetingLength()">
-                        <div
-                          v-for="meeting in this.$store.state.confirmedMeetings"
-                          :key="meeting.id"
-                        >
-                          <div v-if="checkMeetingDate(meeting)">
-                            <v-card
-                              color="white"
-                              outlined
-                              style="
-                                color: #ff9d66;
-                                padding: 20px;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: flex-start;
-                                align-items: stretch !important;
-                                margin-bottom: 16px !important;
-                                font-size: 15px;
-                              "
-                              :class="`rounded-xl`"
-                            >
-                              <span style="display: flex; justify-content: flex-start"
-                                >{{ meeting.project.get("modCode") }}
-                                {{ meeting.project.get("title") }}</span
-                              >
-                              <span style="text-align:left; display:flex; justify-content:flex-start">{{ meeting.title }}</span>
-                              <div
-                                    style="
-                                      padding-top: 3px;
-                                      padding-bottom: 0px !important;
-                                      display: inline-flex;
-                                      flex-direction: row-reverse;
-                                      justify-content: flex-end;
-                                      padding-left: 12px;
-                                    "
-                                  >
-                                    <div
-                                      v-for="groupmate in meeting.groupmates"
-                                      :key="groupmate.id"
-                                    >
-                                      <div
-                                        style="
-                                          margin-left: -15px;
-                                          padding-bottom: 0px !important;
-                                          padding-top: 3px !important;
-                                          padding-left: 3px !important;
-                                          padding-right: 3px !important;
-                                        "
-                                      >
-                                        <v-avatar
-                                          :size="30"
-                                          style="border: 2px solid #fff"
-                                        >
-                                          <v-img :src="groupmate.avatar"></v-img
-                                        ></v-avatar>
-                                      </div>
-                                    </div>
-                                  </div>
-                              <div
-                                style="
-                                  display: flex;
-                                  justify-content: space-between;
-                                "
-                              >
+                  </div>
 
-                              
-                                <span
-                                  ><v-icon color="#ff9d66"
-                                    >mdi-clock-time-four-outline</v-icon
-                                  >
-
-                                  {{
-                                    meeting.selectedStartDate
-                                      .toDate()
-                                      .toLocaleTimeString([], {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                      })
-                                  }}
-                                  -
-                                  {{
-                                    meeting.selectedEndDate
-                                      .toDate()
-                                      .toLocaleTimeString([], {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                      })
-                                  }} </span
-                                ><span style="margin-left: 1vw"
-                                  ><v-icon color="#ff9d66">place</v-icon>
-                                  {{ meeting.venue }}</span
-                                >
-                              </div>
-                              <!-- <span><v-icon color="#ff9d66">place</v-icon> 
-                  {{meeting.venue}} </span> -->
-                            </v-card>
-                          </div>
-                        </div>
-                      </div>
-                      <div v-else style="display:flex; padding-left:16px; padding-bottom:16px">
-                        <span> You don't have any meeting this day. </span>
-                      </div>
-                      <v-card-text style="font-weight:bold; font-size: 18px; display:flex"> Todos on {{ date }} </v-card-text>
-                     
-                        <div v-if="checkTodayTaskLength()">
-                        
-                          <div
-                            v-for="project in this.$store.state
-                              .calendarProjects"
-                            :key="project.id"
+                  <v-card
+                    color="white"
+                    outlined
+                    :class="`rounded-xl`"
+                    style="
+                      padding: 10px;
+                      font-size: 15px;
+                      display: flex;
+                      justify-content: center;
+                      overflow-y: auto;
+                    "
+                    min-height="40vh"
+                    max-height="40vh"
+                  >
+                    <div v-if="checkTodayMeetingLength()" style="width: 100%">
+                      <div
+                        v-for="meeting in this.$store.state
+                          .confirmedMeetings"
+                        :key="meeting.id"
+                        style="width: 100%"
+                      >
+                        <div v-if="checkTodayMeetingOrNot(meeting)" style="width: 100%">
+                          <v-card
+                            color="white"
+                            outlined
+                            style="
+                              padding: 20px;
+                              display: flex;
+                              flex-direction: column;
+                              justify-content: flex-start;
+                              align-items: stretch;
+                            "
+                            :class="`rounded-xl`"
                           >
+                            <span
+                              style="
+                                display: flex;
+                                justify-content: flex-start;
+                                padding-bottom: 5px;
+                              "
+                              >{{ meeting.project.get("modCode") }}
+                              {{ meeting.project.get("title") }}</span
+                            >
+                            <span
+                              style="
+                                display: flex;
+                                justify-content: flex-start;
+                                padding-bottom: 5px;
+                              "
+                              >{{ meeting.title }}</span
+                            >
                             <div
-                              v-if="
-                                project.todos.length !== 0 &&
-                                checkTodoDate(project.todos)
+                              style="
+                                padding-top: 3px;
+                                padding-bottom: 5px;
+                                display: inline-flex;
+                                flex-direction: row-reverse;
+                                justify-content: flex-end;
+                                padding-left: 12px;
                               "
                             >
-                           
-                              <!-- <v-card outlined color="white" :class="`rounded-xl`" style="text-align:left; padding: 20px;">
-                            <div style="padding:5px;">
-                            <span style="color: #ff9d66;" >{{project.modCode}} {{project.title}}</span>
-                            </div>
-                            <v-divider style="padding:5px;"></v-divider>
-                           
-                            <div v-for="todo in project.todos" :key="todo.id" style="padding:5px; display:flex; justify-content:space-between;">
-                              <div v-if="changeTodoDate(todo.deadline) === date">
-                              <span style="padding:5px; color: #ff9d66" v-bind:class="{ completed: todo.complete }">{{todo.task}}</span>
-                              <v-checkbox
-                                  class="centerAlign"
-                                  color="#ff9d66"
-                                  hide-details
-                                  style="margin-top:0px !important;"
-                                  v-model="todo.complete"
-                                  @click="completeTask(todo)"
-                                />
-                              
-                              </div>
-                            </div>
-
-                          </v-card> -->
-
-                              <!-- <div style="padding:5px;"> -->
-                              <v-expansion-panels flat>
-                                <v-expansion-panel
-                                  flat
-                                  :class="`rounded-lg`"
+                              <div
+                                v-for="groupmate in meeting.groupmates"
+                                :key="groupmate.id"
+                              >
+                                <div
                                   style="
-                                    margin-bottom: 10px;
-                                    min-width: 300px;
-                                    max-width: 300px;
-                                    box-shadow: none !important;
+                                    margin-left: -15px;
+                                    padding-bottom: 0px !important;
+                                    padding-top: 3px !important;
+                                    padding-left: 3px !important;
+                                    padding-right: 3px !important;
                                   "
                                 >
-                                  <v-expansion-panel-header
-                                    style="color: #ff9d66"
-                                    >{{ project.modCode }}
-                                    {{
-                                      project.title
-                                    }}</v-expansion-panel-header
+                                  <v-avatar
+                                    :size="30"
+                                    style="border: 2px solid #fff"
                                   >
-
-                                  <v-expansion-panel-content>
-                                    <v-divider style="padding: 5px"></v-divider>
-
-                                    <div
-                                      v-for="todo in project.todos"
-                                      :key="todo.id"
-                                    >
-                                      <div
-                                        v-if="
-                                          changeTodoDate(todo.deadline) === date
-                                        "
-                                        style="
-                                          padding: 5px;
-                                          display: flex;
-                                          justify-content: space-between;
-                                        "
-                                      >
-                                        <span
-                                          style="padding: 5px; color: #ff9d66"
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{ todo.task }}</span
-                                        >
-                                        <v-checkbox
-                                          class="centerAlign"
-                                          color="#ff9d66"
-                                          hide-details
-                                          style="margin-top: 0px !important"
-                                          v-model="todo.complete"
-                                          @click="completeTask(todo)"
-                                        />
-                                      </div>
-                                      <div
-                                        v-else
-                                        style="
-                                          padding: 0px;
-                                          display: flex;
-                                          justify-content: space-between;
-                                        "
-                                      ></div>
-                                    </div>
-                                  </v-expansion-panel-content>
-                                </v-expansion-panel>
-                              </v-expansion-panels>
+                                    <v-img :src="groupmate.avatar"></v-img
+                                  ></v-avatar>
+                                </div>
+                              </div>
                             </div>
+                            <div
+                              style="
+                                display: flex;
+                                justify-content: space-between;
+                                padding-bottom: 5px;
+                              "
+                            >
+                              <span
+                                ><v-icon color="#ff9d66"
+                                  >mdi-clock-time-four-outline</v-icon
+                                >
 
-                            <!-- <br> -->
-                            <!-- </div> -->
-                          </div>
+                                {{
+                                  meeting.selectedStartDate
+                                    .toDate()
+                                    .toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })
+                                }}
+                                -
+                                {{
+                                  meeting.selectedEndDate
+                                    .toDate()
+                                    .toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })
+                                }} </span
+                              ><span style="margin-left: 2vw"
+                                ><v-icon color="#ff9d66">place</v-icon>
+                                {{ meeting.venue }}</span
+                              >
+                            </div>
+                            <!-- <span><v-icon color="#ff9d66">place</v-icon> 
+              {{meeting.venue}} </span> -->
+                            <div
+                              style="
+                                display: flex;
+                                justify-content: flex-start;
+                              "
+                            >
+                              <span
+                                v-if="
+                                  displaySelectedTimeDifference(
+                                    meeting.selectedStartDate
+                                  ) >= 0 &&
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  ) > 0
+                                "
+                                ><v-icon color="#ff9d66"
+                                  >hourglass_bottom</v-icon
+                                >
+
+                                In
+                                {{
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  )
+                                }}
+                                hours
+                              </span>
+
+                              <span
+                                v-if="
+                                  displaySelectedTimeDifference(
+                                    meeting.selectedStartDate
+                                  ) >= 0 &&
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  ) == 0
+                                "
+                                ><v-icon color="#ff9d66"
+                                  >hourglass_bottom</v-icon
+                                >
+
+                                In
+                                {{
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60
+                                  )
+                                }}
+                                minutes
+                              </span>
+
+                              <span
+                                v-if="
+                                  displaySelectedTimeDifference(
+                                    meeting.selectedStartDate
+                                  ) < 0 &&
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  ) == 0
+                                "
+                                ><v-icon color="#ff9d66"
+                                  >hourglass_bottom</v-icon
+                                >
+                                    Expired by
+                                    {{
+                                      Math.trunc(
+                                        displaySelectedTimeDifference(
+                                          meeting.selectedStartDate
+                                        ) /
+                                          1000 /
+                                          60 /
+                                          60
+                                      ) * -1
+                                    }}
+                                    hours
+                              </span>
+
+                              <v-btn
+                              v-if="meeting.isOnlineVenue == true && (meeting.meetingLink !== 'No meeting link')"
+                                style="margin-left: 2vw"
+                                outlined
+                                rounded
+                                color="#ff9d66"
+                                small
+                                :href="meeting.meetingLink"
+                                >Join Now</v-btn
+                              >
+                                </div>
+                              </v-card>
+                              <v-divider style="color: #ff9d66"></v-divider>
                         </div>
-                        <div v-else  style="display:flex; padding-left:16px;">
-                          <span>You don't have any todo this day.</span>
-                        </div>
-                     
-                    </v-card>
+                      </div>
+                    </div>
+                    <div v-else style="padding-top: 18vh">
+                      <span style="font-weight: bold; color: #4b4b4b">
+                        You do not have any meeting this day.
+                      </span>
+                    </div>
+                    <br />
+                  </v-card>
+                </v-container>
+              </v-col>
+              <v-col col="12" md="6" style="padding-left: 0px !important">
+                <v-container
+                  style="
+                    margin-right: auto;
+                    margin-left: auto;
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-direction: column;
+                  "
+                >
+                  <div
+                    style="padding: 8px; display: flex; flex-direction: row"
+                  >
+                    <span
+                      style="
+                        margin-top: 10px;
+                        color: #4b4b4b;
+                        font-size: 20px;
+                        display: flex;
+                        align-items: flex-start;
+                        font-weight: bold;
+                      "
+                      >Today's Todos</span
+                    >
                   </div>
-                  <div></div>
-                </div>
+                  <v-card
+                    color="#ff9d66"
+                    outlined
+                    :class="`rounded-xl`"
+                    style="padding: 10px; overflow-y: auto"
+                    min-height="40vh"
+                    max-height="40vh"
+                  >
+                    <div v-if="checkTodayTaskDashboardLength()">
+                      <v-card-text
+                        style="
+                          color: white;
+                          display: flex;
+                          font-weight: bold;
+
+                          font-family: MuseoModerno, sans-serif;
+                        "
+                      >
+                        <v-col
+                          col="12"
+                          md="6"
+                          style="
+                            padding-bottom: 16px;
+                            display: flex;
+                            justify-content: flex-end;
+                          "
+                        >
+                          <v-progress-circular
+                            class="
+                              progress-circular
+                              v-progress-circular__underlay
+                            "
+                            :rotate="-90"
+                            :size="80"
+                            :width="10"
+                            :value="this.totalTaskProgress * 100"
+                            color="white"
+                          >
+                            <span style="font-size: 18px">{{
+                              Math.trunc(this.totalTaskProgress * 100) + "%"
+                            }}</span>
+                          </v-progress-circular>
+                        </v-col>
+
+                        <v-col
+                          col="12"
+                          md="6"
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column;
+                          "
+                        >
+                          <span style="display: flex; font-size: 24px"
+                            >{{ totalTaskDone }} / {{ totalTask }}</span
+                          >
+                          <span
+                            style="
+                              display: flex;
+                              font-family: DM Sans, sans-serif;
+                              font-size: 18px;
+                              font-weight: bold;
+                            "
+                            >Completed</span
+                          >
+                        </v-col>
+                      </v-card-text>
+                      <div
+                        v-for="project in this.$store.state.todayProjects"
+                        :key="project.id"
+                        style="margin-left: 0.5vw; margin-right: 0.5vw"
+                      >
+                      
+                        <div v-if="project.todos.length !== 0">
+                          <v-card
+                            outlined
+                            color="white"
+                            :class="`rounded-xl`"
+                            style="text-align: left; padding: 20px"
+                          >
+                            <div style="padding: 5px">
+                              <span style="color: #ff9d66"
+                                >{{ project.modCode }}
+                                {{ project.title }}</span
+                              >
+                            </div>
+                            <v-divider style="padding: 5px"></v-divider>
+
+                            <div
+                              v-for="todo in project.todos"
+                              :key="todo.id"
+                              style="
+                                padding: 5px;
+                                display: flex;
+                                justify-content: space-between;
+                              "
+                            >
+                              <span
+                                style="padding: 5px; color: #ff9d66"
+                                v-bind:class="{ completed: todo.complete }"
+                                >{{ todo.task }}</span
+                              >
+
+                              <v-checkbox
+                                class="centerAlign"
+                                color="#ff9d66"
+                                hide-details
+                                style="margin-top: 0px !important"
+                                v-model="todo.complete"
+                                @click="completeTask(todo)"
+                              />
+                            </div>
+                          </v-card>
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      v-else
+                      style="
+                        padding-top: 18vh;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                      "
+                    >
+                      <span style="color: white; font-weight: bold"
+                        >You don't have any todos today.</span
+                      >
+                    </div>
+                  </v-card>
+                </v-container>
               </v-col>
             </v-row>
-          </div>
-          <v-card> </v-card>
+          </v-col>
+          <v-col col="12" md="4">
+            <div
+              style="
+                margin-right: auto;
+                margin-left: auto;
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+                height: 100%;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  height: 100%;
+                "
+              >
+                <v-date-picker
+                  ref="picker"
+                  v-model="date"
+                  :events="dashboardCalendar()"
+                  :event-color="(date) => checkEvents(date)"
+                  color="#ff9d66"
+                  width="360"
+                  height="100"
+                >
+                </v-date-picker>
+                <v-card
+                  width="360"
+                  min-height="45vh"
+                  outlined
+                  color="#FFE4CB"
+                  style="
+                    padding: 14px;
+                    display: flex;
+                    flex: 1;
+                    flex-direction: column;
+                    font-size: 15px;
+                    overflow-y: scroll;
+                    overflow: hidden;
+                    margin-bottom: 36px;
+                  "
+                  :class="`rounded-b-xl`"
+                >
+                  <v-card-text
+                    style="
+                      font-weight: bold;
+                      font-size: 18px;
+                      display: flex;
+                    "
+                  >
+                    Meetings on {{ date }}
+                  </v-card-text>
+                  <div v-if="checkThisDayMeetingLength()">
+                    <div
+                      v-for="meeting in this.$store.state.confirmedMeetings"
+                      :key="meeting.id"
+                    >
+                      <div v-if="checkMeetingDate(meeting)">
+                        <v-card
+                          color="white"
+                          outlined
+                          style="
+                            color: #ff9d66;
+                            padding: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: stretch !important;
+                            margin-bottom: 16px !important;
+                            font-size: 15px;
+                          "
+                          :class="`rounded-xl`"
+                        >
+                          <span
+                            style="
+                              display: flex;
+                              justify-content: flex-start;
+                            "
+                            >{{ meeting.project.get("modCode") }}
+                            {{ meeting.project.get("title") }}</span
+                          >
+                          <span
+                            style="
+                              text-align: left;
+                              display: flex;
+                              justify-content: flex-start;
+                            "
+                            >{{ meeting.title }}</span
+                          >
+                          <div
+                            style="
+                              padding-top: 3px;
+                              padding-bottom: 0px !important;
+                              display: inline-flex;
+                              flex-direction: row-reverse;
+                              justify-content: flex-end;
+                              padding-left: 12px;
+                            "
+                          >
+                            <div
+                              v-for="groupmate in meeting.groupmates"
+                              :key="groupmate.id"
+                            >
+                              <div
+                                style="
+                                  margin-left: -15px;
+                                  padding-bottom: 0px !important;
+                                  padding-top: 3px !important;
+                                  padding-left: 3px !important;
+                                  padding-right: 3px !important;
+                                "
+                              >
+                                <v-avatar
+                                  :size="30"
+                                  style="border: 2px solid #fff"
+                                >
+                                  <v-img :src="groupmate.avatar"></v-img
+                                ></v-avatar>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              display: flex;
+                              justify-content: space-between;
+                            "
+                          >
+                            <span
+                              ><v-icon color="#ff9d66"
+                                >mdi-clock-time-four-outline</v-icon
+                              >
 
-          <div></div>
-        </div>
-      </v-col>
-    </v-row>
+                              {{
+                                meeting.selectedStartDate
+                                  .toDate()
+                                  .toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                              }}
+                              -
+                              {{
+                                meeting.selectedEndDate
+                                  .toDate()
+                                  .toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                              }} </span
+                            ><span style="margin-left: 1vw"
+                              ><v-icon color="#ff9d66">place</v-icon>
+                              {{ meeting.venue }}</span
+                            >
+                          </div>
+                          <!-- <span><v-icon color="#ff9d66">place</v-icon> 
+              {{meeting.venue}} </span> -->
+                        </v-card>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    style="
+                      display: flex;
+                      padding-left: 16px;
+                      padding-bottom: 16px;
+                    "
+                  >
+                    <span> You don't have any meeting this day. </span>
+                  </div>
+                  <v-card-text
+                    style="
+                      font-weight: bold;
+                      font-size: 18px;
+                      display: flex;
+                    "
+                  >
+                    Todos on {{ date }}
+                  </v-card-text>
+
+                  <div v-if="checkTodayTaskLength()">
+                    <div
+                      v-for="project in this.$store.state.calendarProjects"
+                      :key="project.id"
+                    >
+                      <div
+                        v-if="
+                          project.todos.length !== 0 &&
+                          checkTodoDate(project.todos)
+                        "
+                      >
+                        <!-- <v-card outlined color="white" :class="`rounded-xl`" style="text-align:left; padding: 20px;">
+                        <div style="padding:5px;">
+                        <span style="color: #ff9d66;" >{{project.modCode}} {{project.title}}</span>
+                        </div>
+                        <v-divider style="padding:5px;"></v-divider>
+                        
+                        <div v-for="todo in project.todos" :key="todo.id" style="padding:5px; display:flex; justify-content:space-between;">
+                          <div v-if="changeTodoDate(todo.deadline) === date">
+                          <span style="padding:5px; color: #ff9d66" v-bind:class="{ completed: todo.complete }">{{todo.task}}</span>
+                          <v-checkbox
+                              class="centerAlign"
+                              color="#ff9d66"
+                              hide-details
+                              style="margin-top:0px !important;"
+                              v-model="todo.complete"
+                              @click="completeTask(todo)"
+                            />
+                          
+                          </div>
+                        </div>
+
+                      </v-card> -->
+
+                        <!-- <div style="padding:5px;"> -->
+                        <v-expansion-panels flat>
+                          <v-expansion-panel
+                            flat
+                            :class="`rounded-lg`"
+                            style="
+                              margin-bottom: 10px;
+                              min-width: 300px;
+                              max-width: 300px;
+                              box-shadow: none !important;
+                            "
+                          >
+                            <v-expansion-panel-header style="color: #ff9d66"
+                              >{{ project.modCode }}
+                              {{ project.title }}</v-expansion-panel-header
+                            >
+
+                            <v-expansion-panel-content>
+                              <v-divider style="padding: 5px"></v-divider>
+
+                              <div
+                                v-for="todo in project.todos"
+                                :key="todo.id"
+                              >
+                                <div
+                                  v-if="
+                                    changeTodoDate(todo.deadline) === date
+                                  "
+                                  style="
+                                    padding: 5px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                  "
+                                >
+                                  <span
+                                    style="padding: 5px; color: #ff9d66"
+                                    v-bind:class="{
+                                      completed: todo.complete,
+                                    }"
+                                    >{{ todo.task }}</span
+                                  >
+                                  <v-checkbox
+                                    class="centerAlign"
+                                    color="#ff9d66"
+                                    hide-details
+                                    style="margin-top: 0px !important"
+                                    v-model="todo.complete"
+                                    @click="completeTask(todo)"
+                                  />
+                                </div>
+                                <div
+                                  v-else
+                                  style="
+                                    padding: 0px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                  "
+                                ></div>
+                              </div>
+                            </v-expansion-panel-content>
+                          </v-expansion-panel>
+                        </v-expansion-panels>
+                      </div>
+
+                      <!-- <br> -->
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                  <div v-else style="display: flex; padding-left: 16px">
+                    <span>You don't have any todo this day.</span>
+                  </div>
+                </v-card>
+              </div>
+              <div></div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -1207,7 +1234,7 @@ export default {
   },
 
   methods: {
-    checkTodayMeetingOrNot(meeting){
+    checkTodayMeetingOrNot(meeting) {
       const currLocalDate = meeting.selectedStartDate
         .toDate()
         .toLocaleDateString()
@@ -1221,18 +1248,16 @@ export default {
       console.log(currDate);
       const newDate = currYear + "-" + currMonth + "-" + currDate;
       const today = new Date(
-          Date.now() - new Date().getTimezoneOffset() * 60000
-        )
-          .toISOString()
-          .substr(0, 10);
-      console.log(today)
+        Date.now() - new Date().getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .substr(0, 10);
+      console.log(today);
       if (newDate == today) {
         return true;
       }
 
       return false;
-    
-
     },
     displaySelectedTimeDifference(startTime) {
       console.log(startTime);
@@ -1270,7 +1295,7 @@ export default {
         console.log(this.$store.state.tasks);
         const data = this.$store.state.tasks[i];
         console.log(data);
-        console.log(date)
+        console.log(date);
         if (data.deadline !== null) {
           const currLocalDate = data.deadline
             .toLocaleDateString()
@@ -1283,18 +1308,18 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           const newDate = currYear + "-" + currMonth + "-" + currDate;
-          const PICid = []
+          const PICid = [];
           // for(let j=0; j< data.PIC.length; j++){
           //   const pplID = data.PIC[j].id
           //   console.log(pplID)
           //   PICid.push(pplID)
           // }
           // console.log(PICid)
-          
-          if (newDate == date ) {
-            if(data.task == "try adding project"){
-            console.log("tryaddingproject")
-          }
+
+          if (newDate == date) {
+            if (data.task == "try adding project") {
+              console.log("tryaddingproject");
+            }
             todo = true;
             break;
           }
@@ -1423,14 +1448,14 @@ export default {
             .toISOString()
             .substr(0, 10);
           // const PIC = await this.getPICId(data.PIC)
-          const PICid = []
-          for(let j=0; j< data.PIC.length; j++){
-            const pplID = data.PIC[j].id
-            console.log(pplID)
-            PICid.push(pplID)
+          const PICid = [];
+          for (let j = 0; j < data.PIC.length; j++) {
+            const pplID = data.PIC[j].id;
+            console.log(pplID);
+            PICid.push(pplID);
           }
-          console.log(PICid)
-          if (newDate == today  && PICid.includes(this.$store.state.user.uid)) {
+          console.log(PICid);
+          if (newDate == today && PICid.includes(this.$store.state.user.uid)) {
             return true;
           }
         }
@@ -1438,7 +1463,7 @@ export default {
       return false;
     },
 
-     async getPICId(PIC) {
+    async getPICId(PIC) {
       const TaskvarPICId = [];
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
@@ -1467,24 +1492,36 @@ export default {
           // const PIC = await this.getPICId(data.PIC)
           const newDate = currYear + "-" + currMonth + "-" + currDate;
 
-          console.log(data.PIC.includes(db.collection('user').doc(this.$store.state.user.uid)))
-          console.log(db.collection('user').doc(this.$store.state.user.uid))
-          console.log(data.PIC)
-          console.log(newDate == this.date && data.PIC.includes(db.collection('user').doc(this.$store.state.user.uid)))
-          const PICid = []
-          for(let j=0; j< data.PIC.length; j++){
-            const pplID = data.PIC[j].id
-            console.log(pplID)
-            PICid.push(pplID)
+          console.log(
+            data.PIC.includes(
+              db.collection("user").doc(this.$store.state.user.uid)
+            )
+          );
+          console.log(db.collection("user").doc(this.$store.state.user.uid));
+          console.log(data.PIC);
+          console.log(
+            newDate == this.date &&
+              data.PIC.includes(
+                db.collection("user").doc(this.$store.state.user.uid)
+              )
+          );
+          const PICid = [];
+          for (let j = 0; j < data.PIC.length; j++) {
+            const pplID = data.PIC[j].id;
+            console.log(pplID);
+            PICid.push(pplID);
           }
-          console.log(PICid)
-          if (newDate == this.date && PICid.includes(this.$store.state.user.uid))  {
-            console.log('true')
-            return true
+          console.log(PICid);
+          if (
+            newDate == this.date &&
+            PICid.includes(this.$store.state.user.uid)
+          ) {
+            console.log("true");
+            return true;
           }
         }
       }
-      console.log('false')
+      console.log("false");
       return false;
     },
     checkTodoDate(todos) {
@@ -1553,7 +1590,7 @@ export default {
         complete: task.complete,
       });
       this.$store.dispatch("getProjects");
-      this.$store.dispatch("getTasks")
+      this.$store.dispatch("getTasks");
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
     },
@@ -1652,6 +1689,12 @@ export default {
 .v-list--rounded .v-list-item::before,
 .v-list--rounded .v-list-item > .v-ripple__container {
   border-radius: 20px !important;
+}
+
+
+.v-navigation-drawer__border {
+  height: 100vh !important;
+  position: sticky;
 }
 
 /* .avatars {
