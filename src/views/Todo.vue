@@ -1307,6 +1307,15 @@ export default {
       }
     },
     async addTodo() {
+      let projectTitle = ""
+      
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.myProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+      console.log(projectTitle)
       this.errors = "";
       console.log(this.myProject);
 
@@ -1323,7 +1332,7 @@ export default {
         // displayDeadline: this.displayDeadline,
         PIC: [],
         note: this.myNote,
-        project: db.collection("project").doc(this.myProject),
+         project:{id: this.myProject, title: projectTitle, reference: db.collection("project").doc(this.myProject)},
       });
       await this.addFinalPIC(response);
       await db
@@ -1388,6 +1397,15 @@ export default {
     },
 
     async editTask(task) {
+      let projectTitle = ""
+      
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.myProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+      console.log(projectTitle)
       console.log(task.id);
       console.log(this.dateSwitchValue);
       const response = await db
@@ -1405,7 +1423,7 @@ export default {
           deadline: this.finalDeadline,
           // displayDeadline: this.displayDeadline,
           note: this.myNote,
-          project: db.collection("project").doc(this.myProject),
+          project:{id: this.myProject, title: projectTitle, reference: db.collection("project").doc(this.myProject)},
           PIC: [],
         });
       await this.addFinalPIC(task);

@@ -6128,6 +6128,16 @@ export default {
     },
 
     async addMeeting() {
+      let projectTitle = ""
+      console.log(this.meetingProject)
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.meetingProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+      console.log(projectTitle)
+ 
       this.meetingSubmit = true;
       this.checkMeetingDetails();
       if (this.meetingDateRange[0] > this.meetingDateRange[1]) {
@@ -6163,7 +6173,7 @@ export default {
         meetingVenue: this.meetingTypeDetails,
         isOnlineVenue: this.meetingVenue == "Online" ? true : false,
         timeslot: [],
-        project: db.collection("project").doc(this.meetingProject),
+        project:{id: this.meetingProject, title: projectTitle, reference: db.collection("project").doc(this.meetingProject)},
         author: db.collection("user").doc(this.$store.state.user.uid),
         isConfirmed: false,
         selectedStartDate: null,
@@ -6197,6 +6207,16 @@ export default {
     },
 
     async addConfirmedMeeting() {
+      let projectTitle = ""
+      console.log(this.meetingProject)
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.meetingProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+      console.log(projectTitle)
+ 
       this.meetingSubmit = true;
       this.checkMeetingDetails();
 
@@ -6226,7 +6246,7 @@ export default {
         meetingVenue: this.meetingTypeDetails,
         isOnlineVenue: this.meetingVenue == "Online" ? true : false,
         timeslot: [],
-        project: db.collection("project").doc(this.meetingProject),
+        project:{id: this.meetingProject, title: projectTitle, reference: db.collection("project").doc(this.meetingProject)},
         author: db.collection("user").doc(this.$store.state.user.uid),
         isConfirmed: true,
         startDate: firebase.firestore.Timestamp.fromDate(
