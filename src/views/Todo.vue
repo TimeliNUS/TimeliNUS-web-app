@@ -1266,6 +1266,7 @@ export default {
     },
 
     checkEdit(task) {
+      console.log(this.switchValue)
       if (this.switchValue == false) {
         console.log(this.myDeadlineTime);
         this.myDeadlineTime = "00:00";
@@ -1307,6 +1308,15 @@ export default {
       }
     },
     async addTodo() {
+      let projectTitle = ""
+      
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.myProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+      console.log(projectTitle)
       this.errors = "";
       console.log(this.myProject);
 
@@ -1323,7 +1333,7 @@ export default {
         // displayDeadline: this.displayDeadline,
         PIC: [],
         note: this.myNote,
-        project: db.collection("project").doc(this.myProject),
+         project:{id: this.myProject, title: projectTitle, reference: db.collection("project").doc(this.myProject)},
       });
       await this.addFinalPIC(response);
       await db
@@ -1337,8 +1347,9 @@ export default {
         .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
         .catch((error) => console.log(error));
 
+       await this.$store.dispatch("getTasks");
       await this.$store.dispatch("getProjects");
-      await this.$store.dispatch("getTasks");
+     
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
@@ -1388,8 +1399,18 @@ export default {
     },
 
     async editTask(task) {
+      let projectTitle = ""
+      
+      for(let i=0; i<this.projects.length; i++){
+          console.log(this.projects[i].title)
+        if (this.projects[i].id == this.myProject) {
+          projectTitle = this.projects[i].title
+        }
+      }
+
+      console.log(projectTitle)
       console.log(task.id);
-      console.log(this.dateSwitchValue);
+      console.log(this.switchValue);
       const response = await db
         .collection("todo")
         .doc(task.id)
@@ -1399,13 +1420,13 @@ export default {
           complete: this.complete,
           // deadlineTime: this.myDeadlineTime,
           // deadlineDate: this.myDeadline,
-          switchValue: this.switchValue,
+          includeTime: this.switchValue,
           // dateSwitchValue: this.dateSwitchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
           deadline: this.finalDeadline,
           // displayDeadline: this.displayDeadline,
           note: this.myNote,
-          project: db.collection("project").doc(this.myProject),
+          project:{id: this.myProject, title: projectTitle, reference: db.collection("project").doc(this.myProject)},
           PIC: [],
         });
       await this.addFinalPIC(task);
@@ -1429,12 +1450,13 @@ export default {
           })
           .catch((error) => console.log(error));
       }
-this.$store.dispatch("getProjects");
-      this.$store.dispatch("getTasks");
-     
+    await this.$store.dispatch("getTasks");
+     await this.$store.dispatch("getProjects");
+    
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
+      
       this.myTodo = "";
       this.myProject = "";
       this.myNote = "";
