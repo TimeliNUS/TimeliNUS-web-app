@@ -1266,6 +1266,7 @@ export default {
     },
 
     checkEdit(task) {
+      console.log(this.switchValue)
       if (this.switchValue == false) {
         console.log(this.myDeadlineTime);
         this.myDeadlineTime = "00:00";
@@ -1346,8 +1347,9 @@ export default {
         .update({ todos: firebase.firestore.FieldValue.arrayUnion(response) })
         .catch((error) => console.log(error));
 
+       await this.$store.dispatch("getTasks");
       await this.$store.dispatch("getProjects");
-      await this.$store.dispatch("getTasks");
+     
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
@@ -1405,9 +1407,10 @@ export default {
           projectTitle = this.projects[i].title
         }
       }
+
       console.log(projectTitle)
       console.log(task.id);
-      console.log(this.dateSwitchValue);
+      console.log(this.switchValue);
       const response = await db
         .collection("todo")
         .doc(task.id)
@@ -1417,7 +1420,7 @@ export default {
           complete: this.complete,
           // deadlineTime: this.myDeadlineTime,
           // deadlineDate: this.myDeadline,
-          switchValue: this.switchValue,
+          includeTime: this.switchValue,
           // dateSwitchValue: this.dateSwitchValue,
           // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
           deadline: this.finalDeadline,
@@ -1447,12 +1450,13 @@ export default {
           })
           .catch((error) => console.log(error));
       }
-this.$store.dispatch("getProjects");
-      this.$store.dispatch("getTasks");
-     
+    await this.$store.dispatch("getTasks");
+     await this.$store.dispatch("getProjects");
+    
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
+      
       this.myTodo = "";
       this.myProject = "";
       this.myNote = "";
