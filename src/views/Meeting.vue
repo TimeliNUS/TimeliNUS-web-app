@@ -6,90 +6,88 @@
       min-height: 100vh;
     "
   >
-    <v-row>
-      <v-col col="12" md="2">
-        <v-navigation-drawer
-          absolute
-          permanent
-          floating
-          left
-          align="center"
-          class="v-navigation-drawer__border"
-          style="
-            padding: 18px;
-            font-size: 8px;
-            font-weight: bold;
-            border-color: white;
-            text-align: left;
-            font-color: #4b4b4b;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-          "
-        >
-          <div style="display: flex; flex-direction: column; height: 100%">
-            <v-img
-              width="10vw"
-              src="@/assets/orbital_logo_latest.png"
-              alt=""
-              style="flex: none; top: 20%"
-            ></v-img>
-            <br />
+    <div style="display: flex">
+      <v-navigation-drawer
+        permanent
+        floating
+        left
+        align="center"
+        class="v-navigation-drawer__border"
+        style="
+          padding: 18px;
+          font-size: 8px;
+          font-weight: bold;
+          border-color: white;
+          text-align: left;
+          font-color: #4b4b4b;
+          min-width: 256px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div style="display: flex; flex-direction: column; height: 100%">
+          <v-img
+            width="160"
+            src="@/assets/orbital_logo_latest.png"
+            alt=""
+            contain
+            style="flex: none; top: 50px; margin-bottom: 50px"
+          ></v-img>
+          <br />
 
-            <v-list
-              :class="`rounded-xl`"
-              rounded
-              nav
-              style="display: flex; flex-direction: column; margin: auto"
+          <v-list
+            :class="`rounded-xl`"
+            rounded
+            nav
+            style="display: flex; flex-direction: column; margin: auto"
+          >
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.title"
+              link
+              :to="item.href"
+              color="#ff7200"
+              style="
+                display: flex;
+                justify-content: center;
+                font-size: 12px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+              "
             >
-              <v-list-item
-                v-for="item in navItems"
-                :key="item.title"
-                link
-                :to="item.href"
-                color="#ff7200"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  font-size: 12px;
-                  margin-top: 4px;
-                  margin-bottom: 4px;
-                "
+              <v-list-item-icon
+                style="display: flex; justify-content: center; margin: 12px"
               >
-                <v-list-item-icon
-                  style="display: flex; justify-content: center; margin: 12px"
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title
+                  style="
+                    font-color: #4b4b4b;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                  "
+                  >{{ item.title }}</v-list-item-title
                 >
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title
-                    style="
-                      font-color: #4b4b4b;
-                      margin-right: 5px;
-                      margin-top: 5px;
-                      margin-bottom: 5px;
-                    "
-                    >{{ item.title }}</v-list-item-title
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-btn
-              color="#ff9d66"
-              depressed
-              large
-              type="submit"
-              v-on:click="signOut"
-            >
-              <span style="color: #ffffff">Sign Out</span>
-            </v-btn>
-          </div>
-        </v-navigation-drawer>
-      </v-col>
-
-      <v-col col="12" md="10">
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-btn
+            color="#ff9d66"
+            depressed
+            large
+            type="submit"
+            v-on:click="signOut"
+          >
+            <span style="color: #ffffff">Sign Out</span>
+          </v-btn>
+        </div>
+      </v-navigation-drawer>
+      <v-col style="flex: 1;" class="content">
         <div>
           <div>
             <v-container style="padding-bottom: 0px">
@@ -1114,12 +1112,12 @@
                 </v-dialog>
               </div>
               <br />
-              <div>
+              <div style="margin-left: 1vw">
                 <v-btn-toggle
                   v-model="calOrList"
                   rounded
                   outlined
-                  style="margin-left: 1vw"
+                  style="display: flex"
                   background-color="white"
                   color="#ff7200"
                   mandatory
@@ -1127,14 +1125,14 @@
                   <v-btn
                     :value="0"
                     color="white"
-                    style="min-width: 12vw; border-color: #ff9d66 !important"
+                    style="flex:1; border-color: #ff9d66 !important"
                   >
                     <v-icon color="#ff9d66">event</v-icon>
                   </v-btn>
                   <v-btn
                     :value="1"
                     color="white"
-                    style="min-width: 12vw; border-color: #ff9d66 !important"
+                    style="flex:1; border-color: #ff9d66 !important"
                   >
                     <v-icon color="#ff9d66">view_list</v-icon>
                   </v-btn>
@@ -1156,9 +1154,8 @@
                   v-model="displayMeetingCalendar"
                   :events="this.$store.state.meetingCalendar"
                   event-color="blue"
+                  width="100%"
                   color="#ff9d66"
-                  width="400"
-                  style="max-width: 400px; min-width: 400px"
                   @click="loadMeetingsCalendar()"
                 ></v-date-picker>
 
@@ -5204,7 +5201,7 @@
           </v-row>
         </div>
       </v-col>
-    </v-row>
+    </div>
   </div>
 </template>
 
@@ -6837,6 +6834,16 @@ export default {
   background-color: rgba(255, 255, 255, 1);
   border-color: white;
   color: white;
+  height: 100vh !important;
+  position: sticky;
+}
+
+.content {
+  max-width: calc(100% - 256px);
+}
+
+.v-picker .div {
+  width: 100% !important;
 }
 
 .v-list--rounded .v-list-item,

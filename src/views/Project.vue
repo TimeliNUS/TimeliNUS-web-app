@@ -12,7 +12,8 @@
         floating
         left
         align="center"
-        class="v-navigation-drawer__border"
+        class="v-navigation-drawer__border "
+        v-bind:class="{isActive: isNavigationBarActive}"
         style="
           padding: 18px;
           font-size: 8px;
@@ -20,6 +21,7 @@
           border-color: white;
           text-align: left;
           font-color: #4b4b4b;
+          min-width: 256px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -87,25 +89,27 @@
         </div>
       </v-navigation-drawer>
 
-      <v-column style="flex: 1">
+      <v-column style="flex: 1;" class="content">
         <div>
-          <v-container style="padding-bottom: 0px; margin-left: 1vw">
-            <span
-              style="
-                margin-top: 10px;
-                color: #4b4b4b;
-                font-size: 32px;
-                display: flex;
-                align-items: flex-start;
-                font-weight: bold;
-              "
-              >Project</span
-            >
-          </v-container>
+          <v-row style="margin-top: 10px; padding-bottom: 0px; margin-left: 1vw; align-items: center">
+            <v-icon class="navigation_button" large v-on:click="setNavigationBarActive" style="padding-left: 10px; padding-right: 10px">menu</v-icon>
+            <v-container class="navigation_title">
+              <span
+                style="
+                  color: #4b4b4b;
+                  font-size: 32px;
+                  display: flex;
+                  align-items: flex-start;
+                  font-weight: bold;
+                "
+                >Project</span
+              >
+            </v-container>
+          </v-row>
         </div>
 
-        <v-row>
-          <v-col col="12" md="4">
+        <v-row style="margin: 0">
+          <v-col col="12" md="4" style="display: flex; flex-direction: column">
             <div style="margin-left: 1vw">
               <v-dialog
                 v-model="dialog"
@@ -120,7 +124,7 @@
                   <v-card
                     outlined
                     color="white"
-                    style="margin-top: 15px; padding: 2px"
+                    style="padding: 2px"
                     :class="`rounded-lg`"
                   >
                     <v-btn
@@ -520,14 +524,15 @@
                 flex-direction: column;
                 justify-content: center;
                 padding-top: 20px !important;
+                flex: 1;
               "
             >
               <v-container
                 :class="`rounded-lg`"
-                style="padding-top: 20px !important; padding: 0px"
+                style="flex: 1; padding: 0px"
               >
                 <v-card
-                  style="padding: 8px ; padding-top: 20px !important; padding-bottom:12px;!important"
+                  style="padding: 8px ; padding-top: 20px !important; padding-bottom:12px;!important; flex: 1; height: 100%"
                   color="#ff9d66"
                   outlined
                   :class="`rounded-xl`"
@@ -696,18 +701,14 @@
           </v-col>
 
           <v-col col="12" md="8">
-            <div style="display: flex">
-              <v-container
-                style="margin-right: auto; margin-left: auto; display: flex"
-                max-width="51vw"
-                min-width="51vw"
+            <div style="display: flex; height: 100%; margin-right: 1vw">
+              <div
+                style="min-width:51vw; height:100%; margin-right: auto; margin-left: auto; display: flex; padding-bottom: 0; width: 100%"
               >
                 <v-card
-                  max-width="51vw"
-                  min-width="51vw"
                   outlined
                   color="#FFE4CB"
-                  style="padding: 14px; display: flex; flex-direction: column"
+                  style="padding: 14px; display: flex; flex-direction: column; width  : 100%; margin-right: 25px;"
                   :class="`rounded-xl`"
                 >
                   <div
@@ -721,7 +722,6 @@
                     <span
                       style="
                         margin-top: 10px;
-                        margin-left: 3vw;
                         color: #4b4b4b;
                         font-size: 20px;
                         display: flex;
@@ -741,7 +741,6 @@
                         display: flex;
                         align-items: center;
                         font-weight: bold;
-                        margin-right: 3vw;
                       "
                       @click="tableView = true"
                     >
@@ -757,7 +756,7 @@
                       :class="`rounded-xl`"
                       class="mx-auto"
                       elevation="0"
-                      max-width="50vw"
+                      min-width="50vw"
                       style="background-color: #ffe4cb"
                     >
                       <v-slide-group
@@ -776,7 +775,6 @@
                             :color="active ? undefined : 'white'"
                             class="ma-2"
                             height="230"
-                            width="330"
                             @click="
                               toggle;
                               passCurrSelectedProject(project);
@@ -786,7 +784,7 @@
                               getMeetingInvProject(project);
                               getConfirmedMeetingProject(project);
                             "
-                            style="padding: 10px; padding-left: 14px"
+                            style="padding: 10px; padding-left: 14px; min-width: 330px"
                           >
                             <v-row style="padding: 5px">
                               <v-col
@@ -876,13 +874,11 @@
                                   </div>
                                 </div>
                               </v-col>
-                              <v-col
-                                col="12"
-                                md="3"
+                              <div
                                 style="
                                   display: flex;
                                   align-items: center;
-                                  padding: 0px !important;
+                                  padding: 5px !important;
                                 "
                               >
                                 <v-progress-circular
@@ -905,7 +901,7 @@
                                     Math.trunc(project.progress * 100) + "%"
                                   }}</span>
                                 </v-progress-circular>
-                              </v-col>
+                              </div>
                             </v-row>
                             <v-divider style="padding: 3px"></v-divider>
                             <span
@@ -1511,18 +1507,15 @@
                     >
                   </div>
                 </v-card>
-              </v-container>
+              </div>
             </div>
           </v-col>
         </v-row>
-        <div v-if="currTodos.length !== 0 || currProject !== null">
-          <v-container
+        <v-row style="margin-left: 1vw; margin-right: 1vw" v-if="currTodos.length !== 0 || currProject !== null">
+          <v-col
             :class="`rounded-xl`"
             style="
-              max-width: 1450px !important;
-              width: 80vw;
-              margin-left: 0.5vw;
-              margin-right: 3vw;
+              width: 100%;
             "
           >
             <v-card
@@ -1531,7 +1524,7 @@
               style="
                 padding: 20px;
                 padding-left: 30px;
-
+                width: 100%;
                 overflow-y: scroll;
               "
               :class="`rounded-xl`"
@@ -3995,8 +3988,8 @@
                 </v-tabs-items>
               </v-card>
             </v-card>
-          </v-container>
-        </div>
+          </v-col>
+        </v-row>
         <div
           v-else
           height="40vh"
@@ -4790,6 +4783,7 @@ export default {
     confirmedSlide: null,
     currGroupmateTodos: [],
     tabTodo: null,
+    isNavigationBarActive: false,
   }),
 
   created() {
@@ -4844,7 +4838,10 @@ export default {
   // },
 
   methods: {
-    
+    setNavigationBarActive() {
+      console.log(this.isNavigationBarActive);
+      this.isNavigationBarActive = !this.isNavigationBarActive
+    },
     getMeetingInvProject(project) {
       console.log(project);
       const invArray = this.$store.state.meetingInvitations;
@@ -6203,6 +6200,44 @@ export default {
   color: white;
   height: 100vh !important;
   position: sticky;
+}
+
+.content {
+  max-width: calc(100% - 256px);
+}
+
+.navigation_button {
+  display: none;
+}
+
+.navigation_title {
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .navigation_button {
+    display: inline-flex;
+  }
+
+  .navigation_title {
+    width: 0;
+  }
+
+  .v-navigation-drawer__border {
+    max-width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    transition: width 1s;transition-timing-function: ease-in;
+  }
+  .v-navigation-drawer__border.isActive {
+    max-width: 256px !important;
+    min-width: 256px !important;
+    padding: 18 !important;   
+    transition: width 1s;transition-timing-function: ease-in;
+  }
+
+  .content {
+    max-width: 100%;
+  }
 }
 
 .v-list--rounded .v-list-item,
