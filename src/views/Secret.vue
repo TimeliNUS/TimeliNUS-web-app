@@ -13,6 +13,7 @@
         left
         align="center"
         class="v-navigation-drawer__border"
+        v-bind:class="{ isActive: isNavigationBarActive }"
         style="
           padding: 18px;
           font-size: 8px;
@@ -86,32 +87,44 @@
         </div>
       </v-navigation-drawer>
 
-      <v-row style="flex: 1; margin: 0; flex-direction: column; flex-wrap: nowrap; margin-left: 25px">
-        <v-row style="margin: 0">
-          <v-col col="12" md="12" style="align-items: flex-end; justify-content: flex-end; display: flex;">
-            <v-row
-              style="
-                margin: 0;
-                display: flex;
-                margin-bottom: 5px;
-              "
-            >
-             <v-col col="12" md="12">
-                <span
-                  style="
-                    margin-top: 10px;
-                    color: #4b4b4b;
-                    font-size: 32px;
-                    display: flex;
-                    align-items: flex-start;
-                    font-weight: bold;
-                  "
-                  >Welcome! {{ this.$store.state.displayUser.name }}</span
-                >
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
+      <v-row
+        class="content"
+        style="
+          flex: 1;
+          margin: 0;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          margin-left: 25px;
+        "
+      >
+        <v-container
+          style="
+            margin-top: 10px;
+            padding-bottom: 0px;
+            display: flex;
+            align-items: center;
+            margin-left: 0;
+          "
+        >
+          <v-icon
+            class="navigation_button"
+            large
+            v-on:click="setNavigationBarActive"
+            style="padding-left: 10px; padding-right: 10px"
+            >menu</v-icon
+          >
+          <span
+            style="
+              color: #4b4b4b;
+              font-size: 32px;
+              display: flex;
+              align-items: flex-start;
+              font-weight: bold;
+            "
+          >
+            Welcome! {{ this.$store.state.displayUser.name }}
+          </span>
+        </v-container>
         <v-row style="margin: 0">
           <v-col col="12" md="8">
             <v-row
@@ -127,7 +140,7 @@
                   min-height="38vh"
                   outlined
                   color="#FFE4CB"
-                  style="display: flex; flex-direction: column; flex: 1; "
+                  style="display: flex; flex-direction: column; flex: 1"
                   :class="`rounded-xl`"
                   height="100%"
                 >
@@ -171,7 +184,12 @@
                   </div>
                   <div
                     v-if="projectLength"
-                    style="display: flex; flex-direction: row; max-width: 60vw; height: 80%"
+                    style="
+                      display: flex;
+                      flex-direction: row;
+                      max-width: 60vw;
+                      height: 80%;
+                    "
                   >
                     <v-sheet
                       :class="`rounded-xl`"
@@ -199,7 +217,12 @@
                             height="100%"
                             width="250"
                             outlined
-                            style="padding: 10px; padding-left: 14px; display: flex; flex-direction: column;"
+                            style="
+                              padding: 10px;
+                              padding-left: 14px;
+                              display: flex;
+                              flex-direction: column;
+                            "
                           >
                             <v-row style="padding: 5px">
                               <v-col
@@ -225,10 +248,7 @@
                                   {{ project.title }}
                                 </v-card-title>
                                 <v-card-text
-                                  style="
-                                    display: flex;
-                                    padding: 2px !important;
-                                  "
+                                  style="display: flex; padding: 2px !important"
                                 >
                                   <div v-if="project.deadline !== null">
                                     <span style="">
@@ -291,7 +311,9 @@
                                 </div>
                               </v-col>
                             </v-row>
-                            <v-row style="padding: 13px; flex: 0; margin-bottom: 5px;">
+                            <v-row
+                              style="padding: 13px; flex: 0; margin-bottom: 5px"
+                            >
                               <span
                                 style="
                                   display: flex;
@@ -371,11 +393,7 @@
                     "
                   >
                     <span
-                      style="
-                        color: #4b4b4b;
-                        font-weight: bold;
-                        font-size: 18px;
-                      "
+                      style="color: #4b4b4b; font-weight: bold; font-size: 18px"
                       >You do not have any project yet. Create one or accept a
                       project invitation.</span
                     >
@@ -395,9 +413,7 @@
                     flex-direction: column;
                   "
                 >
-                  <div
-                    style="padding: 8px; display: flex; flex-direction: row"
-                  >
+                  <div style="padding: 8px; display: flex; flex-direction: row">
                     <span
                       style="
                         margin-top: 10px;
@@ -427,12 +443,14 @@
                   >
                     <div v-if="checkTodayMeetingLength()" style="width: 100%">
                       <div
-                        v-for="meeting in this.$store.state
-                          .confirmedMeetings"
+                        v-for="meeting in this.$store.state.confirmedMeetings"
                         :key="meeting.id"
                         style="width: 100%"
                       >
-                        <div v-if="checkTodayMeetingOrNot(meeting)" style="width: 100%">
+                        <div
+                          v-if="checkTodayMeetingOrNot(meeting)"
+                          style="width: 100%"
+                        >
                           <v-card
                             color="white"
                             outlined
@@ -531,10 +549,7 @@
                             <!-- <span><v-icon color="#ff9d66">place</v-icon> 
               {{meeting.venue}} </span> -->
                             <div
-                              style="
-                                display: flex;
-                                justify-content: flex-start;
-                              "
+                              style="display: flex; justify-content: flex-start"
                             >
                               <span
                                 v-if="
@@ -616,22 +631,25 @@
                                 ><v-icon color="#ff9d66"
                                   >hourglass_bottom</v-icon
                                 >
-                                    Expired by
-                                    {{
-                                      Math.trunc(
-                                        displaySelectedTimeDifference(
-                                          meeting.selectedStartDate
-                                        ) /
-                                          1000 /
-                                          60 /
-                                          60
-                                      ) * -1
-                                    }}
-                                    hours
+                                Expired by
+                                {{
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  ) * -1
+                                }}
+                                hours
                               </span>
 
                               <v-btn
-                              v-if="meeting.isOnlineVenue == true && (meeting.meetingLink !== 'No meeting link')"
+                                v-if="
+                                  meeting.isOnlineVenue == true &&
+                                  meeting.meetingLink !== 'No meeting link'
+                                "
                                 style="margin-left: 2vw"
                                 outlined
                                 rounded
@@ -640,9 +658,9 @@
                                 :href="meeting.meetingLink"
                                 >Join Now</v-btn
                               >
-                                </div>
-                              </v-card>
-                              <v-divider style="color: #ff9d66"></v-divider>
+                            </div>
+                          </v-card>
+                          <v-divider style="color: #ff9d66"></v-divider>
                         </div>
                       </div>
                     </div>
@@ -665,9 +683,7 @@
                     flex-direction: column;
                   "
                 >
-                  <div
-                    style="padding: 8px; display: flex; flex-direction: row"
-                  >
+                  <div style="padding: 8px; display: flex; flex-direction: row">
                     <span
                       style="
                         margin-top: 10px;
@@ -752,7 +768,6 @@
                         :key="project.id"
                         style="margin-left: 0.5vw; margin-right: 0.5vw"
                       >
-                      
                         <div v-if="project.todos.length !== 0">
                           <v-card
                             outlined
@@ -762,8 +777,7 @@
                           >
                             <div style="padding: 5px">
                               <span style="color: #ff9d66"
-                                >{{ project.modCode }}
-                                {{ project.title }}</span
+                                >{{ project.modCode }} {{ project.title }}</span
                               >
                             </div>
                             <v-divider style="padding: 5px"></v-divider>
@@ -840,12 +854,12 @@
                   :events="dashboardCalendar()"
                   :event-color="(date) => checkEvents(date)"
                   color="#ff9d66"
-                  width="360"
+                  width="100%"
                   height="100"
                 >
                 </v-date-picker>
                 <v-card
-                  width="360"
+                  width="100%"
                   min-height="45vh"
                   outlined
                   color="#FFE4CB"
@@ -866,6 +880,7 @@
                       font-weight: bold;
                       font-size: 18px;
                       display: flex;
+                      text-align: left;
                     "
                   >
                     Meetings on {{ date }}
@@ -892,10 +907,7 @@
                           :class="`rounded-xl`"
                         >
                           <span
-                            style="
-                              display: flex;
-                              justify-content: flex-start;
-                            "
+                            style="display: flex; justify-content: flex-start"
                             >{{ meeting.project.get("modCode") }}
                             {{ meeting.project.get("title") }}</span
                           >
@@ -993,6 +1005,7 @@
                       font-weight: bold;
                       font-size: 18px;
                       display: flex;
+                      text-align: left;
                     "
                   >
                     Todos on {{ date }}
@@ -1052,14 +1065,9 @@
                             <v-expansion-panel-content>
                               <v-divider style="padding: 5px"></v-divider>
 
-                              <div
-                                v-for="todo in project.todos"
-                                :key="todo.id"
-                              >
+                              <div v-for="todo in project.todos" :key="todo.id">
                                 <div
-                                  v-if="
-                                    changeTodoDate(todo.deadline) === date
-                                  "
+                                  v-if="changeTodoDate(todo.deadline) === date"
                                   style="
                                     padding: 5px;
                                     display: flex;
@@ -1162,6 +1170,7 @@ export default {
       searchEmail: "",
       searchId: "",
       searchAvatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+      isNavigationBarActive: false,
     };
   },
 
@@ -1234,6 +1243,10 @@ export default {
   },
 
   methods: {
+    setNavigationBarActive() {
+      console.log(this.isNavigationBarActive);
+      this.isNavigationBarActive = !this.isNavigationBarActive;
+    },
     checkTodayMeetingOrNot(meeting) {
       const currLocalDate = meeting.selectedStartDate
         .toDate()
@@ -1691,10 +1704,57 @@ export default {
   border-radius: 20px !important;
 }
 
-
 .v-navigation-drawer__border {
+  background-color: rgba(255, 255, 255, 1);
+  border-color: white;
+  color: white;
   height: 100vh !important;
   position: sticky;
+}
+
+.content {
+  max-width: calc(100% - 256px);
+}
+
+.navigation_button {
+  display: none !important;
+}
+
+.navigation_title {
+  margin: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+  .navigation_button {
+    display: inline-flex !important;
+  }
+
+  .navigation_title {
+    width: 0;
+  }
+
+  .v-navigation-drawer__border {
+    max-width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    transition: width 1s;
+    transition-timing-function: ease-in;
+  }
+  .v-navigation-drawer__border.isActive {
+    max-width: 256px !important;
+    min-width: 256px !important;
+    padding: 18 !important;
+    transition: width 1s;
+    transition-timing-function: ease-in;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+}
+
+.v-picker .div {
+  width: 100% !important;
 }
 
 /* .avatars {
