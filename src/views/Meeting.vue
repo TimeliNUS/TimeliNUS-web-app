@@ -6400,6 +6400,7 @@ export default {
       // await this.addMeetingGroupmates(response);
       this.$store.dispatch("getMeetingInvitations");
       this.$store.dispatch("getMeetingPendings");
+
       await db
         .collection("project")
         .doc(this.meetingProject)
@@ -6490,8 +6491,9 @@ export default {
         displayMeetingDateRange: this.displayMeetingDateRange,
       });
       // await this.addMeetingGroupmates(response);
-      this.$store.dispatch("assignMeetingCalendar");
+      
       this.$store.dispatch("getConfirmedMeeting");
+      await this.$store.dispatch("assignMeetingCalendar");
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
@@ -6673,7 +6675,7 @@ export default {
         .collection("project")
         .doc(this.meetingProject)
         .get();
-      const data = await docRef.get("groupmates");
+      const data = await docRef.get("confirmedInvitations");
       for (let i = 0; i < data.length; i++) {
         const currGroupmate = await data[i].get();
         this.tempGroupmates.push({
