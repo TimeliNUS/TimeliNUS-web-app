@@ -750,6 +750,7 @@
 
                     <v-btn
                       align="right"
+                      class="hide-on-sm"
                       text
                       style="
                         margin-top: 10px;
@@ -6123,8 +6124,8 @@ export default {
           ),
         });
 
-      this.$store.dispatch("getProjectInvitations")
-      this.$store.dispatch("getProjects")
+      this.$store.dispatch("getProjectInvitations");
+      this.$store.dispatch("getProjects");
     },
 
     async declineProject(projectInvitation) {
@@ -6287,6 +6288,9 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
+  .hide-on-sm {
+    display: none !important;
+  }
   .description {
     justify-content: center !important;
   }
