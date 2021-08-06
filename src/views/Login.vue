@@ -16,9 +16,10 @@
                 alt=""
               ></v-img>
               <br />
+              <span style="font-size: 24px; color: #001847; font-weight: bold">Slick without Panic</span>
               <br />
-              <br />
-              <br />
+              
+              
             </div>
           </v-col>
 
