@@ -5626,8 +5626,8 @@ export default {
         // dateSwitchValue: this.dateSwitchValue,
         deadline: this.finalDeadline,
         // displayDeadline: this.displayDeadline,
-        groupmates: [],
-        groupmates_invited: [],
+        confirmedInvitations: [],
+        invitations: [],
         groupmates_declined: [],
         moduleCode: this.modCode,
       });
@@ -5699,7 +5699,7 @@ export default {
         // deadlineTime: this.myDeadlineTime,
         // deadlineDate: this.myDeadline,
         includeTime: this.switchValue,
-        groupmates: [],
+        confirmedInvitations: [],
         // dateSwitchValue: this.dateSwitchValue,
         deadline: this.finalDeadline,
         // displayDeadline: this.displayDeadline,
@@ -5897,7 +5897,7 @@ export default {
           db.collection("project")
             .doc(project.id)
             .update({
-              groupmates: firebase.firestore.FieldValue.arrayUnion(
+              confirmedInvitations: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.finalGroupmates[i])
               ),
             });
@@ -5905,7 +5905,7 @@ export default {
           db.collection("project")
             .doc(project.id)
             .update({
-              groupmates_invited: firebase.firestore.FieldValue.arrayUnion(
+              invitations: firebase.firestore.FieldValue.arrayUnion(
                 db.collection("user").doc(this.finalGroupmates[i])
               ),
             });
@@ -5919,7 +5919,7 @@ export default {
           db.collection("project")
             .doc(project.id)
             .update({
-              groupmates: firebase.firestore.FieldValue.arrayRemove(
+              confirmedInvitations: firebase.firestore.FieldValue.arrayRemove(
                 db.collection("user").doc(this.oldGroupmates[i])
               ),
             });

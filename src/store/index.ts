@@ -555,9 +555,9 @@ async function getProjects(state: any): Promise<Project[]> {
       switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
       dateSwitchValue: doc.data().deadline ? false : true,
       displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().groupmates ?? "",
-      groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
-      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
+      groupmatesAvatar: await getGroupmatesAvatar(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
+      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
     });
   }))
   console.log(projects);
@@ -649,8 +649,8 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
       switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
       dateSwitchValue: doc.data().deadline ? false : true,
       displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().groupmates ?? "",
-      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
+      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
     });
   }))
   console.log(projects);
@@ -699,8 +699,8 @@ async function getCalendarProjects(state: any): Promise<TodayProject[]> {
       switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
       dateSwitchValue: doc.data().deadline ? false : true,
       displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().groupmates ?? "",
-      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
+      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
     });
   }))
   console.log(projects);
