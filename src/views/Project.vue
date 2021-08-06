@@ -6213,7 +6213,7 @@ export default {
 .navigation_title {
   margin: 0;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1200px) {
   .navigation_button {
     display: inline-flex;
   }
@@ -6263,7 +6263,7 @@ export default {
 .v-slide-group__prev {
   align-items: center;
   display: flex;
-  flex: 0 1 52px;
+  flex: 0 1 40px;
   justify-content: center;
   min-width: 40px !important ;
 }
