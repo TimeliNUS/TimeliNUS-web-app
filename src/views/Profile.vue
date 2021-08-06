@@ -6,322 +6,366 @@
       min-height: 100vh;
     "
   >
-    <v-row>
-      <v-col col="12" md="2">
-        <v-navigation-drawer
-          absolute
-          permanent
-          floating
-          left
-          align="center"
-          class="v-navigation-drawer__border"
+    <div style="display: flex">
+      <v-navigation-drawer
+        permanent
+        floating
+        left
+        align="center"
+        class="v-navigation-drawer__border"
+        v-bind:class="{ isActive: isNavigationBarActive }"
+        style="
+          padding: 18px;
+          font-size: 8px;
+          font-weight: bold;
+          border-color: white;
+          text-align: left;
+          font-color: #4b4b4b;
+          min-width: 256px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div style="display: flex; flex-direction: column; height: 100%">
+          <v-img
+            width="160"
+            src="@/assets/orbital_logo_latest.png"
+            alt=""
+            contain
+            style="flex: none; top: 50px; margin-bottom: 50px"
+          ></v-img>
+          <br />
+
+          <v-list
+            :class="`rounded-xl`"
+            rounded
+            nav
+            style="display: flex; flex-direction: column; margin: auto"
+          >
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.title"
+              link
+              :to="item.href"
+              color="#ff7200"
+              style="
+                display: flex;
+                justify-content: center;
+                font-size: 12px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+              "
+            >
+              <v-list-item-icon
+                style="display: flex; justify-content: center; margin: 12px"
+              >
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title
+                  style="
+                    font-color: #4b4b4b;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                  "
+                  >{{ item.title }}</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-btn
+            color="#ff9d66"
+            depressed
+            large
+            type="submit"
+            v-on:click="signOut"
+          >
+            <span style="color: #ffffff">Sign Out</span>
+          </v-btn>
+        </div>
+      </v-navigation-drawer>
+
+      <v-col
+        class="content"
+        style="
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          padding: 20px;
+        "
+      >
+        <div
           style="
-            padding: 18px;
-            font-size: 8px;
-            font-weight: bold;
-            border-color: white;
-            text-align: left;
-            font-color: #4b4b4b;
+            margin-top: 10px;
+            padding-bottom: 0px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
           "
         >
-          <div style="display: flex; flex-direction: column; height: 100%">
-            <v-img
-              width="10vw"
-              src="@/assets/orbital_logo_latest.png"
-              alt=""
-              style="flex: none; top: 20%"
-            ></v-img>
-            <br />
-
-            <v-list
-              :class="`rounded-xl`"
-              rounded
-              nav
-              style="display: flex; flex-direction: column; margin: auto"
-            >
-              <v-list-item
-                v-for="item in navItems"
-                :key="item.title"
-                link
-                :to="item.href"
-                color="#ff7200"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  font-size: 12px;
-                  margin-top: 4px;
-                  margin-bottom: 4px;
-                "
-              >
-                <v-list-item-icon
-                  style="display: flex; justify-content: center; margin: 12px"
-                >
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title
-                    style="
-                      font-color: #4b4b4b;
-                      margin-right: 5px;
-                      margin-top: 5px;
-                      margin-bottom: 5px;
-                    "
-                    >{{ item.title }}</v-list-item-title
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-btn
-              color="#ff9d66"
-              depressed
-              large
-              type="submit"
-              v-on:click="signOut"
-            >
-              <span style="color: #ffffff">Sign Out</span>
-            </v-btn>
-          </div>
-        </v-navigation-drawer>
-      </v-col>
-
-      <v-col col="12" md="10" style="display:flex; justify-content: center; flex-direction: column">
+          <v-icon
+            class="navigation_button"
+            large
+            v-on:click="setNavigationBarActive"
+            style="padding-left: 10px; padding-right: 10px"
+            >menu</v-icon
+          >
+          <span
+            style="
+              color: #4b4b4b;
+              font-size: 32px;
+              display: flex;
+              align-items: flex-start;
+              font-weight: bold;
+            "
+            >Profile</span
+          >
+        </div>
         <div>
-          <div>
-            <v-container style="padding-bottom: 0px">
-              <span
+          <v-img
+            src="@/assets/todo_dashboard.png"
+            contain
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            <v-row
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <v-col
+                col="12"
+                md="6"
                 style="
-                  margin-top: 10px;
-                  color: #4b4b4b;
-                  font-size: 32px;
+                  padding-bottom: 16px;
                   display: flex;
-                  align-items: flex-start;
-                  font-weight: bold;
+                  justify-content: flex-end;
                 "
-                >Profile</span
               >
-              <div>
-                <v-img
-                  src="@/assets/todo_dashboard.png"
-                  style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                  "
+                <v-avatar
+                  left
+                  class="white--text"
+                  size="180"
+                  @mouseover="hover = true"
+                  @mouseleave="hover = false"
                 >
-                  <v-row
+                  <!-- <template> -->
+
+                  <v-img :src="this.$store.state.displayUser.avatar">
+                    <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        class="
+                          d-flex
+                          transition-fast-in-fast-out
+                          v-card--reveal
+                          text-h2
+                          white--text
+                        "
+                        style="height: 100%"
+                      >
+                        <!-- <v-btn icon > -->
+
+                        <v-btn
+                          icon
+                          depressed
+                          :loading="isSelecting"
+                          @click="onButtonClick"
+                        >
+                          <v-icon> cloud_upload </v-icon>
+                        </v-btn>
+                        <input
+                          ref="uploader"
+                          class="d-none"
+                          type="file"
+                          accept="image/*"
+                          @change="onFileChanged"
+                        />
+
+                        <!-- </v-btn> -->
+                      </div>
+                    </v-expand-transition>
+                  </v-img>
+
+                  <!-- </template> -->
+                </v-avatar>
+              </v-col>
+              <v-col
+                col="12"
+                md="6"
+                style="
+                  display: flex;
+                  justify-content: flex-start;
+                  flex-direction: column;
+                "
+              >
+                <v-row style="margin-left: 7px">
+                  <span
                     style="
+                      font-size: 30px;
                       display: flex;
-                      justify-content: center;
-                      align-items: center;
+                      font-weight: bold;
+                      color: white;
                     "
                   >
-                    <v-col
-                      col="12"
-                      md="6"
-                      style="
-                        padding-bottom: 16px;
-                        display: flex;
-                        justify-content: flex-end;
-                      "
-                    >
-                      <v-avatar
-                        left
-                        class="white--text"
-                        size="180"
-                        @mouseover="hover = true"
-                        @mouseleave="hover = false"
+                    {{ this.$store.state.displayUser.name }}
+                  </span>
+                  <v-dialog v-model="dialogName" max-width="600px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        icon
+                        style="margin-left: 12px; margin-top: 5px"
+                        color="white"
+                        @click="dialogName = true"
                       >
-                        <!-- <template> -->
-
-                        <v-img :src="this.$store.state.displayUser.avatar">
-                          <v-expand-transition>
-                            <div
-                              v-if="hover"
-                              class="
-                                d-flex
-                                transition-fast-in-fast-out
-                                v-card--reveal
-                                text-h2
-                                white--text
-                              "
-                              style="height: 100%"
-                            >
-                              <!-- <v-btn icon > -->
-
-                              <v-btn
-                                icon
-                                depressed
-                                :loading="isSelecting"
-                                @click="onButtonClick"
-                              >
-                                <v-icon> cloud_upload </v-icon>
-                              </v-btn>
-                              <input
-                                ref="uploader"
-                                class="d-none"
-                                type="file"
-                                accept="image/*"
-                                @change="onFileChanged"
-                              />
-
-                              <!-- </v-btn> -->
-                            </div>
-                          </v-expand-transition>
-                        </v-img>
-
-                        <!-- </template> -->
-                      </v-avatar>
-                    </v-col>
-                    <v-col
-                      col="12"
-                      md="6"
-                      style="
-                        display: flex;
-                        justify-content: flex-start;
-                        flex-direction: column;
-                      "
-                    >
-                      <v-row style="margin-left: 7px">
-                        <span
-                          style="
-                            font-size: 30px;
-                            display: flex;
-                            font-weight: bold;
-                            color: white;
+                        <v-icon rounded>edit</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-card style="padding: 20px">
+                      <v-text-field
+                        label="New username"
+                        v-model="newUsername"
+                        color="#ff9d66"
+                      ></v-text-field>
+                      <v-spacer></v-spacer>
+                      <v-card-actions
+                        style="dispaly: flex; justify-content: flex-end"
+                      >
+                        <v-btn
+                          color="#ff9d66"
+                          text
+                          @click="
+                            dialogName = false;
+                            clearUsername();
                           "
                         >
-                          {{ this.$store.state.displayUser.name }}
-                        </span>
-                        <v-dialog v-model="dialogName" max-width="600px">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              v-bind="attrs"
-                              v-on="on"
-                              icon
-                              style="margin-left: 12px; margin-top: 5px"
-                              color="white"
-                              @click="dialogName = true"
-                            >
-                              <v-icon rounded>edit</v-icon>
-                            </v-btn>
-                          </template>
-                          <v-card style="padding: 20px">
-                            <v-text-field
-                              label="New username"
-                              v-model="newUsername"
-                              color="#ff9d66"
-                            ></v-text-field>
-                            <v-spacer></v-spacer>
-                            <v-card-actions
-                              style="dispaly: flex; justify-content: flex-end"
-                            >
-                              <v-btn
-                                color="#ff9d66"
-                                text
-                                @click="
-                                  dialogName = false;
-                                  clearUsername();
-                                "
-                              >
-                                Cancel
-                              </v-btn>
-                              <v-btn
-                                color="#ff9d66"
-                                text
-                                @click="
-                                  dialogName = false;
-                                  passinNewName();
-                                "
-                              >
-                                Save
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
-                        
-                      </v-row>
-                      <v-row style="margin-left: 7px">
-                        
-                        <span
-                          style="font-size: 20px; display: flex; color: white"
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          color="#ff9d66"
+                          text
+                          @click="
+                            dialogName = false;
+                            passinNewName();
+                          "
                         >
-                          {{ this.$store.state.displayUser.email }}
-                        </span>
-                      </v-row>
-                      <v-row style="margin-left: 7px; display:flex; align-items: center; padding-top:10px; padding-bottom:10px; max-width:15vw; ">
-                      <v-divider></v-divider>
-                      </v-row>
-                      <v-row style="margin-left: 7px; display:flex; align-items: center">
-                        <span  style="font-size: 16px; display: flex; color: white">Set default NUSMods calendar: </span>
-                      <v-dialog v-model="dialogCalendar" max-width="600px">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              v-bind="attrs"
-                              v-on="on"
-                              icon
-                              
-                              color="white"
-                              @click="dialogCalendar = true; getCalendar()"
-                            >
-                              <v-icon rounded>calendar_today</v-icon>
-                            </v-btn>
-                          </template>
-                          <v-card style="padding: 20px">
-                            <v-text-field
-                              label="Set default NUSMods calendar"
-                              v-model="newCalendar"
-                              color="#ff9d66"
-                            ></v-text-field>
-                            <v-spacer></v-spacer>
-                            <v-card-actions
-                              style="dispaly: flex; justify-content: flex-end"
-                            >
-                              <v-btn
-                                color="#ff9d66"
-                                text
-                                @click="
-                                  dialogCalendar = false;
-                                  clearCalendar();
-                                "
-                              >
-                                Cancel
-                              </v-btn>
-                              <v-btn
-                                color="#ff9d66"
-                                text
-                                @click="
-                                  dialogCalendar = false;
-                                  passinNewCalendar();
-                                "
-                              >
-                                Save
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
-                      </v-row>  
-                      <v-row style="margin-left: 7px; display:flex; align-items: center">
-                        <div v-if=" this.$store.state.displayUser.zoomRefreshToken == null" style="font-size: 16px; display: flex; color: white" >
-                          <span>Not Linked with Zoom</span><v-btn text small color="white" @click="redirectToZoomLogin()">Click here to link with zoom</v-btn></div>
-                        <div v-if="this.$store.state.displayUser.zoomRefreshToken != null" style="font-size: 16px; display: flex; color: white">Linked with Zoom</div>
-                      </v-row>
-                      
-                    </v-col>
-                  </v-row>
-                </v-img>
-              </div>
-            </v-container>
-          </div>
-          
-          <div></div>
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-row>
+                <v-row style="margin-left: 7px">
+                  <span style="font-size: 20px; display: flex; color: white">
+                    {{ this.$store.state.displayUser.email }}
+                  </span>
+                </v-row>
+                <v-row
+                  style="
+                    margin-left: 7px;
+                    display: flex;
+                    align-items: center;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    max-width: 15vw;
+                  "
+                >
+                  <v-divider></v-divider>
+                </v-row>
+                <v-row
+                  style="margin-left: 7px; display: flex; align-items: center"
+                >
+                  <span style="font-size: 16px; display: flex; color: white"
+                    >Set default NUSMods calendar:
+                  </span>
+                  <v-dialog v-model="dialogCalendar" max-width="600px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        icon
+                        color="white"
+                        @click="
+                          dialogCalendar = true;
+                          getCalendar();
+                        "
+                      >
+                        <v-icon rounded>calendar_today</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-card style="padding: 20px">
+                      <v-text-field
+                        label="Set default NUSMods calendar"
+                        v-model="newCalendar"
+                        color="#ff9d66"
+                      ></v-text-field>
+                      <v-spacer></v-spacer>
+                      <v-card-actions
+                        style="dispaly: flex; justify-content: flex-end"
+                      >
+                        <v-btn
+                          color="#ff9d66"
+                          text
+                          @click="
+                            dialogCalendar = false;
+                            clearCalendar();
+                          "
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          color="#ff9d66"
+                          text
+                          @click="
+                            dialogCalendar = false;
+                            passinNewCalendar();
+                          "
+                        >
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-row>
+                <v-row
+                  style="margin-left: 7px; display: flex; align-items: center"
+                >
+                  <div
+                    v-if="
+                      this.$store.state.displayUser.zoomRefreshToken == null
+                    "
+                    style="font-size: 16px; display: flex; color: white"
+                  >
+                    <span>Not Linked with Zoom</span
+                    ><v-btn
+                      text
+                      small
+                      color="white"
+                      @click="redirectToZoomLogin()"
+                      >Click here to link with zoom</v-btn
+                    >
+                  </div>
+                  <div
+                    v-if="
+                      this.$store.state.displayUser.zoomRefreshToken != null
+                    "
+                    style="font-size: 16px; display: flex; color: white"
+                  >
+                    Linked with Zoom
+                  </div>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-img>
         </div>
       </v-col>
-    </v-row>
+    </div>
   </div>
 </template>
 
@@ -454,6 +498,7 @@ export default {
     newCalendar: "",
     zoomRefreshToken: null,
     googleRefreshToken: null,
+    isNavigationBarActive: false,
   }),
 
   computed: {
@@ -505,7 +550,6 @@ export default {
       }
     });
     // this.$store.dispatch('getTasks');
-   
   },
 
   mounted() {
@@ -517,15 +561,26 @@ export default {
   },
 
   methods: {
+    setNavigationBarActive() {
+      console.log(this.isNavigationBarActive);
+      this.isNavigationBarActive = !this.isNavigationBarActive;
+    },
     async getCalendar() {
-      const docRef = await db.collection("user").doc(this.$store.state.user.uid).get()
-      const calendar = docRef.get("calendar") ? docRef.get("calendar") : "No default calendar"
-      this.newCalendar = calendar
+      const docRef = await db
+        .collection("user")
+        .doc(this.$store.state.user.uid)
+        .get();
+      const calendar = docRef.get("calendar")
+        ? docRef.get("calendar")
+        : "No default calendar";
+      this.newCalendar = calendar;
     },
 
     redirectToZoomLogin() {
-      window.location.href = 
-      'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "' + this.$store.state.user.uid + '"}';
+      window.location.href =
+        'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "' +
+        this.$store.state.user.uid +
+        '"}';
     },
     // async getZoomRefreshToken() {
     //   const docRef = await db.collection("accounts").doc(this.$store.state.user.uid).get()
@@ -537,7 +592,7 @@ export default {
       this.newUsername = "";
     },
 
-     clearCalendar() {
+    clearCalendar() {
       this.newCalendar = "";
     },
 
@@ -722,6 +777,49 @@ export default {
   background-color: rgba(255, 255, 255, 1);
   border-color: white;
   color: white;
+  height: 100vh !important;
+  position: sticky;
+}
+
+.content {
+  max-width: calc(100% - 256px);
+}
+
+.navigation_button {
+  display: none;
+}
+
+.navigation_title {
+  margin: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+  .navigation_button {
+    display: inline-flex;
+  }
+
+  .navigation_title {
+    width: 0;
+  }
+
+  .v-navigation-drawer__border {
+    max-width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    transition: width 1s;
+    transition-timing-function: ease-in;
+  }
+  .v-navigation-drawer__border.isActive {
+    max-width: 256px !important;
+    min-width: 256px !important;
+    padding: 18 !important;
+    transition: width 1s;
+    transition-timing-function: ease-in;
+  }
+
+  .content {
+    max-width: 100%;
+  }
 }
 
 .v-list--rounded .v-list-item,

@@ -147,6 +147,7 @@ export default {
           .createUserWithEmailAndPassword(this.email, this.password)
           .then((userCredential) => {
             const user = userCredential.user;
+            user.updateProfile({ displayName: this.name });
             console.log(firebase.auth().currentUser);
           });
         // console.log(user);
