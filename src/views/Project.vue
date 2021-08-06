@@ -12,8 +12,8 @@
         floating
         left
         align="center"
-        class="v-navigation-drawer__border "
-        v-bind:class="{isActive: isNavigationBarActive}"
+        class="v-navigation-drawer__border"
+        v-bind:class="{ isActive: isNavigationBarActive }"
         style="
           padding: 18px;
           font-size: 8px;
@@ -89,10 +89,23 @@
         </div>
       </v-navigation-drawer>
 
-      <v-column style="flex: 1;" class="content">
+      <v-column style="flex: 1" class="content">
         <div>
-          <v-row style="margin-top: 10px; padding-bottom: 0px; margin-left: 1vw; align-items: center">
-            <v-icon class="navigation_button" large v-on:click="setNavigationBarActive" style="padding-left: 10px; padding-right: 10px">menu</v-icon>
+          <v-row
+            style="
+              margin-top: 10px;
+              padding-bottom: 0px;
+              margin-left: 1vw;
+              align-items: center;
+            "
+          >
+            <v-icon
+              class="navigation_button"
+              large
+              v-on:click="setNavigationBarActive"
+              style="padding-left: 10px; padding-right: 10px"
+              >menu</v-icon
+            >
             <v-container class="navigation_title">
               <span
                 style="
@@ -197,9 +210,7 @@
                                   <div v-if="tempGroupmates.length !== 0">
                                     <v-row>
                                       <div
-                                        v-for="(
-                                          user, index
-                                        ) in tempGroupmates"
+                                        v-for="(user, index) in tempGroupmates"
                                         :key="user.id"
                                       >
                                         <v-chip
@@ -367,11 +378,7 @@
                                   </v-date-picker>
                                 </v-menu>
                                 <v-row style="padding-top: 5px">
-                                  <v-col
-                                    cols="12"
-                                    md="6"
-                                    style="display: flex"
-                                  >
+                                  <v-col cols="12" md="6" style="display: flex">
                                     <v-switch
                                       :disabled="dateSwitchValue == 1"
                                       inset
@@ -500,9 +507,8 @@
                           "
                         >
                           <span style="color: #4b4b4b; margin-bottom: 10px"
-                            >Project has been created successfully.
-                            Invitations will be sent to groupmates
-                            added.</span
+                            >Project has been created successfully. Invitations
+                            will be sent to groupmates added.</span
                           >
                           <v-btn
                             text
@@ -527,10 +533,7 @@
                 flex: 1;
               "
             >
-              <v-container
-                :class="`rounded-lg`"
-                style="flex: 1; padding: 0px"
-              >
+              <v-container :class="`rounded-lg`" style="flex: 1; padding: 0px">
                 <v-card
                   style="padding: 8px ; padding-top: 20px !important; padding-bottom:12px;!important; flex: 1; height: 100%"
                   color="#ff9d66"
@@ -703,12 +706,26 @@
           <v-col col="12" md="8">
             <div style="display: flex; height: 100%; margin-right: 1vw">
               <div
-                style="min-width:51vw; height:100%; margin-right: auto; margin-left: auto; display: flex; padding-bottom: 0; width: 100%"
+                style="
+                  min-width: 51vw;
+                  height: 100%;
+                  margin-right: auto;
+                  margin-left: auto;
+                  display: flex;
+                  padding-bottom: 0;
+                  width: 100%;
+                "
               >
                 <v-card
                   outlined
                   color="#FFE4CB"
-                  style="padding: 14px; display: flex; flex-direction: column; width  : 100%; margin-right: 25px;"
+                  style="
+                    padding: 14px;
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+                    margin-right: 25px;
+                  "
                   :class="`rounded-xl`"
                 >
                   <div
@@ -748,10 +765,7 @@
                     </v-btn>
                   </div>
 
-                  <div
-                    v-if="length"
-                    style="display: flex; flex-direction: row"
-                  >
+                  <div v-if="length" style="display: flex; flex-direction: row">
                     <v-sheet
                       :class="`rounded-xl`"
                       class="mx-auto"
@@ -765,8 +779,7 @@
                         show-arrows
                       >
                         <v-slide-item
-                          v-for="(project, index) in this.$store.state
-                            .projects"
+                          v-for="(project, index) in this.$store.state.projects"
                           :key="project.id"
                           v-slot="{ active, toggle }"
                         >
@@ -784,7 +797,11 @@
                               getMeetingInvProject(project);
                               getConfirmedMeetingProject(project);
                             "
-                            style="padding: 10px; padding-left: 14px; min-width: 330px"
+                            style="
+                              padding: 10px;
+                              padding-left: 14px;
+                              min-width: 330px;
+                            "
                           >
                             <v-row style="padding: 5px">
                               <v-col
@@ -810,10 +827,7 @@
                                   {{ project.title }}
                                 </v-card-title>
                                 <v-card-text
-                                  style="
-                                    display: flex;
-                                    padding: 2px !important;
-                                  "
+                                  style="display: flex; padding: 2px !important"
                                 >
                                   <div v-if="project.deadline !== null">
                                     <span style="">
@@ -922,7 +936,8 @@
                                 "
                                 >groups</v-icon
                               >
-                              {{project.confirmedMeetingLength}} Scheduled Meeting</span
+                              {{ project.confirmedMeetingLength }} Scheduled
+                              Meeting</span
                             >
 
                             <div
@@ -949,7 +964,8 @@
                                   "
                                   >check_circle</v-icon
                                 >
-                                {{project.incompletedTodoLength}} Incompleted Todo
+                                {{ project.incompletedTodoLength }} Incompleted
+                                Todo
                               </span>
                               <div style="display: flex">
                                 <v-dialog
@@ -1117,9 +1133,7 @@
                                                           </v-btn>
                                                         </template>
                                                         <v-card
-                                                          style="
-                                                            padding: 20px;
-                                                          "
+                                                          style="padding: 20px"
                                                         >
                                                           <v-card-actions>
                                                             <v-text-field
@@ -1153,9 +1167,7 @@
                                                               </v-list-item-avatar>
                                                               {{ searchName }}
                                                               <br />
-                                                              {{
-                                                                searchEmail
-                                                              }}
+                                                              {{ searchEmail }}
                                                               <br />
 
                                                               <v-list-item-action>
@@ -1368,9 +1380,7 @@
                                               color="#ff9d66"
                                               text
                                               @click="
-                                                display[
-                                                  project.title
-                                                ] = false;
+                                                display[project.title] = false;
                                                 clearInfo();
                                               "
                                             >
@@ -1381,9 +1391,7 @@
                                               text
                                               :disabled="!valid"
                                               @click="
-                                                display[
-                                                  project.title
-                                                ] = false;
+                                                display[project.title] = false;
                                                 checkEdit(project);
                                               "
                                             >
@@ -1480,6 +1488,7 @@
                   <div
                     v-else
                     style="padding:85px; display:flex' align-items: center; justify-content: center"
+                    class="empty_message"
                   >
                     <span
                       style="
@@ -1487,8 +1496,8 @@
                         font-weight: bold;
                         font-size: 16px;
                       "
-                      >You do not have any project yet. Create a new one or accept
-                      any project invitation</span
+                      >You do not have any project yet. Create a new one or
+                      accept any project invitation</span
                     >
                   </div>
                   <div>
@@ -1503,6 +1512,7 @@
                         margin-right: 3vw;
                         justify-content: flex-end;
                       "
+                      class="description"
                       >Click any project to see more details</span
                     >
                   </div>
@@ -1511,23 +1521,16 @@
             </div>
           </v-col>
         </v-row>
-        <v-row style="margin-left: 1vw; margin-right: 1vw" v-if="currTodos.length !== 0 || currProject !== null">
-          <v-col
-            :class="`rounded-xl`"
-            style="
-              width: 100%;
-            "
-          >
+        <v-row
+          style="margin-left: 1vw; margin-right: 1vw"
+          v-if="currTodos.length !== 0 || currProject !== null"
+        >
+          <v-col :class="`rounded-xl`" style="width: 100%">
             <v-card
               outlined
               color="#FFE4CB"
-              style="
-                padding: 20px;
-                padding-left: 30px;
-                width: 100%;
-                overflow-y: scroll;
-              "
-              :class="`rounded-xl`"
+              style="padding: 20px; padding-left: 30px; width: 100%"
+              :class="`rounded-xl project-card`"
             >
               <div style="display: flex; justify-content: space-between">
                 <span
@@ -1577,7 +1580,7 @@
                 outlined
                 color="#ff9d66"
                 style="padding: 20px; overflow-y: scroll; max-height: 61vh"
-                :class="`rounded-xl`"
+                :class="`rounded-xl project-card`"
               >
                 <v-tabs
                   :class="`rounded-xl`"
@@ -1593,9 +1596,9 @@
                 </v-tabs>
                 <v-tabs-items v-model="tab" style="background-color: #ff9d66">
                   <v-tab-item style="background-color: #ff9d66">
-                    <v-container
+                    <div
                       style="background-color: #ffe4cb; border-radius: 24px"
-                      :class="`rounded-xl`"
+                      class="rounded-xl"
                     >
                       <v-card
                         color="#FFE4CB"
@@ -1604,10 +1607,8 @@
                         style="padding: 10px"
                       >
                         <div
-                          style="
-                            display: flex;
-                            justify-content: space-between;
-                          "
+                          style="display: flex; justify-content: space-between"
+                          class="project-meeting-bar"
                         >
                           <v-card-title>Meetings</v-card-title>
                           <v-btn outlined
@@ -1621,7 +1622,7 @@
                             ></v-btn
                           >
                         </div>
-                        <v-row style="display:flex; justify-content:center">
+                        <v-row style="display: flex; justify-content: center">
                           <v-tabs
                             style="padding: 10px"
                             v-model="tabMeeting"
@@ -1702,9 +1703,7 @@
                                                     padding-right: 3px !important;
                                                   "
                                                 >
-                                                  {{
-                                                    meetingInv.projectTitle
-                                                  }}
+                                                  {{ meetingInv.projectTitle }}
                                                 </v-card-text>
                                                 <v-card-title
                                                   style="display:flex; padding-top: 0px !important; padding-bottom :3px !important;
@@ -1764,9 +1763,7 @@
                                                         width="20px;"
                                                         >schedule</v-icon
                                                       >
-                                                      {{
-                                                        meetingInv.startTime
-                                                      }}
+                                                      {{ meetingInv.startTime }}
                                                       -
                                                       {{ meetingInv.endTime }}
                                                       ({{
@@ -1783,76 +1780,79 @@
                                                     padding-bottom: 7px !important;
                                                   "
                                                 >
-                                                    <v-row
-                                            style="
-                                              display: flex;
-                                              align-items: center;
-                                            "
-                                          >
-                                            <v-col
-                                              cols="12"
-                                              md="7"
-                                              style="display: flex"
-                                            >
-                                              <div>
-                                                <span style="">
-                                                  <v-icon
-                                                    color="#ff9d66"
-                                                    width="20px;"
-                                                    >place</v-icon
-                                                  >
-                                                  {{ meetingInv.venue }}</span
-                                                >
-                                              </div>
-                                            </v-col>
-                                            <v-col
-                                              cols="12"
-                                              md="5"
-                                              style="
-                                                display: flex;
-                                                padding-top: 6px !important;
-                                                justify-content: center;
-                                              "
-                                            >
-                                              <div
-                                                style="
-                                                  padding-bottom: 0px !important;
-                                                  display: inline-flex;
-                                                  flex-direction: row-reverse;
-                                                  justify-content: flex-end;
-                                                  padding-left: 12px;
-                                                "
-                                              >
-                                                <div
-                                                  v-for="groupmate in meetingInv.groupmates"
-                                                  :key="groupmate.id"
-                                                >
-                                                  <div
+                                                  <v-row
                                                     style="
-                                                      margin-left: -15px;
-                                                      padding-bottom: 0px !important;
-                                                      padding-top: 3px !important;
-                                                      padding-left: 3px !important;
-                                                      padding-right: 3px !important;
+                                                      display: flex;
+                                                      align-items: center;
                                                     "
                                                   >
-                                                    <v-avatar
-                                                      :size="30"
+                                                    <v-col
+                                                      cols="12"
+                                                      md="7"
+                                                      style="display: flex"
+                                                    >
+                                                      <div>
+                                                        <span style="">
+                                                          <v-icon
+                                                            color="#ff9d66"
+                                                            width="20px;"
+                                                            >place</v-icon
+                                                          >
+                                                          {{
+                                                            meetingInv.venue
+                                                          }}</span
+                                                        >
+                                                      </div>
+                                                    </v-col>
+                                                    <v-col
+                                                      cols="12"
+                                                      md="5"
                                                       style="
-                                                        border: 2px solid #fff;
+                                                        display: flex;
+                                                        padding-top: 6px !important;
+                                                        justify-content: center;
                                                       "
                                                     >
-                                                      <v-img
-                                                        :src="
-                                                          groupmate.avatar
+                                                      <div
+                                                        style="
+                                                          padding-bottom: 0px !important;
+                                                          display: inline-flex;
+                                                          flex-direction: row-reverse;
+                                                          justify-content: flex-end;
+                                                          padding-left: 12px;
                                                         "
-                                                      ></v-img
-                                                    ></v-avatar>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </v-col>
-                                          </v-row>
+                                                      >
+                                                        <div
+                                                          v-for="groupmate in meetingInv.groupmates"
+                                                          :key="groupmate.id"
+                                                        >
+                                                          <div
+                                                            style="
+                                                              margin-left: -15px;
+                                                              padding-bottom: 0px !important;
+                                                              padding-top: 3px !important;
+                                                              padding-left: 3px !important;
+                                                              padding-right: 3px !important;
+                                                            "
+                                                          >
+                                                            <v-avatar
+                                                              :size="30"
+                                                              style="
+                                                                border: 2px
+                                                                  solid #fff;
+                                                              "
+                                                            >
+                                                              <v-img
+                                                                :src="
+                                                                  groupmate.avatar
+                                                                "
+                                                              ></v-img
+                                                            ></v-avatar>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </v-col>
+                                                  </v-row>
                                                 </v-card-text>
                                                 <v-card-text
                                                   style="
@@ -1885,9 +1885,7 @@
                                                       small
                                                       color="#ff9d66"
                                                       @click="
-                                                        goMeetingInv(
-                                                          meetingInv
-                                                        )
+                                                        goMeetingInv(meetingInv)
                                                       "
                                                     >
                                                     </v-btn>
@@ -1915,6 +1913,7 @@
                                   <div
                                     v-else
                                     style="padding:85px; display:flex' align-items: center; justify-content: center"
+                                    class="empty_message"
                                   >
                                     <span
                                       style="
@@ -1922,7 +1921,8 @@
                                         font-weight: bold;
                                         font-size: 16px;
                                       "
-                                      >You do not have any meeting invitation for this project yet.</span
+                                      >You do not have any meeting invitation
+                                      for this project yet.</span
                                     >
                                   </div>
                                 </v-card>
@@ -2069,76 +2069,79 @@
                                                     padding-bottom: 7px !important;
                                                   "
                                                 >
-                                                    <v-row
-                                            style="
-                                              display: flex;
-                                              align-items: center;
-                                            "
-                                          >
-                                            <v-col
-                                              cols="12"
-                                              md="7"
-                                              style="display: flex"
-                                            >
-                                              <div>
-                                                <span style="">
-                                                  <v-icon
-                                                    color="#ff9d66"
-                                                    width="20px;"
-                                                    >place</v-icon
-                                                  >
-                                                  {{ pending.venue }}</span
-                                                >
-                                              </div>
-                                            </v-col>
-                                            <v-col
-                                              cols="12"
-                                              md="5"
-                                              style="
-                                                display: flex;
-                                                padding-top: 6px !important;
-                                                justify-content: center;
-                                              "
-                                            >
-                                              <div
-                                                style="
-                                                  padding-bottom: 0px !important;
-                                                  display: inline-flex;
-                                                  flex-direction: row-reverse;
-                                                  justify-content: flex-end;
-                                                  padding-left: 12px;
-                                                "
-                                              >
-                                                <div
-                                                  v-for="groupmate in pending.groupmates"
-                                                  :key="groupmate.id"
-                                                >
-                                                  <div
+                                                  <v-row
                                                     style="
-                                                      margin-left: -15px;
-                                                      padding-bottom: 0px !important;
-                                                      padding-top: 3px !important;
-                                                      padding-left: 3px !important;
-                                                      padding-right: 3px !important;
+                                                      display: flex;
+                                                      align-items: center;
                                                     "
                                                   >
-                                                    <v-avatar
-                                                      :size="30"
+                                                    <v-col
+                                                      cols="12"
+                                                      md="7"
+                                                      style="display: flex"
+                                                    >
+                                                      <div>
+                                                        <span style="">
+                                                          <v-icon
+                                                            color="#ff9d66"
+                                                            width="20px;"
+                                                            >place</v-icon
+                                                          >
+                                                          {{
+                                                            pending.venue
+                                                          }}</span
+                                                        >
+                                                      </div>
+                                                    </v-col>
+                                                    <v-col
+                                                      cols="12"
+                                                      md="5"
                                                       style="
-                                                        border: 2px solid #fff;
+                                                        display: flex;
+                                                        padding-top: 6px !important;
+                                                        justify-content: center;
                                                       "
                                                     >
-                                                      <v-img
-                                                        :src="
-                                                          groupmate.avatar
+                                                      <div
+                                                        style="
+                                                          padding-bottom: 0px !important;
+                                                          display: inline-flex;
+                                                          flex-direction: row-reverse;
+                                                          justify-content: flex-end;
+                                                          padding-left: 12px;
                                                         "
-                                                      ></v-img
-                                                    ></v-avatar>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </v-col>
-                                          </v-row>
+                                                      >
+                                                        <div
+                                                          v-for="groupmate in pending.groupmates"
+                                                          :key="groupmate.id"
+                                                        >
+                                                          <div
+                                                            style="
+                                                              margin-left: -15px;
+                                                              padding-bottom: 0px !important;
+                                                              padding-top: 3px !important;
+                                                              padding-left: 3px !important;
+                                                              padding-right: 3px !important;
+                                                            "
+                                                          >
+                                                            <v-avatar
+                                                              :size="30"
+                                                              style="
+                                                                border: 2px
+                                                                  solid #fff;
+                                                              "
+                                                            >
+                                                              <v-img
+                                                                :src="
+                                                                  groupmate.avatar
+                                                                "
+                                                              ></v-img
+                                                            ></v-avatar>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </v-col>
+                                                  </v-row>
                                                 </v-card-text>
                                                 <v-card-text
                                                   style="
@@ -2200,6 +2203,7 @@
                                   <div
                                     v-else
                                     style="padding:85px; display:flex' align-items: center; justify-content: center"
+                                    class="empty_message"
                                   >
                                     <span
                                       style="
@@ -2207,7 +2211,8 @@
                                         font-weight: bold;
                                         font-size: 16px;
                                       "
-                                      >You do not have any pending meeting for this project yet.</span
+                                      >You do not have any pending meeting for
+                                      this project yet.</span
                                     >
                                   </div>
                                 </v-card>
@@ -2343,9 +2348,7 @@
                                                         confirmation.startTime
                                                       }}
                                                       -
-                                                      {{
-                                                        confirmation.endTime
-                                                      }}
+                                                      {{ confirmation.endTime }}
                                                       ({{
                                                         confirmation.timeLength
                                                       }}
@@ -2360,76 +2363,79 @@
                                                     padding-bottom: 7px !important;
                                                   "
                                                 >
-                                                    <v-row
-                                            style="
-                                              display: flex;
-                                              align-items: center;
-                                            "
-                                          >
-                                            <v-col
-                                              cols="12"
-                                              md="7"
-                                              style="display: flex"
-                                            >
-                                              <div>
-                                                <span style="">
-                                                  <v-icon
-                                                    color="#ff9d66"
-                                                    width="20px;"
-                                                    >place</v-icon
-                                                  >
-                                                  {{ confirmation.venue }}</span
-                                                >
-                                              </div>
-                                            </v-col>
-                                            <v-col
-                                              cols="12"
-                                              md="5"
-                                              style="
-                                                display: flex;
-                                                padding-top: 6px !important;
-                                                justify-content: center;
-                                              "
-                                            >
-                                              <div
-                                                style="
-                                                  padding-bottom: 0px !important;
-                                                  display: inline-flex;
-                                                  flex-direction: row-reverse;
-                                                  justify-content: flex-end;
-                                                  padding-left: 12px;
-                                                "
-                                              >
-                                                <div
-                                                  v-for="groupmate in confirmation.groupmates"
-                                                  :key="groupmate.id"
-                                                >
-                                                  <div
+                                                  <v-row
                                                     style="
-                                                      margin-left: -15px;
-                                                      padding-bottom: 0px !important;
-                                                      padding-top: 3px !important;
-                                                      padding-left: 3px !important;
-                                                      padding-right: 3px !important;
+                                                      display: flex;
+                                                      align-items: center;
                                                     "
                                                   >
-                                                    <v-avatar
-                                                      :size="30"
+                                                    <v-col
+                                                      cols="12"
+                                                      md="7"
+                                                      style="display: flex"
+                                                    >
+                                                      <div>
+                                                        <span style="">
+                                                          <v-icon
+                                                            color="#ff9d66"
+                                                            width="20px;"
+                                                            >place</v-icon
+                                                          >
+                                                          {{
+                                                            confirmation.venue
+                                                          }}</span
+                                                        >
+                                                      </div>
+                                                    </v-col>
+                                                    <v-col
+                                                      cols="12"
+                                                      md="5"
                                                       style="
-                                                        border: 2px solid #fff;
+                                                        display: flex;
+                                                        padding-top: 6px !important;
+                                                        justify-content: center;
                                                       "
                                                     >
-                                                      <v-img
-                                                        :src="
-                                                          groupmate.avatar
+                                                      <div
+                                                        style="
+                                                          padding-bottom: 0px !important;
+                                                          display: inline-flex;
+                                                          flex-direction: row-reverse;
+                                                          justify-content: flex-end;
+                                                          padding-left: 12px;
                                                         "
-                                                      ></v-img
-                                                    ></v-avatar>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </v-col>
-                                          </v-row>
+                                                      >
+                                                        <div
+                                                          v-for="groupmate in confirmation.groupmates"
+                                                          :key="groupmate.id"
+                                                        >
+                                                          <div
+                                                            style="
+                                                              margin-left: -15px;
+                                                              padding-bottom: 0px !important;
+                                                              padding-top: 3px !important;
+                                                              padding-left: 3px !important;
+                                                              padding-right: 3px !important;
+                                                            "
+                                                          >
+                                                            <v-avatar
+                                                              :size="30"
+                                                              style="
+                                                                border: 2px
+                                                                  solid #fff;
+                                                              "
+                                                            >
+                                                              <v-img
+                                                                :src="
+                                                                  groupmate.avatar
+                                                                "
+                                                              ></v-img
+                                                            ></v-avatar>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </v-col>
+                                                  </v-row>
                                                 </v-card-text>
                                                 <v-card-text
                                                   style="
@@ -2493,6 +2499,7 @@
                                   <div
                                     v-else
                                     style="padding:85px; display:flex' align-items: center; justify-content: center"
+                                    class="empty_message"
                                   >
                                     <span
                                       style="
@@ -2500,7 +2507,8 @@
                                         font-weight: bold;
                                         font-size: 16px;
                                       "
-                                      >You do not have any meeting confirmation for this project yet.</span
+                                      >You do not have any meeting confirmation
+                                      for this project yet.</span
                                     >
                                   </div>
                                 </v-card>
@@ -2577,42 +2585,40 @@
                                               >{{ meeting.title }}</span
                                             >
                                             <div
-                                                style="
-                                                  padding-bottom: 0px !important;
-                                                  display: inline-flex;
-                                                  flex-direction: row-reverse;
-                                                  justify-content: flex-end;
-                                                  padding-left: 12px;
-                                                "
+                                              style="
+                                                padding-bottom: 0px !important;
+                                                display: inline-flex;
+                                                flex-direction: row-reverse;
+                                                justify-content: flex-end;
+                                                padding-left: 12px;
+                                              "
+                                            >
+                                              <div
+                                                v-for="groupmate in meeting.groupmates"
+                                                :key="groupmate.id"
                                               >
                                                 <div
-                                                  v-for="groupmate in meeting.groupmates"
-                                                  :key="groupmate.id"
+                                                  style="
+                                                    margin-left: -15px;
+                                                    padding-bottom: 0px !important;
+                                                    padding-top: 3px !important;
+                                                    padding-left: 3px !important;
+                                                    padding-right: 3px !important;
+                                                  "
                                                 >
-                                                  <div
+                                                  <v-avatar
+                                                    :size="30"
                                                     style="
-                                                      margin-left: -15px;
-                                                      padding-bottom: 0px !important;
-                                                      padding-top: 3px !important;
-                                                      padding-left: 3px !important;
-                                                      padding-right: 3px !important;
+                                                      border: 2px solid #fff;
                                                     "
                                                   >
-                                                    <v-avatar
-                                                      :size="30"
-                                                      style="
-                                                        border: 2px solid #fff;
-                                                      "
-                                                    >
-                                                      <v-img
-                                                        :src="
-                                                          groupmate.avatar
-                                                        "
-                                                      ></v-img
-                                                    ></v-avatar>
-                                                  </div>
+                                                    <v-img
+                                                      :src="groupmate.avatar"
+                                                    ></v-img
+                                                  ></v-avatar>
                                                 </div>
                                               </div>
+                                            </div>
                                             <div
                                               style="padding-bottom: 7px"
                                               v-if="
@@ -2624,8 +2630,7 @@
                                                   .toLocaleDateString()
                                               "
                                             >
-                                              <span
-                                                style="padding-bottom: 7px"
+                                              <span style="padding-bottom: 7px"
                                                 ><v-icon
                                                   :size="20"
                                                   color="#ff9d66"
@@ -2662,8 +2667,7 @@
                                               v-else
                                               style="padding-bottom: 7px"
                                             >
-                                              <span
-                                                style="padding-bottom: 7px"
+                                              <span style="padding-bottom: 7px"
                                                 ><v-icon
                                                   :size="20"
                                                   color="#ff9d66"
@@ -2726,6 +2730,7 @@
                                   <div
                                     v-else
                                     style="padding:85px; display:flex' align-items: center; justify-content: center"
+                                    class="empty_message"
                                   >
                                     <span
                                       style="
@@ -2733,7 +2738,8 @@
                                         font-weight: bold;
                                         font-size: 16px;
                                       "
-                                      >You do not have any confirmed meeting for this project yet.</span
+                                      >You do not have any confirmed meeting for
+                                      this project yet.</span
                                     >
                                   </div>
                                 </v-card>
@@ -2742,7 +2748,7 @@
                           </v-tabs-items>
                         </v-row>
                       </v-card>
-                    </v-container>
+                    </div>
                   </v-tab-item>
                   <v-tab-item style="background-color: #ff9d66">
                     <v-container
@@ -2755,643 +2761,658 @@
                         color="#FFE4CB"
                         :class="`rounded-xl`"
                       >
-                      <div style="display:flex; justify-content: space-between">
-                        <v-card-title>Todos</v-card-title>
-                        <v-dialog
-                          v-model="Taskdialog"
-                          content-class="elevation-0"
-                          max-width="600px"
-                          :class="`rounded-lg`"
+                        <div
+                          style="display: flex; justify-content: space-between"
+                          class="project-meeting-bar"
                         >
-                          <template
-                            v-slot:activator="{ on, attrs }"
-                            :class="`rounded-xl`"
+                          <v-card-title>Todos</v-card-title>
+                          <v-dialog
+                            v-model="Taskdialog"
+                            content-class="elevation-0"
+                            max-width="600px"
+                            :class="`rounded-lg`"
                           >
-                            <v-card
-                              outlined
-                              color="white"
-                              style="
-                                margin-top: 10px;
-                                margin-left: 16px;
-                                margin-right: 16px;
-                                padding: 8px;
-                              "
+                            <template
+                              v-slot:activator="{ on, attrs }"
                               :class="`rounded-xl`"
                             >
-                              <v-btn
-                                :class="`rounded-xl`"
-                                color="white"
-                                block
+                              <v-card
                                 outlined
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="
-                                  Taskdialog = true;
-                                  getProjectMenu();
-                                  prefillProject();
+                                color="white"
+                                style="
+                                  margin-top: 10px;
+                                  margin-left: 16px;
+                                  margin-right: 16px;
+                                  padding: 8px;
                                 "
+                                :class="`rounded-xl`"
                               >
-                                <span
-                                  style="color: #ff9d66; font-weight: bold"
+                                <v-btn
+                                  :class="`rounded-xl`"
+                                  color="white"
+                                  block
+                                  outlined
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="
+                                    Taskdialog = true;
+                                    getProjectMenu();
+                                    prefillProject();
+                                  "
                                 >
-                                  + Add New Todo</span
+                                  <span
+                                    style="color: #ff9d66; font-weight: bold"
+                                  >
+                                    + Add New Todo</span
+                                  >
+                                </v-btn>
+                              </v-card>
+                            </template>
+                            <v-sheet
+                              outlined
+                              color="#ff9d66"
+                              style="padding: 3px"
+                              :class="`rounded-xl`"
+                            >
+                              <v-card outlined :class="`rounded-xl`">
+                                <v-form
+                                  ref="form"
+                                  v-model="valid"
+                                  lazy-validation
                                 >
-                              </v-btn>
-                            </v-card>
-                          </template>
-                          <v-sheet
-                            outlined
-                            color="#ff9d66"
-                            style="padding: 3px"
-                            :class="`rounded-xl`"
-                          >
-                            <v-card outlined :class="`rounded-xl`">
-                              <v-form
-                                ref="form"
-                                v-model="valid"
-                                lazy-validation
-                              >
-                                <v-card-title :class="`rounded-xl`">
-                                  <span class="headline">Add New Todo</span>
-                                </v-card-title>
+                                  <v-card-title :class="`rounded-xl`">
+                                    <span class="headline">Add New Todo</span>
+                                  </v-card-title>
 
-                                <v-card-text>
-                                  <v-container :class="`rounded-xl`">
-                                    <v-row>
-                                      <v-col cols="12" :class="`rounded-xl`">
-                                        <v-text-field
-                                          label="Todo Title*"
-                                          required
-                                          :rules="nameRules"
-                                          color="#ff9d66"
-                                          v-model="TaskmyTodo"
-                                        ></v-text-field>
-                                      </v-col>
-                                      <v-col cols="12" :class="`rounded-xl`">
-                                        <v-select
-                                          :items="projects"
-                                          item-text="title"
-                                          item-value="id"
-                                          label="Module Project*"
-                                          required
-                                          color="#ff9d66"
-                                          v-model="TaskmyProject"
-                                          @input="renderGroupmates()"
-                                          :rules="[
-                                            (v) =>
-                                              !!v || 'Project is required',
-                                          ]"
-                                        >
-                                        </v-select>
-                                      </v-col>
-                                      <v-col
-                                        cols="12"
-                                        align="left"
-                                        :class="`rounded-xl`"
-                                      >
-                                        <!-- <span style="color: rgb(113, 113, 113)"
-                                >Person In Charge</span
-                              > -->
-                                        <div v-if="TasktempGroupmates">
-                                          <v-combobox
-                                            :disabled="
-                                              this.TaskmyProject == null
-                                            "
-                                            item-text="name"
+                                  <v-card-text>
+                                    <v-container :class="`rounded-xl`">
+                                      <v-row>
+                                        <v-col cols="12" :class="`rounded-xl`">
+                                          <v-text-field
+                                            label="Todo Title*"
+                                            required
+                                            :rules="nameRules"
+                                            color="#ff9d66"
+                                            v-model="TaskmyTodo"
+                                          ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" :class="`rounded-xl`">
+                                          <v-select
+                                            :items="projects"
+                                            item-text="title"
                                             item-value="id"
-                                            v-model="TaskgroupmatesChips"
-                                            item-color="#ff9d66"
-                                            :items="TasktempGroupmates"
-                                            chips
-                                            clearable
-                                            label="Person In Charge*"
+                                            label="Module Project*"
+                                            required
+                                            color="#ff9d66"
+                                            v-model="TaskmyProject"
+                                            @input="renderGroupmates()"
                                             :rules="[
                                               (v) =>
-                                                !!v ||
-                                                'Person In Charge is required',
+                                                !!v || 'Project is required',
                                             ]"
-                                            multiple
-                                            color="#ff9d66"
                                           >
-                                            <template
-                                              v-slot:selection="{
-                                                attrs,
-                                                item,
-                                                parent,
-                                                selected,
-                                              }"
-                                              color="#ff9d66"
-                                            >
-                                              <v-chip
-                                                class="ma-2"
-                                                color="#ff9d66"
-                                                text-color="white"
-                                                v-bind="attrs"
-                                                :input-value="selected"
-                                                close
-                                                @click="
-                                                  parent.selectItem(item)
-                                                "
-                                                @click:close="
-                                                  Taskremove(item)
-                                                "
-                                              >
-                                                <v-avatar
-                                                  left
-                                                  class="white--text"
-                                                >
-                                                  <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
-                                                  <v-img
-                                                    :src="item.avatar"
-                                                  ></v-img>
-                                                </v-avatar>
-                                                <span>{{ item.name }}</span>
-                                              </v-chip>
-                                            </template>
-                                          </v-combobox>
-                                        </div>
-                                      </v-col>
-
-                                      <v-col cols="12" :class="`rounded-xl`">
-                                        <v-menu
-                                          required
-                                          v-model="TaskmenuAdd"
-                                          :close-on-content-click="false"
-                                          :nudge-right="40"
-                                          transition="scale-transition"
-                                          offset-y
-                                          color="#ff9d66"
-                                          min-width="auto"
+                                          </v-select>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          align="left"
+                                          :class="`rounded-xl`"
                                         >
-                                          <template
-                                            v-slot:activator="{ on, attrs }"
-                                          >
-                                            <v-text-field
-                                              required
+                                          <!-- <span style="color: rgb(113, 113, 113)"
+                                >Person In Charge</span
+                              > -->
+                                          <div v-if="TasktempGroupmates">
+                                            <v-combobox
+                                              :disabled="
+                                                this.TaskmyProject == null
+                                              "
+                                              item-text="name"
+                                              item-value="id"
+                                              v-model="TaskgroupmatesChips"
+                                              item-color="#ff9d66"
+                                              :items="TasktempGroupmates"
+                                              chips
+                                              clearable
+                                              label="Person In Charge*"
                                               :rules="[
                                                 (v) =>
-                                                  (!!v && v) !== 'Deadline' ||
-                                                  'Deadline is required',
+                                                  !!v ||
+                                                  'Person In Charge is required',
                                               ]"
-                                              v-model="TaskdisplayDeadline"
-                                              label="Deadline*"
-                                              prepend-icon="mdi-calendar"
-                                              v-bind="attrs"
-                                              v-on="on"
+                                              multiple
                                               color="#ff9d66"
-                                            ></v-text-field>
-                                          </template>
-                                          <v-date-picker
-                                            :disabled="
-                                              TaskdateSwitchValue == 1
-                                            "
-                                            color="#ff9d66"
-                                            v-model="TaskmyDeadline"
-                                            @input="
-                                              TaskmenuAdd = false;
-                                              changeTaskDisplayDeadline();
-                                            "
-                                          >
-                                            <div
-                                              style="
-                                                margin-left: 10px;
-                                                margin-top: -10px;
-                                                padding-bottom: 10px;
-                                              "
                                             >
-                                              <v-switch
-                                                inset
-                                                hide-details
-                                                v-model="TaskdateSwitchValue"
+                                              <template
+                                                v-slot:selection="{
+                                                  attrs,
+                                                  item,
+                                                  parent,
+                                                  selected,
+                                                }"
                                                 color="#ff9d66"
-                                                :label="`Someday`"
-                                                @change="
-                                                  changeTaskDisplayDeadline()
-                                                "
-                                              ></v-switch>
-                                            </div>
-                                          </v-date-picker>
-                                        </v-menu>
-                                        <v-row style="padding-top: 5px">
-                                          <v-col
-                                            cols="12"
-                                            md="6"
-                                            style="
-                                              display: flex;
-                                              align-items: center;
-                                            "
+                                              >
+                                                <v-chip
+                                                  class="ma-2"
+                                                  color="#ff9d66"
+                                                  text-color="white"
+                                                  v-bind="attrs"
+                                                  :input-value="selected"
+                                                  close
+                                                  @click="
+                                                    parent.selectItem(item)
+                                                  "
+                                                  @click:close="
+                                                    Taskremove(item)
+                                                  "
+                                                >
+                                                  <v-avatar
+                                                    left
+                                                    class="white--text"
+                                                  >
+                                                    <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
+                                                    <v-img
+                                                      :src="item.avatar"
+                                                    ></v-img>
+                                                  </v-avatar>
+                                                  <span>{{ item.name }}</span>
+                                                </v-chip>
+                                              </template>
+                                            </v-combobox>
+                                          </div>
+                                        </v-col>
+
+                                        <v-col cols="12" :class="`rounded-xl`">
+                                          <v-menu
+                                            required
+                                            v-model="TaskmenuAdd"
+                                            :close-on-content-click="false"
+                                            :nudge-right="40"
+                                            transition="scale-transition"
+                                            offset-y
+                                            color="#ff9d66"
+                                            min-width="auto"
                                           >
-                                            <v-switch
+                                            <template
+                                              v-slot:activator="{ on, attrs }"
+                                            >
+                                              <v-text-field
+                                                required
+                                                :rules="[
+                                                  (v) =>
+                                                    (!!v && v) !== 'Deadline' ||
+                                                    'Deadline is required',
+                                                ]"
+                                                v-model="TaskdisplayDeadline"
+                                                label="Deadline*"
+                                                prepend-icon="mdi-calendar"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                color="#ff9d66"
+                                              ></v-text-field>
+                                            </template>
+                                            <v-date-picker
                                               :disabled="
                                                 TaskdateSwitchValue == 1
                                               "
-                                              inset
-                                              hide-details
-                                              v-model="TaskswitchValue"
                                               color="#ff9d66"
-                                              :label="`Include Time`"
-                                            ></v-switch>
-                                          </v-col>
-                                          <v-col cols="12" md="6">
-                                            <v-menu
-                                              ref="Taskmenu3"
-                                              v-model="Taskmenu3"
-                                              color="#ff9d66"
-                                              :close-on-content-click="false"
-                                              :nudge-right="40"
-                                              :return-value.sync="
-                                                TaskmyDeadlineTime
+                                              v-model="TaskmyDeadline"
+                                              @input="
+                                                TaskmenuAdd = false;
+                                                changeTaskDisplayDeadline();
                                               "
-                                              transition="scale-transition"
-                                              offset-y
-                                              max-width="290px"
-                                              min-width="290px"
                                             >
-                                              <template
-                                                v-slot:activator="{
-                                                  on,
-                                                  attrs,
-                                                }"
-                                              >
-                                                <v-text-field
-                                                  :disabled="
-                                                    TaskswitchValue == 0 ||
-                                                    TaskdateSwitchValue == 1
-                                                  "
-                                                  v-model="TaskmyDeadlineTime"
-                                                  label="Time"
-                                                  color="#ff9d66"
-                                                  prepend-icon="mdi-clock-time-four-outline"
-                                                  readonly
-                                                  v-bind="attrs"
-                                                  v-on="on"
-                                                ></v-text-field>
-                                              </template>
-                                              <v-time-picker
-                                                scrollable
-                                                v-if="Taskmenu3"
-                                                v-model="TaskmyDeadlineTime"
-                                                full-width
-                                                color="#ff9d66"
-                                                format="24hr"
-                                                @click:minute="
-                                                  $refs.Taskmenu3.save(
-                                                    TaskmyDeadlineTime
-                                                  )
+                                              <div
+                                                style="
+                                                  margin-left: 10px;
+                                                  margin-top: -10px;
+                                                  padding-bottom: 10px;
                                                 "
-                                              ></v-time-picker>
-                                            </v-menu>
-                                          </v-col>
-                                        </v-row>
-                                      </v-col>
+                                              >
+                                                <v-switch
+                                                  inset
+                                                  hide-details
+                                                  v-model="TaskdateSwitchValue"
+                                                  color="#ff9d66"
+                                                  :label="`Someday`"
+                                                  @change="
+                                                    changeTaskDisplayDeadline()
+                                                  "
+                                                ></v-switch>
+                                              </div>
+                                            </v-date-picker>
+                                          </v-menu>
+                                          <v-row style="padding-top: 5px">
+                                            <v-col
+                                              cols="12"
+                                              md="6"
+                                              style="
+                                                display: flex;
+                                                align-items: center;
+                                              "
+                                            >
+                                              <v-switch
+                                                :disabled="
+                                                  TaskdateSwitchValue == 1
+                                                "
+                                                inset
+                                                hide-details
+                                                v-model="TaskswitchValue"
+                                                color="#ff9d66"
+                                                :label="`Include Time`"
+                                              ></v-switch>
+                                            </v-col>
+                                            <v-col cols="12" md="6">
+                                              <v-menu
+                                                ref="Taskmenu3"
+                                                v-model="Taskmenu3"
+                                                color="#ff9d66"
+                                                :close-on-content-click="false"
+                                                :nudge-right="40"
+                                                :return-value.sync="
+                                                  TaskmyDeadlineTime
+                                                "
+                                                transition="scale-transition"
+                                                offset-y
+                                                max-width="290px"
+                                                min-width="290px"
+                                              >
+                                                <template
+                                                  v-slot:activator="{
+                                                    on,
+                                                    attrs,
+                                                  }"
+                                                >
+                                                  <v-text-field
+                                                    :disabled="
+                                                      TaskswitchValue == 0 ||
+                                                      TaskdateSwitchValue == 1
+                                                    "
+                                                    v-model="TaskmyDeadlineTime"
+                                                    label="Time"
+                                                    color="#ff9d66"
+                                                    prepend-icon="mdi-clock-time-four-outline"
+                                                    readonly
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                  ></v-text-field>
+                                                </template>
+                                                <v-time-picker
+                                                  scrollable
+                                                  v-if="Taskmenu3"
+                                                  v-model="TaskmyDeadlineTime"
+                                                  full-width
+                                                  color="#ff9d66"
+                                                  format="24hr"
+                                                  @click:minute="
+                                                    $refs.Taskmenu3.save(
+                                                      TaskmyDeadlineTime
+                                                    )
+                                                  "
+                                                ></v-time-picker>
+                                              </v-menu>
+                                            </v-col>
+                                          </v-row>
+                                        </v-col>
 
-                                      <v-col cols="12" :class="`rounded-xl`">
-                                        <v-textarea
-                                          name="input-7-1"
-                                          label="Notes"
-                                          rows="2"
-                                          color="#ff9d66"
-                                          v-model="TaskmyNote"
-                                        ></v-textarea>
-                                      </v-col>
-                                    </v-row>
-                                  </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn
-                                    justify="center"
-                                    color="#ff9d66"
-                                    text
-                                    @click="
-                                      Taskdialog = false;
-                                      clearTodoInfo();
-                                    "
-                                  >
-                                    Cancel
-                                  </v-btn>
-                                  <v-btn
-                                    color="#ff9d66"
-                                    :disabled="
-                                      !valid ||
-                                      this.TaskmyTodo == '' ||
-                                      this.TaskmyProject == null ||
-                                      this.TaskdisplayDeadline ==
-                                        'Deadline' ||
-                                      this.TaskgroupmatesChips.length == 0
-                                    "
-                                    text
-                                    @click="
-                                      Taskdialog = false;
-                                      TodocheckTimeAdd();
-                                    "
-                                  >
-                                    Save
-                                  </v-btn>
-                                </v-card-actions>
-                              </v-form>
-                            </v-card>
-                          </v-sheet>
-                        </v-dialog>
-                      </div>
-                        <br />
-                      
-                          <v-tabs
-                            style="padding: 10px"
-                            v-model="tabTodo"
-                            fixed-tabs
-                            color="#4b4b4b"
-                            background-color="#ffe4cb"
-                          >
-                            <v-tab> Your Todos </v-tab>
-                            <v-tab> Groupmates' Todos </v-tab>
-                            
-                          </v-tabs>
-                          <v-tabs-items
-                            v-model="tabTodo"
-                            style="background-color: #ffe4cb"
-                          >
-                            <v-tab-item style="background-color: #ffe4cb">
-                        <div v-if="currTodos.length !== 0">
-                          <div
-                            v-for="(todo, index) in orderedTasks"
-                            :key="todo.id"
-                          >
-                            <template>
-                              <v-list-item style="display: block">
-                                <v-card
-                                  outlined
-                                  color="white"
-                                  style="margin: auto"
-                                  :class="`rounded-xl`"
-                                >
-                                  <v-row style="margin: 0px">
-                                    <v-col
-                                      cols="12"
-                                      md="2"
-                                      align="center"
+                                        <v-col cols="12" :class="`rounded-xl`">
+                                          <v-textarea
+                                            name="input-7-1"
+                                            label="Notes"
+                                            rows="2"
+                                            color="#ff9d66"
+                                            v-model="TaskmyNote"
+                                          ></v-textarea>
+                                        </v-col>
+                                      </v-row>
+                                    </v-container>
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
                                       justify="center"
-                                      class="centerAlign"
-                                      style="
-                                        padding-top: 20px;
-                                        padding-bottom: 20px;
-                                        font-weight: bold;
-                                        font-size: 20px;
-                                        flex-direction: column;
+                                      color="#ff9d66"
+                                      text
+                                      @click="
+                                        Taskdialog = false;
+                                        clearTodoInfo();
                                       "
                                     >
-                                      <div v-if="todo.finalDeadline !== null">
-                                        <span
-                                          style="margin-left: 3vw"
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{
-                                            todo.finalDeadline.toLocaleDateString(
-                                              "en-US",
-                                              {
-                                                month: "short",
-                                                day: "2-digit",
-                                              }
-                                            )
-                                          }}</span
-                                        >
-                                      </div>
-                                      <div v-else>
-                                        <span
-                                          style="margin-left: 3vw"
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                        >
-                                          Someday
-                                        </span>
-                                      </div>
-
-                                      <div v-if="todo.finalDeadline !== null">
-                                        <span
-                                          class="centerAlign"
-                                          style="
-                                            margin-left: 3vw;
-                                            font-size: 14px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{
-                                            todo.finalDeadline.toLocaleTimeString(
-                                              [],
-                                              {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                              }
-                                            )
-                                          }}
-                                        </span>
-                                      </div>
-                                    </v-col>
-                                    <v-col cols="12" md="1">
-                                      <v-divider
-                                        vertical
-                                        style="
-                                          padding-top: 20px;
-                                          padding-bottom: 20px;
-                                        "
-                                        class="leftAlign"
-                                      >
-                                      </v-divider>
-                                    </v-col>
-                                    <v-col
-                                      cols="12"
-                                      md="3"
-                                      align="left"
-                                      class="leftAlign"
-                                      style="
-                                        padding-top: 20px;
-                                        padding-bottom: 20px;
+                                      Cancel
+                                    </v-btn>
+                                    <v-btn
+                                      color="#ff9d66"
+                                      :disabled="
+                                        !valid ||
+                                        this.TaskmyTodo == '' ||
+                                        this.TaskmyProject == null ||
+                                        this.TaskdisplayDeadline ==
+                                          'Deadline' ||
+                                        this.TaskgroupmatesChips.length == 0
                                       "
+                                      text
+                                      @click="
+                                        Taskdialog = false;
+                                        TodocheckTimeAdd();
+                                      "
+                                    >
+                                      Save
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-form>
+                              </v-card>
+                            </v-sheet>
+                          </v-dialog>
+                        </div>
+                        <br />
+
+                        <v-tabs
+                          style="padding: 10px"
+                          v-model="tabTodo"
+                          fixed-tabs
+                          color="#4b4b4b"
+                          background-color="#ffe4cb"
+                        >
+                          <v-tab> Your Todos </v-tab>
+                          <v-tab> Groupmates' Todos </v-tab>
+                        </v-tabs>
+                        <v-tabs-items
+                          v-model="tabTodo"
+                          style="background-color: #ffe4cb"
+                        >
+                          <v-tab-item style="background-color: #ffe4cb">
+                            <div v-if="currTodos.length !== 0">
+                              <div
+                                v-for="(todo, index) in orderedTasks"
+                                :key="todo.id"
+                              >
+                                <template>
+                                  <v-list-item style="display: block">
+                                    <v-card
+                                      outlined
+                                      color="white"
+                                      style="margin: auto"
+                                      :class="`rounded-xl`"
                                     >
                                       <v-row style="margin: 0px">
-                                        <span
+                                        <v-col
+                                          cols="12"
+                                          md="2"
+                                          align="center"
+                                          justify="center"
+                                          class="centerAlign"
                                           style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
                                             font-weight: bold;
                                             font-size: 20px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{ todo.title }}</span
-                                        >
-                                      </v-row>
-
-                                      <div v-if="todo.note">
-                                        <v-row style="margin: 0px">
-                                          <span
-                                            style="
-                                              font-weight: lighter;
-                                              font-size: 14px;
-                                            "
-                                            v-bind:class="{
-                                              completed: todo.complete,
-                                            }"
-                                            >{{ todo.note }}</span
-                                          >
-                                        </v-row>
-                                      </div>
-                                      <div v-else>
-                                        <span
-                                          style="
-                                            font-weight: lighter;
-                                            font-size: 14px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >No notes</span
-                                        >
-                                      </div>
-                                    </v-col>
-                                    <v-col
-                                      cols="12"
-                                      md="2"
-                                      align="right"
-                                      class="centerAlign"
-                                      style="padding-top: 20px; padding-bottom: 20px"
-                                    >
-                                      <v-row style="margin: 0px">
-                                        <div
-                                          class="centerAlign"
-                                          style="
-                                            padding-top: 3px;
-                                            padding-bottom: 0px !important;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            flex-direction: row-reverse;
-                                            justify-content: flex-end;
-                                            padding-left: 12px;
+                                            flex-direction: column;
                                           "
                                         >
                                           <div
-                                            v-for="groupmate in todo.TaskgroupmatesChips"
-                                            :key="groupmate.id"
+                                            v-if="todo.finalDeadline !== null"
                                           >
-                                            <div
-                                              style="
-                                                margin-left: -15px;
-                                                padding-bottom: 0px !important;
-                                                padding-top: 3px !important;
-                                                padding-left: 3px !important;
-                                                padding-right: 3px !important;
-                                              "
+                                            <span
+                                              style="margin-left: 3vw"
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{
+                                                todo.finalDeadline.toLocaleDateString(
+                                                  "en-US",
+                                                  {
+                                                    month: "short",
+                                                    day: "2-digit",
+                                                  }
+                                                )
+                                              }}</span
                                             >
-                                              <v-avatar
-                                                :size="30"
-                                                style="border: 2px solid #fff"
-                                              >
-                                                <v-img :src="groupmate.avatar"></v-img
-                                              ></v-avatar>
-                                            </div>
                                           </div>
-                                        </div>
-                                      </v-row>
-                                    </v-col>
-                                              <!--  -->
-                                    <v-col
-                                      col="12"
-                                      md="1"
-                                      align="right"
-                                      class="centerAlign"
-                                    >
-                                      <v-list-item-action>
-                                        <v-dialog
-                                          v-model="Taskdisplay[todo.title]"
-                                          content-class="elevation-0"
-                                          max-width="600px"
-                                          :class="`rounded-lg`"
-                                        >
-                                          <template
-                                            v-slot:activator="{ on, attrs }"
+                                          <div v-else>
+                                            <span
+                                              style="margin-left: 3vw"
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                            >
+                                              Someday
+                                            </span>
+                                          </div>
+
+                                          <div
+                                            v-if="todo.finalDeadline !== null"
                                           >
-                                            <v-btn
-                                              color="#ff9d66"
-                                              v-bind="attrs"
-                                              v-on="on"
-                                              icon
-                                              @click="
-                                                fillTodoInfo(todo);
-                                                getProjectMenu();
+                                            <span
+                                              class="centerAlign"
+                                              style="
+                                                margin-left: 3vw;
+                                                font-size: 14px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{
+                                                todo.finalDeadline.toLocaleTimeString(
+                                                  [],
+                                                  {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                  }
+                                                )
+                                              }}
+                                            </span>
+                                          </div>
+                                        </v-col>
+                                        <v-col cols="12" md="1">
+                                          <v-divider
+                                            vertical
+                                            style="
+                                              padding-top: 20px;
+                                              padding-bottom: 20px;
+                                            "
+                                            class="leftAlign"
+                                          >
+                                          </v-divider>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          md="3"
+                                          align="left"
+                                          class="leftAlign"
+                                          style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
+                                          "
+                                        >
+                                          <v-row style="margin: 0px">
+                                            <span
+                                              style="
+                                                font-weight: bold;
+                                                font-size: 20px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{ todo.title }}</span
+                                            >
+                                          </v-row>
+
+                                          <div v-if="todo.note">
+                                            <v-row style="margin: 0px">
+                                              <span
+                                                style="
+                                                  font-weight: lighter;
+                                                  font-size: 14px;
+                                                "
+                                                v-bind:class="{
+                                                  completed: todo.complete,
+                                                }"
+                                                >{{ todo.note }}</span
+                                              >
+                                            </v-row>
+                                          </div>
+                                          <div v-else>
+                                            <span
+                                              style="
+                                                font-weight: lighter;
+                                                font-size: 14px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >No notes</span
+                                            >
+                                          </div>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          md="2"
+                                          align="right"
+                                          class="centerAlign"
+                                          style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
+                                          "
+                                        >
+                                          <v-row style="margin: 0px">
+                                            <div
+                                              class="centerAlign"
+                                              style="
+                                                padding-top: 3px;
+                                                padding-bottom: 0px !important;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                flex-direction: row-reverse;
+                                                justify-content: flex-end;
+                                                padding-left: 12px;
                                               "
                                             >
-                                              <v-icon>
-                                                mdi-pencil-outline</v-icon
+                                              <div
+                                                v-for="groupmate in todo.TaskgroupmatesChips"
+                                                :key="groupmate.id"
                                               >
-                                            </v-btn>
-                                            <!--  -->
-                                          </template>
-                                          <v-sheet
-                                            outlined
-                                            color="#ff9d66"
-                                            style="padding: 3px"
-                                            :class="`rounded-xl`"
-                                          >
-                                            <v-card
-                                              outlined
-                                              :class="`rounded-xl`"
+                                                <div
+                                                  style="
+                                                    margin-left: -15px;
+                                                    padding-bottom: 0px !important;
+                                                    padding-top: 3px !important;
+                                                    padding-left: 3px !important;
+                                                    padding-right: 3px !important;
+                                                  "
+                                                >
+                                                  <v-avatar
+                                                    :size="30"
+                                                    style="
+                                                      border: 2px solid #fff;
+                                                    "
+                                                  >
+                                                    <v-img
+                                                      :src="groupmate.avatar"
+                                                    ></v-img
+                                                  ></v-avatar>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </v-row>
+                                        </v-col>
+                                        <!--  -->
+                                        <v-col
+                                          col="12"
+                                          md="1"
+                                          align="right"
+                                          class="centerAlign"
+                                        >
+                                          <v-list-item-action>
+                                            <v-dialog
+                                              v-model="Taskdisplay[todo.title]"
+                                              content-class="elevation-0"
+                                              max-width="600px"
+                                              :class="`rounded-lg`"
                                             >
-                                              <v-form
-                                                ref="form"
-                                                v-model="valid"
-                                                lazy-validation
+                                              <template
+                                                v-slot:activator="{ on, attrs }"
                                               >
-                                                <v-card-title
+                                                <v-btn
+                                                  color="#ff9d66"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  icon
+                                                  @click="
+                                                    fillTodoInfo(todo);
+                                                    getProjectMenu();
+                                                  "
+                                                >
+                                                  <v-icon>
+                                                    mdi-pencil-outline</v-icon
+                                                  >
+                                                </v-btn>
+                                                <!--  -->
+                                              </template>
+                                              <v-sheet
+                                                outlined
+                                                color="#ff9d66"
+                                                style="padding: 3px"
+                                                :class="`rounded-xl`"
+                                              >
+                                                <v-card
+                                                  outlined
                                                   :class="`rounded-xl`"
                                                 >
-                                                  <span class="headline"
-                                                    >Edit Todo</span
+                                                  <v-form
+                                                    ref="form"
+                                                    v-model="valid"
+                                                    lazy-validation
                                                   >
-                                                </v-card-title>
-
-                                                <v-card-text>
-                                                  <v-container>
-                                                    <v-row>
-                                                      <v-col cols="12">
-                                                        <v-text-field
-                                                          label="Todo Title*"
-                                                          required
-                                                          value="todo.title"
-                                                          :rules="nameRules"
-                                                          v-model="TaskmyTodo"
-                                                          color="#ff9d66"
-                                                        ></v-text-field>
-                                                      </v-col>
-                                                      <v-col cols="12">
-                                                        <v-select
-                                                          :items="projects"
-                                                          item-text="title"
-                                                          item-value="id"
-                                                          label="Module Project*"
-                                                          required
-                                                          @input="
-                                                            renderGroupmates
-                                                          "
-                                                          color="#ff9d66"
-                                                          v-model="
-                                                            TaskmyProject
-                                                          "
-                                                          :rules="[
-                                                            (v) =>
-                                                              !!v ||
-                                                              'Project is required',
-                                                          ]"
-                                                        ></v-select>
-                                                        <!--  -->
-                                                      </v-col>
-                                                      <v-col
-                                                        cols="12"
-                                                        align="left"
-                                                        :class="`rounded-xl`"
+                                                    <v-card-title
+                                                      :class="`rounded-xl`"
+                                                    >
+                                                      <span class="headline"
+                                                        >Edit Todo</span
                                                       >
-                                                        <!-- <span
+                                                    </v-card-title>
+
+                                                    <v-card-text>
+                                                      <v-container>
+                                                        <v-row>
+                                                          <v-col cols="12">
+                                                            <v-text-field
+                                                              label="Todo Title*"
+                                                              required
+                                                              value="todo.title"
+                                                              :rules="nameRules"
+                                                              v-model="
+                                                                TaskmyTodo
+                                                              "
+                                                              color="#ff9d66"
+                                                            ></v-text-field>
+                                                          </v-col>
+                                                          <v-col cols="12">
+                                                            <v-select
+                                                              :items="projects"
+                                                              item-text="title"
+                                                              item-value="id"
+                                                              label="Module Project*"
+                                                              required
+                                                              @input="
+                                                                renderGroupmates
+                                                              "
+                                                              color="#ff9d66"
+                                                              v-model="
+                                                                TaskmyProject
+                                                              "
+                                                              :rules="[
+                                                                (v) =>
+                                                                  !!v ||
+                                                                  'Project is required',
+                                                              ]"
+                                                            ></v-select>
+                                                            <!--  -->
+                                                          </v-col>
+                                                          <v-col
+                                                            cols="12"
+                                                            align="left"
+                                                            :class="`rounded-xl`"
+                                                          >
+                                                            <!-- <span
                                                           style="
                                                             color: rgb(
                                                               113,
@@ -3402,216 +3423,103 @@
                                                           >Person In
                                                           Charge</span
                                                         > -->
-                                                        <div
-                                                          v-if="
-                                                            TasktempGroupmates
-                                                          "
-                                                        >
-                                                          <v-combobox
-                                                            :disabled="
-                                                              TaskmyProject ==
-                                                              null
-                                                            "
-                                                            item-text="name"
-                                                            item-value="id"
-                                                            v-model="
-                                                              TaskgroupmatesChips
-                                                            "
-                                                            item-color="#ff9d66"
-                                                            :items="
-                                                              TasktempGroupmates
-                                                            "
-                                                            :rules="[
-                                                              (v) =>
-                                                                !!v ||
-                                                                'Person In Charge is required',
-                                                            ]"
-                                                            chips
-                                                            clearable
-                                                            label="Person In Charge*"
-                                                            multiple
-                                                            color="#ff9d66"
-                                                          >
-                                                            <template
-                                                              v-slot:selection="{
-                                                                attrs,
-                                                                item,
-                                                                parent,
-                                                                selected,
-                                                              }"
-                                                              color="#ff9d66"
+                                                            <div
+                                                              v-if="
+                                                                TasktempGroupmates
+                                                              "
                                                             >
-                                                              <v-chip
-                                                                class="ma-2"
+                                                              <v-combobox
+                                                                :disabled="
+                                                                  TaskmyProject ==
+                                                                  null
+                                                                "
+                                                                item-text="name"
+                                                                item-value="id"
+                                                                v-model="
+                                                                  TaskgroupmatesChips
+                                                                "
+                                                                item-color="#ff9d66"
+                                                                :items="
+                                                                  TasktempGroupmates
+                                                                "
+                                                                :rules="[
+                                                                  (v) =>
+                                                                    !!v ||
+                                                                    'Person In Charge is required',
+                                                                ]"
+                                                                chips
+                                                                clearable
+                                                                label="Person In Charge*"
+                                                                multiple
                                                                 color="#ff9d66"
-                                                                text-color="white"
-                                                                v-bind="attrs"
-                                                                :input-value="
-                                                                  selected
-                                                                "
-                                                                close
-                                                                @click="
-                                                                  parent.selectItem(
-                                                                    item
-                                                                  )
-                                                                "
-                                                                @click:close="
-                                                                  Taskremove(
-                                                                    item
-                                                                  )
-                                                                "
                                                               >
-                                                                <v-avatar
-                                                                  left
-                                                                  class="
-                                                                    white--text
-                                                                  "
+                                                                <template
+                                                                  v-slot:selection="{
+                                                                    attrs,
+                                                                    item,
+                                                                    parent,
+                                                                    selected,
+                                                                  }"
+                                                                  color="#ff9d66"
                                                                 >
-                                                                  <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
-                                                                  <v-img
-                                                                    :src="
-                                                                      item.avatar
+                                                                  <v-chip
+                                                                    class="ma-2"
+                                                                    color="#ff9d66"
+                                                                    text-color="white"
+                                                                    v-bind="
+                                                                      attrs
                                                                     "
-                                                                  ></v-img>
-                                                                </v-avatar>
-                                                                <span>{{
-                                                                  item.name
-                                                                }}</span>
-                                                              </v-chip>
-                                                            </template>
-                                                          </v-combobox>
-                                                        </div>
-                                                      </v-col>
-                                                      <v-col cols="12">
-                                                        <v-menu
-                                                          v-model="
-                                                            Taskmenu[
-                                                              todo.title
-                                                            ]
-                                                          "
-                                                          :close-on-content-click="
-                                                            false
-                                                          "
-                                                          :nudge-right="40"
-                                                          transition="scale-transition"
-                                                          offset-y
-                                                          color="#ff9d66"
-                                                          min-width="auto"
-                                                        >
-                                                          <template
-                                                            v-slot:activator="{
-                                                              on,
-                                                              attrs,
-                                                            }"
-                                                          >
-                                                            <v-text-field
-                                                              :rules="[
-                                                                (v) =>
-                                                                  (!!v &&
-                                                                    v) !==
-                                                                    'Deadline' ||
-                                                                  'Deadline is required',
-                                                              ]"
-                                                              v-model="
-                                                                TaskdisplayDeadline
-                                                              "
-                                                              label="Deadline*"
-                                                              prepend-icon="mdi-calendar"
-                                                              readonly
-                                                              color="#ff9d66"
-                                                              v-bind="attrs"
-                                                              v-on="on"
-                                                            ></v-text-field>
-                                                          </template>
-                                                          <!--  -->
-                                                          <v-date-picker
-                                                            :disabled="
-                                                              TaskdateSwitchValue ==
-                                                              1
-                                                            "
-                                                            color="#ff9d66"
-                                                            v-model="
-                                                              TaskmyDeadline
-                                                            "
-                                                            @input="
-                                                              Taskmenu[
-                                                                todo.title
-                                                              ] = false;
-                                                              changeTaskDisplayDeadline();
-                                                            "
-                                                          >
-                                                            <v-switch
-                                                              inset
-                                                              hide-details
-                                                              v-model="
-                                                                TaskdateSwitchValue
-                                                              "
-                                                              color="#ff9d66"
-                                                              :label="`Someday`"
-                                                              @change="
-                                                                changeTaskDisplayDeadline()
-                                                              "
-                                                            ></v-switch>
-                                                          </v-date-picker>
-                                                        </v-menu>
-                                                        <v-row
-                                                          style="
-                                                            padding-top: 5px;
-                                                          "
-                                                        >
-                                                          <v-col
-                                                            cols="12"
-                                                            md="6"
-                                                            style="
-                                                              display: flex;
-                                                              align-items: center;
-                                                            "
-                                                          >
-                                                            <v-switch
-                                                              :disabled="
-                                                                TaskdateSwitchValue ==
-                                                                1
-                                                              "
-                                                              inset
-                                                              hide-details
-                                                              v-model="
-                                                                TaskswitchValue
-                                                              "
-                                                              color="#ff9d66"
-                                                              :label="`Include Time`"
-                                                            ></v-switch>
+                                                                    :input-value="
+                                                                      selected
+                                                                    "
+                                                                    close
+                                                                    @click="
+                                                                      parent.selectItem(
+                                                                        item
+                                                                      )
+                                                                    "
+                                                                    @click:close="
+                                                                      Taskremove(
+                                                                        item
+                                                                      )
+                                                                    "
+                                                                  >
+                                                                    <v-avatar
+                                                                      left
+                                                                      class="
+                                                                        white--text
+                                                                      "
+                                                                    >
+                                                                      <!--              <v-icon color="#ff9d66">mdi-account</v-icon>-->
+                                                                      <v-img
+                                                                        :src="
+                                                                          item.avatar
+                                                                        "
+                                                                      ></v-img>
+                                                                    </v-avatar>
+                                                                    <span>{{
+                                                                      item.name
+                                                                    }}</span>
+                                                                  </v-chip>
+                                                                </template>
+                                                              </v-combobox>
+                                                            </div>
                                                           </v-col>
-                                                          <v-col
-                                                            cols="12"
-                                                            md="6"
-                                                          >
+                                                          <v-col cols="12">
                                                             <v-menu
-                                                              :ref="
-                                                                'timeMenu' +
-                                                                index
-                                                              "
                                                               v-model="
-                                                                Tasktime[
+                                                                Taskmenu[
                                                                   todo.title
                                                                 ]
                                                               "
                                                               :close-on-content-click="
                                                                 false
                                                               "
-                                                              :nudge-right="
-                                                                40
-                                                              "
-                                                              :return-value.sync="
-                                                                TaskmyDeadlineTime
-                                                              "
+                                                              :nudge-right="40"
                                                               transition="scale-transition"
                                                               offset-y
-                                                              style="
-                                                                z-index: 20;
-                                                              "
-                                                              max-width="290px"
                                                               color="#ff9d66"
-                                                              min-width="290px"
+                                                              min-width="auto"
                                                             >
                                                               <template
                                                                 v-slot:activator="{
@@ -3620,368 +3528,506 @@
                                                                 }"
                                                               >
                                                                 <v-text-field
-                                                                  :disabled="
-                                                                    TaskswitchValue ==
-                                                                      0 ||
-                                                                    TaskdateSwitchValue ==
-                                                                      1
-                                                                  "
+                                                                  :rules="[
+                                                                    (v) =>
+                                                                      (!!v &&
+                                                                        v) !==
+                                                                        'Deadline' ||
+                                                                      'Deadline is required',
+                                                                  ]"
                                                                   v-model="
-                                                                    TaskmyDeadlineTime
+                                                                    TaskdisplayDeadline
                                                                   "
-                                                                  label="Time"
-                                                                  prepend-icon="mdi-clock-time-four-outline"
+                                                                  label="Deadline*"
+                                                                  prepend-icon="mdi-calendar"
                                                                   readonly
                                                                   color="#ff9d66"
-                                                                  v-bind="
-                                                                    attrs
-                                                                  "
+                                                                  v-bind="attrs"
                                                                   v-on="on"
                                                                 ></v-text-field>
                                                               </template>
-                                                              <v-time-picker
-                                                                scrollable
-                                                                v-model="
-                                                                  TaskmyDeadlineTime
+                                                              <!--  -->
+                                                              <v-date-picker
+                                                                :disabled="
+                                                                  TaskdateSwitchValue ==
+                                                                  1
                                                                 "
                                                                 color="#ff9d66"
-                                                                full-width
-                                                                format="24hr"
-                                                                @click:minute="
-                                                                  y =
-                                                                    'timeMenu' +
-                                                                    index.toString();
-                                                                  a =
-                                                                    $refs[y];
-                                                                  a[0].save(
-                                                                    TaskmyDeadlineTime
-                                                                  );
-                                                                  Tasktime[
+                                                                v-model="
+                                                                  TaskmyDeadline
+                                                                "
+                                                                @input="
+                                                                  Taskmenu[
                                                                     todo.title
                                                                   ] = false;
+                                                                  changeTaskDisplayDeadline();
                                                                 "
                                                               >
-                                                              </v-time-picker>
+                                                                <v-switch
+                                                                  inset
+                                                                  hide-details
+                                                                  v-model="
+                                                                    TaskdateSwitchValue
+                                                                  "
+                                                                  color="#ff9d66"
+                                                                  :label="`Someday`"
+                                                                  @change="
+                                                                    changeTaskDisplayDeadline()
+                                                                  "
+                                                                ></v-switch>
+                                                              </v-date-picker>
                                                             </v-menu>
+                                                            <v-row
+                                                              style="
+                                                                padding-top: 5px;
+                                                              "
+                                                            >
+                                                              <v-col
+                                                                cols="12"
+                                                                md="6"
+                                                                style="
+                                                                  display: flex;
+                                                                  align-items: center;
+                                                                "
+                                                              >
+                                                                <v-switch
+                                                                  :disabled="
+                                                                    TaskdateSwitchValue ==
+                                                                    1
+                                                                  "
+                                                                  inset
+                                                                  hide-details
+                                                                  v-model="
+                                                                    TaskswitchValue
+                                                                  "
+                                                                  color="#ff9d66"
+                                                                  :label="`Include Time`"
+                                                                ></v-switch>
+                                                              </v-col>
+                                                              <v-col
+                                                                cols="12"
+                                                                md="6"
+                                                              >
+                                                                <v-menu
+                                                                  :ref="
+                                                                    'timeMenu' +
+                                                                    index
+                                                                  "
+                                                                  v-model="
+                                                                    Tasktime[
+                                                                      todo.title
+                                                                    ]
+                                                                  "
+                                                                  :close-on-content-click="
+                                                                    false
+                                                                  "
+                                                                  :nudge-right="
+                                                                    40
+                                                                  "
+                                                                  :return-value.sync="
+                                                                    TaskmyDeadlineTime
+                                                                  "
+                                                                  transition="scale-transition"
+                                                                  offset-y
+                                                                  style="
+                                                                    z-index: 20;
+                                                                  "
+                                                                  max-width="290px"
+                                                                  color="#ff9d66"
+                                                                  min-width="290px"
+                                                                >
+                                                                  <template
+                                                                    v-slot:activator="{
+                                                                      on,
+                                                                      attrs,
+                                                                    }"
+                                                                  >
+                                                                    <v-text-field
+                                                                      :disabled="
+                                                                        TaskswitchValue ==
+                                                                          0 ||
+                                                                        TaskdateSwitchValue ==
+                                                                          1
+                                                                      "
+                                                                      v-model="
+                                                                        TaskmyDeadlineTime
+                                                                      "
+                                                                      label="Time"
+                                                                      prepend-icon="mdi-clock-time-four-outline"
+                                                                      readonly
+                                                                      color="#ff9d66"
+                                                                      v-bind="
+                                                                        attrs
+                                                                      "
+                                                                      v-on="on"
+                                                                    ></v-text-field>
+                                                                  </template>
+                                                                  <v-time-picker
+                                                                    scrollable
+                                                                    v-model="
+                                                                      TaskmyDeadlineTime
+                                                                    "
+                                                                    color="#ff9d66"
+                                                                    full-width
+                                                                    format="24hr"
+                                                                    @click:minute="
+                                                                      y =
+                                                                        'timeMenu' +
+                                                                        index.toString();
+                                                                      a =
+                                                                        $refs[
+                                                                          y
+                                                                        ];
+                                                                      a[0].save(
+                                                                        TaskmyDeadlineTime
+                                                                      );
+                                                                      Tasktime[
+                                                                        todo.title
+                                                                      ] = false;
+                                                                    "
+                                                                  >
+                                                                  </v-time-picker>
+                                                                </v-menu>
+                                                              </v-col>
+                                                            </v-row>
+                                                          </v-col>
+                                                          <v-col
+                                                            cols="12"
+                                                            :class="`rounded-xl`"
+                                                          >
+                                                            <v-textarea
+                                                              name="input-7-1"
+                                                              label="Notes"
+                                                              rows="2"
+                                                              color="#ff9d66"
+                                                              v-model="
+                                                                TaskmyNote
+                                                              "
+                                                            ></v-textarea>
                                                           </v-col>
                                                         </v-row>
-                                                      </v-col>
-                                                      <v-col
-                                                        cols="12"
-                                                        :class="`rounded-xl`"
+                                                      </v-container>
+                                                      <!--                                        <small>*indicates required field</small>-->
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                      <v-spacer></v-spacer>
+
+                                                      <v-btn
+                                                        color="#ff9d66"
+                                                        text
+                                                        @click="
+                                                          Taskdisplay[
+                                                            todo.title
+                                                          ] = false;
+                                                          clearTodoInfo();
+                                                        "
                                                       >
-                                                        <v-textarea
-                                                          name="input-7-1"
-                                                          label="Notes"
-                                                          rows="2"
-                                                          color="#ff9d66"
-                                                          v-model="TaskmyNote"
-                                                        ></v-textarea>
-                                                      </v-col>
-                                                    </v-row>
-                                                  </v-container>
-                                                  <!--                                        <small>*indicates required field</small>-->
-                                                </v-card-text>
-                                                <v-card-actions>
-                                                  <v-spacer></v-spacer>
-
-                                                  <v-btn
-                                                    color="#ff9d66"
-                                                    text
-                                                    @click="
-                                                      Taskdisplay[
-                                                        todo.title
-                                                      ] = false;
-                                                      clearTodoInfo();
-                                                    "
-                                                  >
-                                                    Close
-                                                  </v-btn>
-                                                  <v-btn
-                                                    color="#ff9d66"
-                                                    text
-                                                    :disabled="!valid"
-                                                    @click="
-                                                      Taskdisplay[
-                                                        todo.title
-                                                      ] = false;
-                                                      checkTodoEdit(todo);
-                                                    "
-                                                  >
-                                                    Update
-                                                  </v-btn>
-                                                </v-card-actions>
-                                              </v-form>
-                                            </v-card>
-                                          </v-sheet>
-                                        </v-dialog>
-                                      </v-list-item-action>
-                                    </v-col>
-                                    <v-col
-                                      col="12"
-                                      md="1"
-                                      align="left"
-                                      class="centerAlign"
-                                    >
-                                      <v-list-item-action>
-                                        <v-btn
-                                          color="#A5A5A5"
-                                          icon
-                                          @click="deleteTask(todo)"
-                                        >
-                                          <v-icon>
-                                            mdi-trash-can-outline
-                                          </v-icon>
-                                        </v-btn>
-                                      </v-list-item-action>
-                                    </v-col>
-
-                                    <v-col
-                                      cols="12"
-                                      md="2"
-                                      class="centerAlign"
-                                      style="background-color: #ff9d66"
-                                      :class="`rounded-r-xl`"
-                                    >
-                                      <v-card outlined color="#ff9d66">
-                                        <v-checkbox
+                                                        Close
+                                                      </v-btn>
+                                                      <v-btn
+                                                        color="#ff9d66"
+                                                        text
+                                                        :disabled="!valid"
+                                                        @click="
+                                                          Taskdisplay[
+                                                            todo.title
+                                                          ] = false;
+                                                          checkTodoEdit(todo);
+                                                        "
+                                                      >
+                                                        Update
+                                                      </v-btn>
+                                                    </v-card-actions>
+                                                  </v-form>
+                                                </v-card>
+                                              </v-sheet>
+                                            </v-dialog>
+                                          </v-list-item-action>
+                                        </v-col>
+                                        <v-col
+                                          col="12"
+                                          md="1"
+                                          align="left"
                                           class="centerAlign"
-                                          :class="`theme--light`"
-                                          color="white"
-                                          hide-details
-                                          dark
-                                          v-model="todo.complete"
-                                          @click="completeTask(todo)"
-                                        />
-                                      </v-card>
-                                    </v-col>
-                                  </v-row>
-                                </v-card>
-                              </v-list-item>
-                            </template>
+                                        >
+                                          <v-list-item-action>
+                                            <v-btn
+                                              color="#A5A5A5"
+                                              icon
+                                              @click="deleteTask(todo)"
+                                            >
+                                              <v-icon>
+                                                mdi-trash-can-outline
+                                              </v-icon>
+                                            </v-btn>
+                                          </v-list-item-action>
+                                        </v-col>
 
-                            <br />
-                          </div>
-                        </div>
-                        <div v-else>
-                          <span style="color: #4b4b4b; font-weight: bold">
-                            You do not have any todo yet.
-                          </span>
-                        </div>
-                            </v-tab-item>
+                                        <v-col
+                                          cols="12"
+                                          md="2"
+                                          class="centerAlign"
+                                          style="background-color: #ff9d66"
+                                          :class="`rounded-r-xl`"
+                                        >
+                                          <v-card outlined color="#ff9d66">
+                                            <v-checkbox
+                                              class="centerAlign"
+                                              :class="`theme--light`"
+                                              color="white"
+                                              hide-details
+                                              dark
+                                              v-model="todo.complete"
+                                              @click="completeTask(todo)"
+                                            />
+                                          </v-card>
+                                        </v-col>
+                                      </v-row>
+                                    </v-card>
+                                  </v-list-item>
+                                </template>
+
+                                <br />
+                              </div>
+                            </div>
+                            <div v-else>
+                              <span style="color: #4b4b4b; font-weight: bold">
+                                You do not have any todo yet.
+                              </span>
+                            </div>
+                          </v-tab-item>
                           <v-tab-item style="background-color: #ffe4cb">
-                        <div v-if="currGroupmateTodos.length !== 0">
-                          <div
-                            v-for="(todo) in orderedGroupmatesTask"
-                            :key="todo.id"
-                          >
-                            <template>
-                              <v-list-item style="display: block">
-                                <v-card
-                                  outlined
-                                  color="white"
-                                  style="margin: auto"
-                                  :class="`rounded-xl`"
-                                >
-                                  <v-row style="margin: 0px">
-                                    <v-col
-                                      cols="12"
-                                      md="2"
-                                      align="center"
-                                      justify="center"
-                                      class="centerAlign"
-                                      style="
-                                        padding-top: 20px;
-                                        padding-bottom: 20px;
-                                        font-weight: bold;
-                                        font-size: 20px;
-                                        flex-direction: column;
-                                      "
-                                    >
-                                      <div v-if="todo.finalDeadline !== null">
-                                        <span
-                                          style="margin-left: 3vw"
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{
-                                            todo.finalDeadline.toLocaleDateString(
-                                              "en-US",
-                                              {
-                                                month: "short",
-                                                day: "2-digit",
-                                              }
-                                            )
-                                          }}</span
-                                        >
-                                      </div>
-                                      <div v-else>
-                                        <span
-                                          style="margin-left: 3vw"
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                        >
-                                          Someday
-                                        </span>
-                                      </div>
-
-                                      <div v-if="todo.finalDeadline !== null">
-                                        <span
-                                          class="centerAlign"
-                                          style="
-                                            margin-left: 3vw;
-                                            font-size: 14px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{
-                                            todo.finalDeadline.toLocaleTimeString(
-                                              [],
-                                              {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                              }
-                                            )
-                                          }}
-                                        </span>
-                                      </div>
-                                    </v-col>
-                                    <v-col cols="12" md="1">
-                                      <v-divider
-                                        vertical
-                                        style="
-                                          padding-top: 20px;
-                                          padding-bottom: 20px;
-                                        "
-                                        class="leftAlign"
-                                      >
-                                      </v-divider>
-                                    </v-col>
-                                    <v-col
-                                      cols="12"
-                                      md="4"
-                                      align="left"
-                                      class="leftAlign"
-                                      style="
-                                        padding-top: 20px;
-                                        padding-bottom: 20px;
-                                      "
+                            <div v-if="currGroupmateTodos.length !== 0">
+                              <div
+                                v-for="todo in orderedGroupmatesTask"
+                                :key="todo.id"
+                              >
+                                <template>
+                                  <v-list-item style="display: block">
+                                    <v-card
+                                      outlined
+                                      color="white"
+                                      style="margin: auto"
+                                      :class="`rounded-xl`"
                                     >
                                       <v-row style="margin: 0px">
-                                        <span
+                                        <v-col
+                                          cols="12"
+                                          md="2"
+                                          align="center"
+                                          justify="center"
+                                          class="centerAlign"
                                           style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
                                             font-weight: bold;
                                             font-size: 20px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >{{ todo.title }}</span
-                                        >
-                                      </v-row>
-
-                                      <div v-if="todo.note">
-                                        <v-row style="margin: 0px">
-                                          <span
-                                            style="
-                                              font-weight: lighter;
-                                              font-size: 14px;
-                                            "
-                                            v-bind:class="{
-                                              completed: todo.complete,
-                                            }"
-                                            >{{ todo.note }}</span
-                                          >
-                                        </v-row>
-                                      </div>
-                                      <div v-else>
-                                        <span
-                                          style="
-                                            font-weight: lighter;
-                                            font-size: 14px;
-                                          "
-                                          v-bind:class="{
-                                            completed: todo.complete,
-                                          }"
-                                          >No notes</span
-                                        >
-                                      </div>
-                                    </v-col>
-                                    <v-col
-                                      cols="12"
-                                      md="3"
-                                      align="right"
-                                      class="centerAlign"
-                                      style="padding-top: 20px; padding-bottom: 20px"
-                                    >
-                                      <v-row style="margin: 0px">
-                                        <div
-                                          class="centerAlign"
-                                          style="
-                                            padding-top: 3px;
-                                            padding-bottom: 0px !important;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            flex-direction: row-reverse;
-                                            justify-content: flex-end;
-                                            padding-left: 12px;
+                                            flex-direction: column;
                                           "
                                         >
                                           <div
-                                            v-for="groupmate in todo.TaskgroupmatesChips"
-                                            :key="groupmate.id"
+                                            v-if="todo.finalDeadline !== null"
                                           >
-                                            <div
+                                            <span
+                                              style="margin-left: 3vw"
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{
+                                                todo.finalDeadline.toLocaleDateString(
+                                                  "en-US",
+                                                  {
+                                                    month: "short",
+                                                    day: "2-digit",
+                                                  }
+                                                )
+                                              }}</span
+                                            >
+                                          </div>
+                                          <div v-else>
+                                            <span
+                                              style="margin-left: 3vw"
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                            >
+                                              Someday
+                                            </span>
+                                          </div>
+
+                                          <div
+                                            v-if="todo.finalDeadline !== null"
+                                          >
+                                            <span
+                                              class="centerAlign"
                                               style="
-                                                margin-left: -15px;
+                                                margin-left: 3vw;
+                                                font-size: 14px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{
+                                                todo.finalDeadline.toLocaleTimeString(
+                                                  [],
+                                                  {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                  }
+                                                )
+                                              }}
+                                            </span>
+                                          </div>
+                                        </v-col>
+                                        <v-col cols="12" md="1">
+                                          <v-divider
+                                            vertical
+                                            style="
+                                              padding-top: 20px;
+                                              padding-bottom: 20px;
+                                            "
+                                            class="leftAlign"
+                                          >
+                                          </v-divider>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          md="4"
+                                          align="left"
+                                          class="leftAlign"
+                                          style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
+                                          "
+                                        >
+                                          <v-row style="margin: 0px">
+                                            <span
+                                              style="
+                                                font-weight: bold;
+                                                font-size: 20px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >{{ todo.title }}</span
+                                            >
+                                          </v-row>
+
+                                          <div v-if="todo.note">
+                                            <v-row style="margin: 0px">
+                                              <span
+                                                style="
+                                                  font-weight: lighter;
+                                                  font-size: 14px;
+                                                "
+                                                v-bind:class="{
+                                                  completed: todo.complete,
+                                                }"
+                                                >{{ todo.note }}</span
+                                              >
+                                            </v-row>
+                                          </div>
+                                          <div v-else>
+                                            <span
+                                              style="
+                                                font-weight: lighter;
+                                                font-size: 14px;
+                                              "
+                                              v-bind:class="{
+                                                completed: todo.complete,
+                                              }"
+                                              >No notes</span
+                                            >
+                                          </div>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          md="3"
+                                          align="right"
+                                          class="centerAlign"
+                                          style="
+                                            padding-top: 20px;
+                                            padding-bottom: 20px;
+                                          "
+                                        >
+                                          <v-row style="margin: 0px">
+                                            <div
+                                              class="centerAlign"
+                                              style="
+                                                padding-top: 3px;
                                                 padding-bottom: 0px !important;
-                                                padding-top: 3px !important;
-                                                padding-left: 3px !important;
-                                                padding-right: 3px !important;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                flex-direction: row-reverse;
+                                                justify-content: flex-end;
+                                                padding-left: 12px;
                                               "
                                             >
-                                              <v-avatar
-                                                :size="30"
-                                                style="border: 2px solid #fff"
+                                              <div
+                                                v-for="groupmate in todo.TaskgroupmatesChips"
+                                                :key="groupmate.id"
                                               >
-                                                <v-img :src="groupmate.avatar"></v-img
-                                              ></v-avatar>
+                                                <div
+                                                  style="
+                                                    margin-left: -15px;
+                                                    padding-bottom: 0px !important;
+                                                    padding-top: 3px !important;
+                                                    padding-left: 3px !important;
+                                                    padding-right: 3px !important;
+                                                  "
+                                                >
+                                                  <v-avatar
+                                                    :size="30"
+                                                    style="
+                                                      border: 2px solid #fff;
+                                                    "
+                                                  >
+                                                    <v-img
+                                                      :src="groupmate.avatar"
+                                                    ></v-img
+                                                  ></v-avatar>
+                                                </div>
+                                              </div>
                                             </div>
-                                          </div>
-                                        </div>
+                                          </v-row>
+                                        </v-col>
+
+                                        <v-col
+                                          cols="12"
+                                          md="2"
+                                          class="centerAlign"
+                                          style="background-color: #ff9d66"
+                                          :class="`rounded-r-xl`"
+                                        >
+                                          <v-card outlined color="#ff9d66">
+                                            <span
+                                              style="
+                                                color: white;
+                                                font-weight: bold;
+                                              "
+                                              >{{
+                                                todo.complete
+                                                  ? "Completed"
+                                                  : "Incompleted"
+                                              }}</span
+                                            >
+                                          </v-card>
+                                        </v-col>
                                       </v-row>
-                                    </v-col>
-                                    
-                                    <v-col
-                                      cols="12"
-                                      md="2"
-                                      class="centerAlign"
-                                      style="background-color: #ff9d66"
-                                      :class="`rounded-r-xl`"
-                                    >
-                                      <v-card outlined color="#ff9d66">
-                                        <span style="color:white; font-weight: bold">{{todo.complete ? "Completed" : "Incompleted"}}</span>
-                                      </v-card>
-                                    </v-col>
-                                  </v-row>
-                                </v-card>
-                              </v-list-item>
-                            </template>
+                                    </v-card>
+                                  </v-list-item>
+                                </template>
 
-                            <br />
-                          </div>
-                        </div>
-                        <div v-else>
-                          <span style="color: #4b4b4b; font-weight: bold">
-                            Your groupmates do not have any todo yet.
-                          </span>
-                        </div>
-                            </v-tab-item>
-
-                          </v-tabs-items>
-                      
+                                <br />
+                              </div>
+                            </div>
+                            <div v-else>
+                              <span style="color: #4b4b4b; font-weight: bold">
+                                Your groupmates do not have any todo yet.
+                              </span>
+                            </div>
+                          </v-tab-item>
+                        </v-tabs-items>
                       </v-card>
                     </v-container>
                   </v-tab-item>
@@ -4081,13 +4127,10 @@
                                     class="centerAlign"
                                     style="margin-left: 3vw; font-size: 14px"
                                     >{{
-                                      project.deadline.toLocaleTimeString(
-                                        [],
-                                        {
-                                          hour: "2-digit",
-                                          minute: "2-digit",
-                                        }
-                                      )
+                                      project.deadline.toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })
                                     }}</span
                                   >
                                 </div>
@@ -4108,10 +4151,7 @@
                                 md="5"
                                 align="left"
                                 class="leftAlign"
-                                style="
-                                  padding-top: 20px;
-                                  padding-bottom: 20px;
-                                "
+                                style="padding-top: 20px; padding-bottom: 20px"
                               >
                                 <v-row style="margin: 0px">
                                   <span
@@ -4172,9 +4212,7 @@
                                     max-width="600px"
                                     :class="`rounded-lg`"
                                   >
-                                    <template
-                                      v-slot:activator="{ on, attrs }"
-                                    >
+                                    <template v-slot:activator="{ on, attrs }">
                                       <v-btn
                                         color="#ff9d66"
                                         v-bind="attrs"
@@ -4333,9 +4371,7 @@
                                                           </v-btn>
                                                         </template>
                                                         <v-card
-                                                          style="
-                                                            padding: 20px;
-                                                          "
+                                                          style="padding: 20px"
                                                         >
                                                           <v-card-actions>
                                                             <v-text-field
@@ -4369,9 +4405,7 @@
                                                               </v-list-item-avatar>
                                                               {{ searchName }}
                                                               <br />
-                                                              {{
-                                                                searchEmail
-                                                              }}
+                                                              {{ searchEmail }}
                                                               <br />
 
                                                               <v-list-item-action>
@@ -4830,7 +4864,6 @@ export default {
         ["asc", "asc"]
       );
     },
-     
   },
 
   // beforeMount(){
@@ -4840,7 +4873,7 @@ export default {
   methods: {
     setNavigationBarActive() {
       console.log(this.isNavigationBarActive);
-      this.isNavigationBarActive = !this.isNavigationBarActive
+      this.isNavigationBarActive = !this.isNavigationBarActive;
     },
     getMeetingInvProject(project) {
       console.log(project);
@@ -5129,7 +5162,7 @@ export default {
         .catch((error) => console.log(error));
 
       this.$store.dispatch("getTasks");
-     this.$store.dispatch("getProjects");
+      this.$store.dispatch("getProjects");
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
@@ -5239,7 +5272,7 @@ export default {
       }
 
       this.$store.dispatch("getTasks");
-     this.$store.dispatch("getProjects");
+      this.$store.dispatch("getProjects");
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
       this.$store.dispatch("assignTodoDashboardCalendar");
@@ -5320,54 +5353,51 @@ export default {
       const todos = project.todos;
       for (let i = 0; i < todos.length; i++) {
         const data = await db.collection("todo").doc(todos[i].id).get();
-        const PIC = await this.getPICId(data.get("PIC"))
-        if(PIC.includes(this.$store.state.user.uid)){
-        console.log(await this.getPICId(data.get("PIC")))
-        this.currTodos.push({
-          id: data.id,
-          title: data.get("task"),
-          complete: data.get("complete"),
-          note: data.get("note"),
-          finalDeadline: data.get("deadline")
-            ? data.get("deadline").toDate()
-            : null,
+        const PIC = await this.getPICId(data.get("PIC"));
+        if (PIC.includes(this.$store.state.user.uid)) {
+          console.log(await this.getPICId(data.get("PIC")));
+          this.currTodos.push({
+            id: data.id,
+            title: data.get("task"),
+            complete: data.get("complete"),
+            note: data.get("note"),
+            finalDeadline: data.get("deadline")
+              ? data.get("deadline").toDate()
+              : null,
 
-          project: data.get("project").id,
-          oldProject: data.get("project").id,
-          TaskmyDeadline: data.get("deadlineDate"),
-          TaskmyDeadlineTime: data.get("deadlineTime"),
-          TaskswitchValue: data.get("switchValue"),
-          TaskdateSwitchValue: data.get("dateSwitchValue"),
-          TaskdisplayDeadline: data.get("displayDeadline"),
-          TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-        });
+            project: data.get("project").id,
+            oldProject: data.get("project").id,
+            TaskmyDeadline: data.get("deadlineDate"),
+            TaskmyDeadlineTime: data.get("deadlineTime"),
+            TaskswitchValue: data.get("switchValue"),
+            TaskdateSwitchValue: data.get("dateSwitchValue"),
+            TaskdisplayDeadline: data.get("displayDeadline"),
+            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          });
         } else {
           this.currGroupmateTodos.push({
-          id: data.id,
-          title: data.get("task"),
-          complete: data.get("complete"),
-          note: data.get("note"),
-          finalDeadline: data.get("deadline")
-            ? data.get("deadline").toDate()
-            : null,
+            id: data.id,
+            title: data.get("task"),
+            complete: data.get("complete"),
+            note: data.get("note"),
+            finalDeadline: data.get("deadline")
+              ? data.get("deadline").toDate()
+              : null,
 
-          project: data.get("project").id,
-          oldProject: data.get("project").id,
-          TaskmyDeadline: data.get("deadlineDate"),
-          TaskmyDeadlineTime: data.get("deadlineTime"),
-          TaskswitchValue: data.get("switchValue"),
-          TaskdateSwitchValue: data.get("dateSwitchValue"),
-          TaskdisplayDeadline: data.get("displayDeadline"),
-          TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-        });
-
+            project: data.get("project").id,
+            oldProject: data.get("project").id,
+            TaskmyDeadline: data.get("deadlineDate"),
+            TaskmyDeadlineTime: data.get("deadlineTime"),
+            TaskswitchValue: data.get("switchValue"),
+            TaskdateSwitchValue: data.get("dateSwitchValue"),
+            TaskdisplayDeadline: data.get("displayDeadline"),
+            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          });
         }
-        
-     
       }
 
       console.log(this.currTodos);
@@ -5379,15 +5409,13 @@ export default {
       this.currGroupmateTodos = [];
       const todos = project.todos;
       for (let i = 0; i < todos.length; i++) {
-        let newDate = ""
-      
-      
+        let newDate = "";
+
         const data = await db.collection("todo").doc(todos[i].id).get();
-        if(data.get("deadline")){
-    
-      
-      const currLocalDate = data.data().deadline
-            .toDate()
+        if (data.get("deadline")) {
+          const currLocalDate = data
+            .data()
+            .deadline.toDate()
             .toLocaleDateString()
             .substr(0, 10);
           const currYear = currLocalDate.substr(6);
@@ -5398,56 +5426,61 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           newDate = currYear + "-" + currMonth + "-" + currDate;
-      } 
-        const PIC = await this.getPICId(data.get("PIC"))
-        if(PIC.includes(this.$store.state.user.uid)){
-        console.log(await this.getPICId(data.get("PIC")))
+        }
+        const PIC = await this.getPICId(data.get("PIC"));
+        if (PIC.includes(this.$store.state.user.uid)) {
+          console.log(await this.getPICId(data.get("PIC")));
 
-        this.currTodos.push({
-          id: data.id,
-          title: data.get("task"),
-          complete: data.get("complete"),
-          note: data.get("note"),
-          finalDeadline: data.get("deadline")
-            ? data.get("deadline").toDate()
-            : null,
+          this.currTodos.push({
+            id: data.id,
+            title: data.get("task"),
+            complete: data.get("complete"),
+            note: data.get("note"),
+            finalDeadline: data.get("deadline")
+              ? data.get("deadline").toDate()
+              : null,
 
-          project: data.get("project").id,
-          oldProject: data.get("project").id,
-          TaskmyDeadline: data.get("deadline") ? newDate : "",
-          TaskmyDeadlineTime: data.get("deadline") ? data.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-          TaskswitchValue: data.get("includeTime") ? data.get("includeTime") : data.get("switchValue"),
-          TaskdateSwitchValue: data.get("deadline") ? false : true,
-          TaskdisplayDeadline: data.get("deadline")  ? newDate : "Someday",
-          TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-        });
+            project: data.get("project").id,
+            oldProject: data.get("project").id,
+            TaskmyDeadline: data.get("deadline") ? newDate : "",
+            TaskmyDeadlineTime: data.get("deadline")
+              ? data.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+              : "00:00",
+            TaskswitchValue: data.get("includeTime")
+              ? data.get("includeTime")
+              : data.get("switchValue"),
+            TaskdateSwitchValue: data.get("deadline") ? false : true,
+            TaskdisplayDeadline: data.get("deadline") ? newDate : "Someday",
+            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          });
         } else {
           this.currGroupmateTodos.push({
-          id: data.id,
-          title: data.get("task"),
-          complete: data.get("complete"),
-          note: data.get("note"),
-          finalDeadline: data.get("deadline")
-            ? data.get("deadline").toDate()
-            : null,
+            id: data.id,
+            title: data.get("task"),
+            complete: data.get("complete"),
+            note: data.get("note"),
+            finalDeadline: data.get("deadline")
+              ? data.get("deadline").toDate()
+              : null,
 
-          project: data.get("project").id,
-          oldProject: data.get("project").id,
-          TaskmyDeadline: data.get("deadline") ? newDate : "",
-          TaskmyDeadlineTime: data.get("deadline") ? data.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-          TaskswitchValue: data.get("includeTime") ? data.get("includeTime") : data.get("switchValue"),
-          TaskdateSwitchValue: data.get("deadline") ? false : true,
-          TaskdisplayDeadline: data.get("deadline")  ? newDate : "Someday",
-          TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-          TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-        });
-
+            project: data.get("project").id,
+            oldProject: data.get("project").id,
+            TaskmyDeadline: data.get("deadline") ? newDate : "",
+            TaskmyDeadlineTime: data.get("deadline")
+              ? data.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+              : "00:00",
+            TaskswitchValue: data.get("includeTime")
+              ? data.get("includeTime")
+              : data.get("switchValue"),
+            TaskdateSwitchValue: data.get("deadline") ? false : true,
+            TaskdisplayDeadline: data.get("deadline") ? newDate : "Someday",
+            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
+          });
         }
-        
-     
       }
 
       console.log(this.currTodos);
@@ -5459,14 +5492,13 @@ export default {
       const docRef = await db.collection("project").doc(projectID).get();
       const todos = await docRef.get("todos");
       for (let i = 0; i < todos.length; i++) {
-        let newDate = ""
-      
+        let newDate = "";
+
         const data = await db.collection("todo").doc(todos[i].id).get();
-        if(data.get("deadline")){
-    
-      
-      const currLocalDate = data.data().deadline
-            .toDate()
+        if (data.get("deadline")) {
+          const currLocalDate = data
+            .data()
+            .deadline.toDate()
             .toLocaleDateString()
             .substr(0, 10);
           const currYear = currLocalDate.substr(6);
@@ -5477,7 +5509,7 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           newDate = currYear + "-" + currMonth + "-" + currDate;
-      } 
+        }
         this.currTodos.push({
           id: data.id,
           title: data.get("task"),
@@ -5489,10 +5521,14 @@ export default {
           project: data.get("project").id,
           oldProject: data.get("project").id,
           TaskmyDeadline: data.get("deadline") ? newDate : "",
-          TaskmyDeadlineTime: data.get("deadline") ? data.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-          TaskswitchValue: data.get("includeTime") ? data.get("includeTime") : data.get("switchValue"),
+          TaskmyDeadlineTime: data.get("deadline")
+            ? data.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+            : "00:00",
+          TaskswitchValue: data.get("includeTime")
+            ? data.get("includeTime")
+            : data.get("switchValue"),
           TaskdateSwitchValue: data.get("deadline") ? false : true,
-          TaskdisplayDeadline: data.get("deadline")  ? newDate : "Someday",
+          TaskdisplayDeadline: data.get("deadline") ? newDate : "Someday",
           TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
           TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
           TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
@@ -5729,7 +5765,6 @@ export default {
       this.displayDeadline = "Deadline";
       this.oldGroupmates = [];
       this.finalDeadline = new Date().toISOString().substr(0, 10);
-   
     },
 
     async getMatchedUserbyEmail() {
@@ -6226,17 +6261,37 @@ export default {
     max-width: 0 !important;
     min-width: 0 !important;
     padding: 0 !important;
-    transition: width 1s;transition-timing-function: ease-in;
+    transition: width 1s;
+    transition-timing-function: ease-in;
   }
   .v-navigation-drawer__border.isActive {
     max-width: 256px !important;
     min-width: 256px !important;
-    padding: 18 !important;   
-    transition: width 1s;transition-timing-function: ease-in;
+    padding: 18 !important;
+    transition: width 1s;
+    transition-timing-function: ease-in;
   }
 
   .content {
     max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .description {
+    justify-content: center !important;
+  }
+  .project-card {
+    overflow-y: hidden !important;
+    padding: 10px !important;
+    max-height: 100% !important;
+  }
+  .project-meeting-bar {
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+  .empty_message {
+    padding: 10px !important;
   }
 }
 
@@ -6259,13 +6314,13 @@ export default {
   color: #ff9d66;
 }
 
-.v-slide-group__next,
-.v-slide-group__prev {
+>>> .v-slide-group__next,
+>>> .v-slide-group__prev {
   align-items: center;
   display: flex;
-  flex: 0 1 40px;
+  flex: 0 1 32px;
   justify-content: center;
-  min-width: 40px !important ;
+  min-width: 32px !important ;
 }
 </style>
 <style lang="sass">
