@@ -544,6 +544,7 @@
                             </div>
                             <div v-else>
                               <span
+                                class="todo_item"
                                 style="margin-left: 3vw"
                                 v-bind:class="{ completed: task.complete }"
                               >
@@ -583,7 +584,7 @@
                             style="padding-right: 0px"
                           >
                             <v-row>
-                              <v-col cols="12" md="7">
+                              <v-col cols="12" md="7" class="todo-background">
                                 <v-row style="margin: 0px">
                                   <span
                                     style="font-weight: bold; font-size: 20px"
@@ -610,7 +611,7 @@
                                   >
                                 </v-row>
                               </v-col>
-                              <v-col cols="12" md="5" style="padding-left: 0px">
+                              <v-col cols="12" md="5" style="padding: 0px">
                                 <v-row
                                   class="todo-item__row"
                                   style="padding-top: 0px; padding-bottom: 0px"
@@ -1738,6 +1739,12 @@ export default {
   margin-left: 3vw;
 }
 
+.todo-item__row {
+  height: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 @media only screen and (max-width: 1200px) {
   .todo_list {
     padding: 0px;
@@ -1772,6 +1779,11 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
+  .todo_list {
+    overflow-y: hidden !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+  }
   .todo_item {
     margin-left: 0;
     font-size: 16px;
