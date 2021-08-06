@@ -89,23 +89,9 @@
 
       <v-row
         class="content"
-        style="
-          flex: 1;
-          margin: 0;
-          flex-direction: column;
-          flex-wrap: nowrap;
-          margin-left: 25px;
-        "
+        style="flex: 1; margin: 0; flex-direction: column; flex-wrap: nowrap"
       >
-        <v-container
-          style="
-            margin-top: 10px;
-            padding-bottom: 0px;
-            display: flex;
-            align-items: center;
-            margin-left: 0;
-          "
-        >
+        <v-row style="margin: 10px 0 0 12px">
           <v-icon
             class="navigation_button"
             large
@@ -114,17 +100,18 @@
             >menu</v-icon
           >
           <span
+            class="dashboard_title"
             style="
               color: #4b4b4b;
-              font-size: 32px;
               display: flex;
-              align-items: flex-start;
+              align-items: flex-end;
               font-weight: bold;
+              margin-top: 5px;
             "
           >
             Welcome! {{ this.$store.state.displayUser.name }}
           </span>
-        </v-container>
+        </v-row>
         <v-row style="margin: 0">
           <v-col col="12" md="8">
             <v-row
@@ -184,6 +171,7 @@
                   </div>
                   <div
                     v-if="projectLength"
+                    class="project_list"
                     style="
                       display: flex;
                       flex-direction: row;
@@ -403,7 +391,7 @@
             </v-row>
 
             <v-row>
-              <v-col col="12" md="6" style="padding-right: 0px !important">
+              <v-col cols="12" md="6">
                 <v-container
                   style="
                     margin-right: auto;
@@ -673,7 +661,7 @@
                   </v-card>
                 </v-container>
               </v-col>
-              <v-col col="12" md="6" style="padding-left: 0px !important">
+              <v-col cols="12" md="6">
                 <v-container
                   style="
                     margin-right: auto;
@@ -1713,6 +1701,7 @@ export default {
 }
 
 .content {
+  margin-left: 25px;
   max-width: calc(100% - 256px);
 }
 
@@ -1724,6 +1713,11 @@ export default {
   margin: 0;
 }
 
+.dashboard_title {
+  font-size: 32px;
+  margin-left: 10px;
+}
+
 @media only screen and (max-width: 1200px) {
   .navigation_button {
     display: inline-flex !important;
@@ -1731,6 +1725,11 @@ export default {
 
   .navigation_title {
     width: 0;
+  }
+
+  .dashboard_title {
+    font-size: 20px;
+    margin-left: 0px;
   }
 
   .v-navigation-drawer__border {
@@ -1749,12 +1748,26 @@ export default {
   }
 
   .content {
+    margin-left: 0;
     max-width: 100%;
+  }
+
+  .project_list {
+    max-width: 100% !important;
   }
 }
 
 .v-picker .div {
   width: 100% !important;
+}
+
+>>> .v-slide-group__next,
+>>> .v-slide-group__prev {
+  align-items: center;
+  display: flex;
+  flex: 0 1 32px;
+  justify-content: center;
+  min-width: 32px !important ;
 }
 
 /* .avatars {
@@ -1765,9 +1778,9 @@ export default {
 .avatar {
   position: relative;
   border: 2px solid #fff;
-  
+
   overflow: hidden;
-  
+
 }
 
 .avatar:not(:last-child) {
