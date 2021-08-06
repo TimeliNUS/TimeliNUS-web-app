@@ -5001,7 +5001,7 @@ export default {
         .collection("project")
         .doc(this.TaskmyProject)
         .get();
-      const data = await docRef.get("groupmates");
+      const data = await docRef.get("confirmedInvitations");
       this.TasktempGroupmates = [];
       console.log(this.TaskmyProject);
       console.log(docRef);

@@ -537,7 +537,8 @@
                             <!-- <span><v-icon color="#ff9d66">place</v-icon> 
               {{meeting.venue}} </span> -->
                             <div
-                              style="display: flex; justify-content: flex-start"
+                              style="display: flex; justify-content: space-between;"
+                              
                             >
                               <span
                                 v-if="
@@ -644,6 +645,7 @@
                                 color="#ff9d66"
                                 small
                                 :href="meeting.meetingLink"
+                                :target="_blank"
                                 >Join Now</v-btn
                               >
                             </div>
