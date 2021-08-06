@@ -1559,7 +1559,9 @@ export default {
       this.tempGroupmates = [];
       this.groupmatesChips = [];
       const docRef = await db.collection("project").doc(this.myProject).get();
-      const data = await docRef.get("groupmates");
+      const data = await docRef.get("confirmedInvitations");
+      console.log(data)
+      console.log(docRef)
       for (let i = 0; i < data.length; i++) {
         const currGroupmate = await data[i].get();
         this.tempGroupmates.push({

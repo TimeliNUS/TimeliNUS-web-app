@@ -5007,7 +5007,7 @@ export default {
         .collection("project")
         .doc(this.TaskmyProject)
         .get();
-      const data = await docRef.get("groupmates");
+      const data = await docRef.get("confirmedInvitations");
       this.TasktempGroupmates = [];
       console.log(this.TaskmyProject);
       console.log(docRef);
@@ -6111,17 +6111,20 @@ export default {
       db.collection("project")
         .doc(projectInvitation.id)
         .update({
-          groupmates: firebase.firestore.FieldValue.arrayUnion(
+          confirmedInvitations: firebase.firestore.FieldValue.arrayUnion(
             db.collection("user").doc(this.$store.state.user.uid)
           ),
         });
       db.collection("project")
         .doc(projectInvitation.id)
         .update({
-          groupmates_invited: firebase.firestore.FieldValue.arrayRemove(
+          invitations: firebase.firestore.FieldValue.arrayRemove(
             db.collection("user").doc(this.$store.state.user.uid)
           ),
         });
+
+      this.$store.dispatch("getProjectInvitations")
+      this.$store.dispatch("getProjects")
     },
 
     async declineProject(projectInvitation) {
