@@ -7016,6 +7016,15 @@ export default {
   padding-top: 0px;
 }
 
+>>> .v-slide-group__next,
+>>> .v-slide-group__prev {
+  align-items: center;
+  display: flex;
+  flex: 0 1 32px;
+  justify-content: center;
+  min-width: 32px !important ;
+}
+
 /*.dialogCSS {*/
 /* border-radius: 4px;*/
 /* margin: 24px;*/

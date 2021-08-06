@@ -120,12 +120,20 @@
               class="elevation-0"
             >
               <v-img
+                class="todo-background"
                 style="padding: 20px"
                 height="200px"
+                contain
                 src="@/assets/todo_dashboard.png"
               >
                 <v-card-title style="padding-bottom: 0px">
-                  <span style="color: white; font-size: 28px; font-weight: bold"
+                  <span
+                    style="
+                      color: white;
+                      font-size: 28px;
+                      font-weight: bold;
+                      word-break: keep-all;
+                    "
                     >Your Overall Todos Progress</span
                   >
                 </v-card-title>
@@ -194,13 +202,8 @@
             <v-card
               outlined
               color="#FFE4CB"
-              style="
-                padding: 20px;
-                overflow-y: scroll;
-                max-height: 65vh;
-                min-height: 65vh;
-              "
-              :class="`rounded-xl`"
+              style="overflow-y: scroll; max-height: 65vh; min-height: 65vh"
+              :class="`rounded-xl todo_list`"
             >
               <v-dialog
                 v-model="dialog"
@@ -525,15 +528,11 @@
                             align="center"
                             justify="center"
                             class="centerAlign"
-                            style="
-                              font-weight: bold;
-                              font-size: 20px;
-                              flex-direction: column;
-                            "
+                            style="font-weight: bold; flex-direction: column"
                           >
                             <div v-if="task.deadline !== null">
                               <span
-                                style="margin-left: 3vw"
+                                class="todo_item"
                                 v-bind:class="{ completed: task.complete }"
                                 >{{
                                   task.deadline.toLocaleDateString("en-US", {
@@ -566,7 +565,7 @@
                               >
                             </div>
                           </v-col>
-                          <v-col cols="1" md="1">
+                          <v-col cols="1" md="1" class="todo_divider">
                             <v-divider
                               vertical
                               style="padding-top: 20px; padding-bottom: 20px"
@@ -611,11 +610,14 @@
                                   >
                                 </v-row>
                               </v-col>
-                              <v-col cols="12" md="5">
-                                <v-row class="todo-item__row">
+                              <v-col cols="12" md="5" style="padding-left: 0px">
+                                <v-row
+                                  class="todo-item__row"
+                                  style="padding-top: 0px; padding-bottom: 0px"
+                                >
                                   <v-col
                                     cols="6"
-                                    md="6"
+                                    md="7"
                                     align="right"
                                     class="centerAlign todo-item"
                                     style="
@@ -1075,7 +1077,6 @@
                                   </v-col>
 
                                   <v-col
-                                    cols="3"
                                     class="centerAlign"
                                     style="background-color: #ff9d66"
                                     :class="`rounded-r-xl todo-item`"
@@ -1729,7 +1730,19 @@ export default {
   margin: 0;
 }
 
+.todo_list {
+  padding: 20px;
+}
+
+.todo_item {
+  margin-left: 3vw;
+}
+
 @media only screen and (max-width: 1200px) {
+  .todo_list {
+    padding: 0px;
+  }
+
   .navigation_button {
     display: inline-flex;
   }
@@ -1759,6 +1772,15 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
+  .todo_item {
+    margin-left: 0;
+    font-size: 16px;
+  }
+  .todo-background {
+    height: 100% !important;
+    padding-bottom: 0px;
+  }
+
   >>> .v-input--selection-controls__input {
     margin-right: 0px !important;
     /* margin-right: 8px; */
@@ -1767,10 +1789,17 @@ export default {
     height: 36px;
   }
   .todo-item.rounded-r-xl {
-    background-color: #fff !important;
+    background-color: transparent !important;
+    padding-left: 0px;
   }
   .todo-item__row {
     padding-bottom: 12px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .todo_divider {
+    padding: 0px;
   }
 }
 
