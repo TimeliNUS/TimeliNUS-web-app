@@ -1057,7 +1057,6 @@
                         v-model="meetingSubmit"
                         content-class="elevation-0"
                         max-width="600px"
-                        min-height="300px"
                         :class="`rounded-lg`"
                         style="
                           display: flex;
@@ -1070,7 +1069,6 @@
                           color="#ff9d66"
                           style="
                             padding: 3px;
-                            min-width: 600px;
                             max-width: 600px;
                             min-height: 300px;
                           "
@@ -1279,7 +1277,6 @@
                           color="#ff9d66"
                           style="
                             padding: 3px;
-                            min-width: 600px;
                             max-width: 600px;
                             min-height: 300px;
                           "
@@ -1291,7 +1288,6 @@
                             style="
                               padding: 40px;
                               min-height: 300px;
-                              min-width: 550px;
                               max-width: 600px;
                               display: flex;
                               justify-content: center;
@@ -1305,7 +1301,7 @@
                                 display: flex;
                                 align-items: center;
                                 justify-content: space-between;
-                                min-width: 520px;
+                                width: 100%;
                               "
                             >
                               <span
@@ -1778,7 +1774,6 @@
                         color="#ff9d66"
                         style="
                           padding: 3px;
-                          min-width: 600px;
                           max-width: 600px;
                           min-height: 300px;
                         "
@@ -1790,7 +1785,6 @@
                           style="
                             padding: 40px;
                             min-height: 300px;
-                            min-width: 550px;
                             max-width: 600px;
                             display: flex;
                             justify-content: center;
@@ -1803,7 +1797,7 @@
                               display: flex;
                               align-items: center;
                               justify-content: space-between;
-                              min-width: 520px;
+                              width: 100%;
                             "
                           >
                             <span
@@ -4078,7 +4072,6 @@
                             color="#ff9d66"
                             style="
                               padding: 3px;
-                              min-width: 600px;
                               max-width: 600px;
                               min-height: 300px;
                             "
@@ -4164,7 +4157,6 @@
                               color="#ff9d66"
                               style="
                                 padding: 3px;
-                                min-width: 600px;
                                 max-width: 600px;
                                 min-height: 300px;
                               "
@@ -4549,7 +4541,6 @@
                           color="#ff9d66"
                           style="
                             padding: 3px;
-                            min-width: 600px;
                             max-width: 600px;
                             min-height: 300px;
                           "
@@ -4626,7 +4617,6 @@
                           color="#ff9d66"
                           style="
                             padding: 3px;
-                            min-width: 600px;
                             max-width: 600px;
                             min-height: 300px;
                           "
@@ -5285,7 +5275,6 @@
                                   color="#ff9d66"
                                   style="
                                     padding: 3px;
-                                    min-width: 600px;
                                     max-width: 600px;
                                     min-height: 300px;
                                   "
@@ -5296,7 +5285,6 @@
                                     :class="`rounded-xl`"
                                     style="
                                       padding: 40px;
-                                      min-height: 300px;
                                       max-width: 600px;
                                       display: flex;
                                       justify-content: center;
