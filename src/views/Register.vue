@@ -34,7 +34,7 @@
               <div>
                 <v-row>
                   <v-row>
-                    <v-col col="3">
+                    <v-col col="6">
                       <v-btn
                         class=""
                         outlined
@@ -43,15 +43,11 @@
                         @click="googleSignIn"
                       >
                         <v-icon dark left> mdi-google </v-icon>
-                        Google
+                        Login with Google
                       </v-btn>
                     </v-col>
 
-                    <v-col col="3">
-                      <v-btn class="" large outlined color="#ff9d66">
-                        NUS Email
-                      </v-btn>
-                    </v-col>
+                    
                   </v-row>
                 </v-row>
 
