@@ -447,7 +447,7 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
 async function getProjectInvitations(state: any): Promise<Project[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("groupmates_invited", "array-contains",db.collection("user").doc(state.user.uid))
+    .where("invitations", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
   console.log(state);
   const projectInvitations: Project[] = [];
@@ -486,9 +486,9 @@ async function getProjectInvitations(state: any): Promise<Project[]> {
       switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
       dateSwitchValue: doc.data().deadline ? false : true,
       displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().groupmates ?? "",
-      groupmatesAvatar: await getGroupmatesAvatar(doc.data().groupmates),
-      groupmatesName: await getGroupmatesName(doc.data().groupmates),
+      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
+      groupmatesAvatar: await getGroupmatesAvatar(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
+      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
       confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
       incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
     });
@@ -513,7 +513,7 @@ async function getCreator(creator: any) {
 async function getProjects(state: any): Promise<Project[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
+    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
   console.log(state);
  
@@ -610,7 +610,7 @@ async function getProjectProgress(todos: any) {
 async function getTodayProjects(state: any): Promise<TodayProject[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
+    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
   console.log(state);
   const projects: TodayProject[] = [];
@@ -660,7 +660,7 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
 async function getCalendarProjects(state: any): Promise<TodayProject[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("groupmates", "array-contains",db.collection("user").doc(state.user.uid))
+    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
     .get();
   console.log(state);
   const projects: TodayProject[] = [];
