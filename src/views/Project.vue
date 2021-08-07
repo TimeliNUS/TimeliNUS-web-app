@@ -5140,6 +5140,14 @@ export default {
 
     async addTodo() {
       this.errors = "";
+      let projectTitle = "";
+
+      for (let i = 0; i < this.projects.length; i++) {
+        console.log(this.projects[i].title);
+        if (this.projects[i].id == this.TaskmyProject) {
+          projectTitle = this.projects[i].title;
+        }
+      }
 
       const response = await db.collection("todo").add({
         task: this.TaskmyTodo,
@@ -5154,7 +5162,11 @@ export default {
         displayDeadline: this.TaskdisplayDeadline,
         PIC: [],
         note: this.TaskmyNote,
-        project: db.collection("project").doc(this.TaskmyProject),
+        project: {
+          id: this.TaskmyProject,
+          title: projectTitle,
+          reference: db.collection("project").doc(this.TaskmyProject),
+        },
       });
       await this.addFinalPIC(response);
       await db
@@ -5238,6 +5250,14 @@ export default {
     async editTask(task) {
       console.log(task.id);
       console.log(this.TaskdateSwitchValue);
+      let projectTitle = "";
+
+      for (let i = 0; i < this.projects.length; i++) {
+        console.log(this.projects[i].title);
+        if (this.projects[i].id == this.myProject) {
+          projectTitle = this.projects[i].title;
+        }
+      }
       const response = await db
         .collection("todo")
         .doc(task.id)
@@ -5253,7 +5273,11 @@ export default {
           deadline: this.TaskfinalDeadline,
           displayDeadline: this.TaskdisplayDeadline,
           note: this.TaskmyNote,
-          project: db.collection("project").doc(this.TaskmyProject),
+          project: {
+          id: this.TaskmyProject,
+          title: projectTitle,
+          reference: db.collection("project").doc(this.TaskmyProject),
+        },
           PIC: [],
         });
       await this.addFinalPIC(task);
