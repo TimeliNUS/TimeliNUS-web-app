@@ -106,7 +106,7 @@ export const findGoogleCommonTime = async (
     user: user,
   };
   await axios.post(
-    "http://asia-east2-timelinus-2021.cloudfunctions.net/findCommon",
+    "https://asia-east2-timelinus-2021.cloudfunctions.net/findCommon",
     obj
     // {
     //   headers: {
