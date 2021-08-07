@@ -431,7 +431,7 @@
                   >
                     <div v-if="checkTodayMeetingLength()" style="width: 100%">
                       <div
-                        v-for="meeting in this.$store.state.confirmedMeetings"
+                        v-for="meeting in orderedConfirmedMeetings"
                         :key="meeting.id"
                         style="width: 100%"
                       >
@@ -538,7 +538,7 @@
               {{meeting.venue}} </span> -->
                             <div
                               style="display: flex; justify-content: space-between;"
-                              
+
                             >
                               <span
                                 v-if="
@@ -615,7 +615,7 @@
                                       1000 /
                                       60 /
                                       60
-                                  ) == 0
+                                  ) !== 0
                                 "
                                 ><v-icon color="#ff9d66"
                                   >hourglass_bottom</v-icon
@@ -632,6 +632,35 @@
                                   ) * -1
                                 }}
                                 hours
+                              </span>
+
+                              <span
+                                v-if="
+                                  displaySelectedTimeDifference(
+                                    meeting.selectedStartDate
+                                  ) < 0 &&
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /
+                                      1000 /
+                                      60 /
+                                      60
+                                  ) == 0
+                                "
+                                ><v-icon color="#ff9d66"
+                                  >hourglass_bottom</v-icon
+                                >
+                                Expired by
+                                {{
+                                  Math.trunc(
+                                    displaySelectedTimeDifference(
+                                      meeting.selectedStartDate
+                                    ) /1000 / 60
+                                  
+                                  ) * -1
+                                }}
+                                minutes
                               </span>
 
                               <v-btn
@@ -877,7 +906,7 @@
                   </v-card-text>
                   <div v-if="checkThisDayMeetingLength()">
                     <div
-                      v-for="meeting in this.$store.state.confirmedMeetings"
+                      v-for="meeting in orderedCalendarConfirmedMeetings"
                       :key="meeting.id"
                     >
                       <div v-if="checkMeetingDate(meeting)">
@@ -1177,6 +1206,14 @@ export default {
 
   computed: {
     orderedConfirmedMeetings: function () {
+      return _.orderBy(
+        this.$store.state.confirmedMeetings,
+        ["selectedStartDate", "selectedEndDate", "projectTitle"],
+        ["asc", "asc", "asc"]
+      );
+    },
+
+    orderedCalendarConfirmedMeetings: function () {
       return _.orderBy(
         this.$store.state.confirmedMeetings,
         ["projectTitle", "selectedStartDate", "selectedEndDate"],
