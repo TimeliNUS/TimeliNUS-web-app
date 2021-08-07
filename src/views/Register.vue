@@ -2,11 +2,12 @@
   <div class="background centerAlign">
     <v-container class="align-center mb-6 fill-height centerAlign">
       <v-card class="test" rounded="xl">
-        <v-row class="test">
+        <v-row style="margin: auto; min-height: 60vh">
           <v-col
             align="center"
             justify="center"
-            cols="6"
+            cols="12"
+            md="6"
             class="register__image centerAlign"
           >
             <div class="image-container">
@@ -16,15 +17,15 @@
                 alt=""
               ></v-img>
               <br />
-              <span style="font-size: 24px; color: #001847; font-weight: bold">Slick without Panic</span>
+              <span style="font-size: 24px; color: #001847; font-weight: bold"
+                >Slick without Panic</span
+              >
               <br />
-              
-              
             </div>
           </v-col>
 
-          <v-col cols="6" class="blueblue leftAlign">
-            <div style="max-height: 100%; max-width: 100%">
+          <v-col cols="12" md="6" class="leftAlign">
+            <div style="max-height: 100%; max-width: 100%; width: 100%">
               <div>
                 <h1 style="color: #ff6f1e">Get started.</h1>
                 <p style="color: #979797">
@@ -37,25 +38,16 @@
                 <br />
               </div>
               <div>
-                <v-row>
-                  <v-row>
-                    <v-col col="6">
-                      <v-btn
-                        class=""
-                        outlined
-                        large
-                        color="#ff9d66"
-                        @click="googleSignIn"
-                      >
-                        <v-icon dark left> mdi-google </v-icon>
-                        Login with Google
-                      </v-btn>
-                    </v-col>
-
-                    
-                  </v-row>
-                </v-row>
-
+                <v-btn
+                  class=""
+                  outlined
+                  large
+                  color="#ff9d66"
+                  @click="googleSignIn"
+                >
+                  <v-icon dark left> mdi-google </v-icon>
+                  Login with Google
+                </v-btn>
                 <br /><br />
               </div>
               <div>
@@ -267,7 +259,9 @@ export default {
 
 .register__image {
   width: 40vw;
-  min-height: 60vh;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  /*min-height: 60vh;*/
   background-color: #ffd0a5;
 }
 
