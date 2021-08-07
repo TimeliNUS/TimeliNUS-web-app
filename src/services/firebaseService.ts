@@ -86,6 +86,7 @@ export const findCommonTime = (
     id: id,
     user: user,
   };
+  console.log("link: " + link);
   axios.post(
     "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
     obj
@@ -142,4 +143,3 @@ export const isLinkedToZoom = async (user: string): Promise<boolean> => {
   const doc = await firebase.firestore().collection("user").doc(user).get();
   return doc.get("zoomRefreshToken") != null;
 };
-
