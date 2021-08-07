@@ -4032,7 +4032,7 @@
                                 importedCalendar == true
                               "
                               @click="
-                                importCalendar(link, currMeetingInv);
+                                importCalendar(newCalendarURL, currMeetingInv);
                                 assignExistingCalendar();
                               "
                             >
@@ -6480,7 +6480,7 @@ export default {
         displayMeetingDateRange: this.displayMeetingDateRange,
       });
       // await this.addMeetingGroupmates(response);
-      
+
       this.$store.dispatch("getConfirmedMeeting");
       await this.$store.dispatch("assignMeetingCalendar");
       this.$store.dispatch("getTodayProjects");
@@ -6829,7 +6829,7 @@ export default {
       }
     },
 
-    async tempImportCalendar(link, meetingInv) {
+    tempImportCalendar(link, meetingInv) {
       this.tempImportStartDate = new Date(
         meetingInv.displayMeetingDateRange.substr(0, 10) +
           "T" +
@@ -6851,6 +6851,7 @@ export default {
 
     async importCalendar(link, meeting) {
       this.tempImportCalendar(link, meeting);
+      console.log("temp Imort link " + this.tempImportLink);
       await findCommonTime(
         this.tempImportLink,
         this.tempImportStartDate,
