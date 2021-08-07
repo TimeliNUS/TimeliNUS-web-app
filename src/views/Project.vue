@@ -3133,6 +3133,7 @@
                                           font-weight: bold;
                                           font-size: 20px;
                                           flex-direction: column;
+                                          padding: 0px;
                                         "
                                       >
                                         <div v-if="todo.finalDeadline !== null">
@@ -3202,7 +3203,7 @@
                                         <v-row>
                                           <v-col
                                             cols="12"
-                                            md="7"
+                                            md="5"
                                             align="left"
                                             class="leftAlign todo-background"
                                             style="
@@ -3252,6 +3253,7 @@
                                           </v-col>
                                           <v-col
                                             cols="5"
+                                            md="4"
                                             align="right"
                                             class="centerAlign todo-item"
                                             style="
@@ -3767,7 +3769,7 @@
                                           </v-col>
 
                                           <v-col
-                                            md="2"
+                                            md="1"
                                             class="centerAlign"
                                             style="background-color: #ff9d66"
                                             :class="`rounded-r-xl todo-item`"
@@ -3899,7 +3901,7 @@
                                         <v-row class="todo-item__row">
                                           <v-col
                                             cols="12"
-                                            md="7"
+                                            md="6"
                                             align="left"
                                             class="leftAlign todo-background"
                                             style="
@@ -4001,7 +4003,7 @@
                                           <!-- todo -->
                                           <v-col
                                             cols="12"
-                                            md="2"
+                                            md="3"
                                             class="centerAlign"
                                             style="background-color: #ff9d66"
                                             :class="`rounded-r-xl`"
