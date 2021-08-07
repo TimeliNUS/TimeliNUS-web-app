@@ -5722,7 +5722,7 @@ export default {
     },
     redirectToZoomLogin() {
       window.location.href =
-        'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "' +
+        'https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=https://asia-east2-timelinus-2021.cloudfunctions.net/zoomAuth&state={"client":"web", "id": "' +
         this.$store.state.user.uid +
         '"}';
     },
