@@ -886,6 +886,8 @@ async function getMeetingInvitations(
       console.log(currMonth);
       console.log(currDate);
       newStartDate = currYear + "-" + currMonth + "-" + currDate;
+      console.log(newStartDate)
+
 
       const currLocalDateEnd = doc.data().endDate
       .toDate()
@@ -914,7 +916,7 @@ async function getMeetingInvitations(
       timeLength: doc.data().timeLength,
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
-      displayMeetingDateRange: newStartDate + "~" + newEndDate,
+      displayMeetingDateRange: newStartDate + " ~ " + newEndDate,
       groupmates: await getPendingGroupmates(doc.data().groupmates),
     });
   });
