@@ -2,11 +2,12 @@
   <div class="background centerAlign">
     <v-container class="align-center mb-6 fill-height centerAlign">
       <v-card class="test">
-        <v-row class="test">
+        <v-row style="margin: auto; min-height: 60vh">
           <v-col
             align="center"
             justify="center"
-            cols="6"
+            cols="12"
+            md="6"
             class="login__image centerAlign"
           >
             <div class="image-container">
@@ -16,15 +17,15 @@
                 alt=""
               ></v-img>
               <br />
-              <span style="font-size: 24px; color: #001847; font-weight: bold">Slick without Panic</span>
+              <span style="font-size: 24px; color: #001847; font-weight: bold"
+                >Slick without Panic</span
+              >
               <br />
-              
-              
             </div>
           </v-col>
 
-          <v-col cols="6" class="login__form leftAlign">
-            <div style="max-height: 100%">
+          <v-col cols="12" md="6" class="leftAlign">
+            <div style="max-height: 100%; width: 100%">
               <div>
                 <h1 style="color: #ff6f1e">Login.</h1>
                 <p style="color: #979797">
@@ -49,8 +50,6 @@
                       Login with Google
                     </v-btn>
                   </v-col>
-
-                  
                 </v-row>
 
                 <br />
@@ -204,6 +203,12 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (min-width: 1200px) {
+  .test {
+    width: 80vw;
+  }
+}
+
 .test {
   /*width: 80vw;*/
   min-height: 60vh;
@@ -217,7 +222,9 @@ export default {
 
 .login__image {
   width: 40vw;
-  min-height: 60vh;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  /*min-height: 60vh;*/
   background-color: #ffd0a5;
 }
 
@@ -255,6 +262,7 @@ export default {
   text-align: left;
   padding-left: 5%;
   padding-top: 5%;
+  padding-right: 5%;
 }
 
 .divider {
