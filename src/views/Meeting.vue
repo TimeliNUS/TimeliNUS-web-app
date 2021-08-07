@@ -6851,6 +6851,7 @@ export default {
 
     async importCalendar(link, meeting) {
       this.tempImportCalendar(link, meeting);
+      console.log(tempImportLink);
       await findCommonTime(
         this.tempImportLink,
         this.tempImportStartDate,

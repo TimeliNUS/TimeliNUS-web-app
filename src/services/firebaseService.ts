@@ -86,6 +86,7 @@ export const findCommonTime = (
     id: id,
     user: user,
   };
+  console.log(obj.link);
   axios.post(
     "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
     obj
