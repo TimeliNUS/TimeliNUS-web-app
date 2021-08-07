@@ -545,7 +545,6 @@
                             <div v-else>
                               <span
                                 class="todo_item"
-                                style="margin-left: 3vw"
                                 v-bind:class="{ completed: task.complete }"
                               >
                                 Someday
@@ -555,7 +554,7 @@
                             <div v-if="task.deadline !== null">
                               <span
                                 class="centerAlign"
-                                style="margin-left: 3vw; font-size: 14px"
+                                style="font-size: 14px"
                                 v-bind:class="{ completed: task.complete }"
                                 >{{
                                   task.deadline.toLocaleTimeString([], {
@@ -611,7 +610,11 @@
                                   >
                                 </v-row>
                               </v-col>
-                              <v-col cols="12" md="5" style="padding: 0px">
+                              <v-col
+                                cols="12"
+                                md="5"
+                                style="padding: 0px; padding-right: 10px"
+                              >
                                 <v-row
                                   class="todo-item__row"
                                   style="padding-top: 0px; padding-bottom: 0px"
@@ -1560,8 +1563,8 @@ export default {
       this.groupmatesChips = [];
       const docRef = await db.collection("project").doc(this.myProject).get();
       const data = await docRef.get("confirmedInvitations");
-      console.log(data)
-      console.log(docRef)
+      console.log(data);
+      console.log(docRef);
       for (let i = 0; i < data.length; i++) {
         const currGroupmate = await data[i].get();
         this.tempGroupmates.push({
@@ -1737,9 +1740,9 @@ export default {
   padding: 20px;
 }
 
-.todo_item {
+/*.todo_item {
   margin-left: 3vw;
-}
+}*/
 
 .todo-item__row {
   height: 100%;
