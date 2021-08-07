@@ -1806,6 +1806,7 @@
                                 padding: 5px;
                                 font-size: 36px;
                                 margin-bottom: -10px;
+                                text-align: left;
                               "
                               >{{ meeting.title }}</span
                             >
