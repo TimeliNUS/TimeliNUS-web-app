@@ -122,12 +122,14 @@ export const createZoomMeeting = async (
   startDateString: string,
   durationInMins: number,
   id: string,
-  user: string
+  user: string,
+  topic: string
 ) => {
   console.log(durationInMins);
   const obj = {
+    topic: topic,
     startTime: startDateString,
-    duration: durationInMins,
+    timeLength: durationInMins,
     id: id,
     user: user,
   };

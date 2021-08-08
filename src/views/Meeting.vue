@@ -4448,9 +4448,6 @@
                                     </v-card-text>
                                     <v-card-actions>
                                       <v-spacer></v-spacer>
-                                      {{ meetingExtraDate }}
-                                      {{ meetingExtraStartTime }}
-                                      {{ meetingExtraEndTime }}
                                       <v-btn
                                         color="#ff9d66"
                                         :disabled="
@@ -5941,11 +5938,18 @@ export default {
           this.selectedEndTime.getTime() - this.selectedStartTime.getTime();
         console.log(Difference_In_Time);
         console.log(this.selectedStartTime.toISOString());
-        const zoomLink = await createZoomMeeting(
-          this.selectedStartTime.toISOString(),
+        const tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+        const localISOTime = new Date(
+          this.selectedStartTime.getTime() - tzoffset
+        )
+          .toISOString()
+          .slice(0, -1);
+        createZoomMeeting(
+          localISOTime,
           Difference_In_Time / 60 / 1000,
           this.currMeetingConfirmation.id,
-          this.$store.state.user.uid
+          this.$store.state.user.uid,
+          this.currMeetingConfirmation.title
         );
       }
       db.collection("meeting")
@@ -7111,7 +7115,7 @@ export default {
 .navigation_title {
   margin: 0;
 }
-.meeting-avatars{
+.meeting-avatars {
   justify-content: center;
 }
 @media only screen and (max-width: 1200px) {
@@ -7144,7 +7148,7 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
-  .meeting-avatars{
+  .meeting-avatars {
     justify-content: flex-start;
   }
 }
