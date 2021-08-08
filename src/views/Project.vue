@@ -5440,16 +5440,15 @@ export default {
       console.log(project);
       this.currTodos = [];
       this.currGroupmateTodos = [];
-      const tasks = project.todos
-      for(let i=0; i<tasks.length; i++){
-        const doc = await tasks[i].get()
-        const data = doc.data()
+      const tasks = project.todos;
+      for (let i = 0; i < tasks.length; i++) {
+        const doc = await tasks[i].get();
+        const data = doc.data();
         const PIC = await this.getPICId(data.PIC);
-        let newDate=""
-          if (data.deadline) {
-          const currLocalDate = data
-            
-            .deadline.toDate()
+        let newDate = "";
+        if (data.deadline) {
+          const currLocalDate = data.deadline
+            .toDate()
             .toLocaleDateString()
             .substr(0, 10);
           const currYear = currLocalDate.substr(6);
@@ -5461,41 +5460,14 @@ export default {
           console.log(currDate);
           newDate = currYear + "-" + currMonth + "-" + currDate;
         }
-      
-          if (PIC.includes(this.$store.state.user.uid)) {
-            this.currTodos.push({
-              id: doc.id,
-              title: data.task,
-              complete: data.complete,
-              note: data.note,
-              finalDeadline: data.deadline
-                ? data.deadline.toDate()
-                : null,
 
-              project: data.project.id,
-              oldProject: data.project.id,
-              TaskmyDeadline: data.deadline ? newDate : "",
-              TaskmyDeadlineTime: data.deadline
-                ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-                : "00:00",
-              TaskswitchValue: data.includeTime
-                ? data.includeTime
-                : data.includeTime,
-              TaskdateSwitchValue: data.deadline ? false : true,
-              TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-              TaskgroupmatesChips: await this.getPIC(data.PIC),
-              TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-              TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-          } else {
-            this.currGroupmateTodos.push({
-            id: data.id,
+        if (PIC.includes(this.$store.state.user.uid)) {
+          this.currTodos.push({
+            id: doc.id,
             title: data.task,
             complete: data.complete,
             note: data.note,
-            finalDeadline: data.deadline
-              ? data.deadline.toDate()
-              : null,
+            finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
             project: data.project.id,
             oldProject: data.project.id,
@@ -5512,29 +5484,50 @@ export default {
             TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
             TaskoldGroupmatesChips: await this.getPICId(data.PIC),
           });
-          }
-        
+        } else {
+          this.currGroupmateTodos.push({
+            id: data.id,
+            title: data.task,
+            complete: data.complete,
+            note: data.note,
+            finalDeadline: data.deadline ? data.deadline.toDate() : null,
+
+            project: data.project.id,
+            oldProject: data.project.id,
+            TaskmyDeadline: data.deadline ? newDate : "",
+            TaskmyDeadlineTime: data.deadline
+              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+              : "00:00",
+            TaskswitchValue: data.includeTime
+              ? data.includeTime
+              : data.includeTime,
+            TaskdateSwitchValue: data.deadline ? false : true,
+            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+            TaskgroupmatesChips: await this.getPIC(data.PIC),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
+            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
+          });
+        }
       }
-      console.log(this.currTodos)
+      console.log(this.currTodos);
     },
 
     async EditpassCurrSelectedProject(projectID) {
       console.log(project);
       this.currTodos = [];
       this.currGroupmateTodos = [];
-      const projectDoc = await db.collection("project").doc(projectID).get()
-      const project = projectDoc.data()
-      console.log(project)
-      const tasks = project.todos
-      for(let i=0; i<tasks.length; i++){
-        const doc = await tasks[i].get()
-        const data = doc.data()
+      const projectDoc = await db.collection("project").doc(projectID).get();
+      const project = projectDoc.data();
+      console.log(project);
+      const tasks = project.todos;
+      for (let i = 0; i < tasks.length; i++) {
+        const doc = await tasks[i].get();
+        const data = doc.data();
         const PIC = await this.getPICId(data.PIC);
-        let newDate=""
-          if (data.deadline) {
-          const currLocalDate = data
-            
-            .deadline.toDate()
+        let newDate = "";
+        if (data.deadline) {
+          const currLocalDate = data.deadline
+            .toDate()
             .toLocaleDateString()
             .substr(0, 10);
           const currYear = currLocalDate.substr(6);
@@ -5546,41 +5539,14 @@ export default {
           console.log(currDate);
           newDate = currYear + "-" + currMonth + "-" + currDate;
         }
-      
-          if (PIC.includes(this.$store.state.user.uid)) {
-            this.currTodos.push({
-              id: doc.id,
-              title: data.task,
-              complete: data.complete,
-              note: data.note,
-              finalDeadline: data.deadline
-                ? data.deadline.toDate()
-                : null,
 
-              project: data.project.id,
-              oldProject: data.project.id,
-              TaskmyDeadline: data.deadline ? newDate : "",
-              TaskmyDeadlineTime: data.deadline
-                ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-                : "00:00",
-              TaskswitchValue: data.includeTime
-                ? data.includeTime
-                : data.includeTime,
-              TaskdateSwitchValue: data.deadline ? false : true,
-              TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-              TaskgroupmatesChips: await this.getPIC(data.PIC),
-              TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-              TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-          } else {
-            this.currGroupmateTodos.push({
-            id: data.id,
+        if (PIC.includes(this.$store.state.user.uid)) {
+          this.currTodos.push({
+            id: doc.id,
             title: data.task,
             complete: data.complete,
             note: data.note,
-            finalDeadline: data.deadline
-              ? data.deadline.toDate()
-              : null,
+            finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
             project: data.project.id,
             oldProject: data.project.id,
@@ -5597,10 +5563,32 @@ export default {
             TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
             TaskoldGroupmatesChips: await this.getPICId(data.PIC),
           });
-          }
-        
+        } else {
+          this.currGroupmateTodos.push({
+            id: data.id,
+            title: data.task,
+            complete: data.complete,
+            note: data.note,
+            finalDeadline: data.deadline ? data.deadline.toDate() : null,
+
+            project: data.project.id,
+            oldProject: data.project.id,
+            TaskmyDeadline: data.deadline ? newDate : "",
+            TaskmyDeadlineTime: data.deadline
+              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+              : "00:00",
+            TaskswitchValue: data.includeTime
+              ? data.includeTime
+              : data.includeTime,
+            TaskdateSwitchValue: data.deadline ? false : true,
+            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+            TaskgroupmatesChips: await this.getPIC(data.PIC),
+            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
+            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
+          });
+        }
       }
-      console.log(this.currTodos)
+      console.log(this.currTodos);
     },
 
     async addCurrUserToTempGroupmates() {
@@ -5640,7 +5628,7 @@ export default {
           new Date(this.myDeadline + "T" + this.myDeadlineTime + ":00+08:00")
         );
       }
-      await this.passGroupmates();
+      this.passGroupmates();
       this.editProject(project);
     },
 
@@ -5726,19 +5714,22 @@ export default {
         // dateSwitchValue: this.dateSwitchValue,
         deadline: this.finalDeadline,
         // displayDeadline: this.displayDeadline,
-        confirmedInvitations: [],
-        invitations: [],
+        confirmedInvitations: [
+          db.collection("user").doc(this.$store.state.user.uid),
+        ],
+        invitations: this.finalGroupmates
+          .filter((x) => x != this.$store.state.user.uid)
+          .map((x) => db.collection("user").doc(x)),
         groupmates_declined: [],
         moduleCode: this.modCode,
       });
-      await this.addGroupmatesToProject(response);
-      await this.addForGroupmates(response);
-      await db
-        .collection("user")
-        .doc(this.$store.state.user.uid)
-        .update({
-          project: firebase.firestore.FieldValue.arrayUnion(response),
-        });
+
+      // await db
+      //   .collection("user")
+      //   .doc(this.$store.state.user.uid)
+      //   .update({
+      //     project: firebase.firestore.FieldValue.arrayUnion(response),
+      //   });
       this.$store.dispatch("getProjects");
       this.$store.dispatch("getTodayProjects");
       this.$store.dispatch("getCalendarProjects");
@@ -5757,29 +5748,29 @@ export default {
     },
 
     async deleteProject(project) {
-      await db
-        .collection("user")
-        .doc(this.$store.state.user.uid)
-        .update({
-          project: firebase.firestore.FieldValue.arrayRemove(
-            db.collection("project").doc(project.id)
-          ),
-        });
-      for (let i = 0; i < project.todos.length; i++) {
-        await db
-          .collection("user")
-          .doc(this.$store.state.user.uid)
-          .update({
-            todo: firebase.firestore.FieldValue.arrayRemove(
-              db.collection("todo").doc(project.todos[i].id)
-            ),
-          });
-      }
+      // await db
+      //   .collection("user")
+      //   .doc(this.$store.state.user.uid)
+      //   .update({
+      //     project: firebase.firestore.FieldValue.arrayRemove(
+      //       db.collection("project").doc(project.id)
+      //     ),
+      //   });
+      // for (let i = 0; i < project.todos.length; i++) {
+      //   await db
+      //     .collection("user")
+      //     .doc(this.$store.state.user.uid)
+      //     .update({
+      //       todo: firebase.firestore.FieldValue.arrayRemove(
+      //         db.collection("todo").doc(project.todos[i].id)
+      //       ),
+      //     });
+      // }
       await db
         .collection("project")
         .doc(project.id)
         .update({
-          groupmates: firebase.firestore.FieldValue.arrayRemove(
+          confirmedInvitations: firebase.firestore.FieldValue.arrayRemove(
             db.collection("user").doc(this.$store.state.user.uid)
           ),
         });
@@ -5790,32 +5781,35 @@ export default {
     },
 
     async editProject(project) {
-      
       this.errors = "";
-      const response = await db.collection("project").doc(project.id).update({
-        title: this.title,
-        progress: this.progress,
-        _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        // deadlineTime: this.myDeadlineTime,
-        // deadlineDate: this.myDeadline,
-        includeTime: this.switchValue,
-        confirmedInvitations: [],
-        // dateSwitchValue: this.dateSwitchValue,
-        deadline: this.finalDeadline,
-        // displayDeadline: this.displayDeadline,
-        moduleCode: this.modCode,
-        todos: project.todos,
-      });
+      const response = await db
+        .collection("project")
+        .doc(project.id)
+        .update({
+          title: this.title,
+          progress: this.progress,
+          _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          // deadlineTime: this.myDeadlineTime,
+          // deadlineDate: this.myDeadline,
+          includeTime: this.switchValue,
+          confirmedInvitations: this.finalGroupmates.map((x) =>
+            db.collection("user").doc(x)
+          ),
+          // dateSwitchValue: this.dateSwitchValue,
+          deadline: this.finalDeadline,
+          // displayDeadline: this.displayDeadline,
+          moduleCode: this.modCode,
+          todos: project.todos,
+        });
 
-      
       if (this.currProjectObject !== null) {
         if (project.id == this.currProjectObject.id) {
           this.currProject = this.modCode + " " + this.title;
         }
       }
 
-      await this.addForGroupmates(project);
-      await this.addGroupmatesToProject(project);
+      // await this.addForGroupmates(project);
+      // this.addGroupmatesToProject(project);
       this.$store.dispatch("getProjects");
       this.editSubmit = true;
       this.$store.dispatch("getTodayProjects");
@@ -5931,6 +5925,7 @@ export default {
     },
 
     async addForGroupmates(project) {
+      // const promises = [];
       if (this.finalGroupmates.length == 0) {
         this.finalGroupmates = this.oldGroupmates;
       }
@@ -5939,6 +5934,7 @@ export default {
         if (this.oldGroupmates.includes(this.finalGroupmates[i])) {
           console.log("they have the project record already");
         } else if (this.finalGroupmates[i] !== this.$store.state.user.uid) {
+          // promises.push(
           db.collection("user")
             .doc(this.finalGroupmates[i])
             .update({
@@ -5946,12 +5942,14 @@ export default {
                 db.collection("project").doc(project.id)
               ),
             });
+          // );
         }
       }
       for (let i = 0; i < this.oldGroupmates.length; i++) {
         if (this.finalGroupmates.includes(this.oldGroupmates[i])) {
           console.log("they are still remaining in the project");
         } else {
+          // promises.push(
           db.collection("user")
             .doc(this.oldGroupmates[i])
             .update({
@@ -5959,12 +5957,14 @@ export default {
                 db.collection("project").doc(project.id)
               ),
             });
+          // );
         }
       }
+      // await Promise.all(promises);
       console.log("check");
     },
 
-    async passGroupmates() {
+    passGroupmates() {
       for (let i = 0; i < this.tempGroupmates.length; i++) {
         if (this.tempGroupmates[i].chipValue == true) {
           console.log(this.tempGroupmates[i].id);
@@ -5982,7 +5982,7 @@ export default {
       this.tempGroupmates = [];
     },
 
-    async addGroupmatesToProject(project) {
+    addGroupmatesToProject(project) {
       console.log(this.oldGroupmates);
       console.log(this.finalGroupmates);
       console.log(project);
