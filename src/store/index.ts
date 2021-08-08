@@ -746,7 +746,9 @@ async function getTodayTodos(state: any, project: any) {
       
       newTodayDate = todayYear + "-" + todayMonth + "-" + todayDate;
       console.log(newTodayDate)
-    if (newDate === newTodayDate) {
+      console.log(new Date().toISOString())
+
+    if (newDate === new Date().toISOString().substr(0,10)) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
