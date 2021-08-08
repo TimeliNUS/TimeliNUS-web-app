@@ -123,11 +123,11 @@
                 class="todo-background"
                 style="padding: 20px"
                 height="200px"
-                contain
                 src="@/assets/todo_dashboard.png"
               >
                 <v-card-title style="padding-bottom: 0px">
                   <span
+                    class="todo-banner-heading"
                     style="
                       color: white;
                       font-size: 28px;
@@ -544,7 +544,7 @@
                             </div>
                             <div v-else>
                               <span
-                                class="todo_item"
+                                class="todo_item someday"
                                 v-bind:class="{ completed: task.complete }"
                               >
                                 Someday
@@ -1068,6 +1068,7 @@
                                     cols="1"
                                     align="left"
                                     class="centerAlign todo-item"
+                                    style="margin-left: 12px"
                                   >
                                     <v-list-item-action>
                                       <v-btn
@@ -1784,6 +1785,13 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
+  .someday {
+    writing-mode: vertical-rl;
+    -webkit-transform: rotate(180deg);
+  }
+  .todo-banner-heading {
+    font-size: 20px !important;
+  }
   .todo_list {
     overflow-y: hidden !important;
     min-height: 100% !important;

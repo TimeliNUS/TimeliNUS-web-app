@@ -177,25 +177,31 @@
                             >Add New Meeting</span
                           >
 
-                          <v-btn
-                            color="#ff9d66"
+                          <span
                             v-if="newMeetingType == 'import'"
-                            plain
+                            style="
+                              overflow-wrap: break-word;
+                              text-align: left;
+                              font-size: 14px;
+                            "
                             @click="
                               clearAddMeetingInfo();
                               changeMeetingCreationType();
                             "
-                            >Switch to Direct Meeting Creation</v-btn
+                            >Switch to Direct Meeting Creation</span
                           >
-                          <v-btn
-                            color="#ff9d66"
+                          <span
+                            style="
+                              overflow-wrap: break-word;
+                              text-align: left;
+                              font-size: 14px;
+                            "
                             v-if="newMeetingType == 'direct'"
-                            plain
                             @click="
                               clearAddMeetingInfo();
                               changeMeetingCreationType();
                             "
-                            >Switch to finding common timeslot</v-btn
+                            >Switch to finding common timeslot</span
                           >
                         </v-card-title>
                         <div v-if="newMeetingType == null" style="padding: 3px">
@@ -2273,8 +2279,8 @@
                                         style="
                                           display: flex;
                                           padding-top: 6px !important;
-                                          justify-content: center;
                                         "
+                                        class="meeting-avatars"
                                       >
                                         <div
                                           style="
@@ -2570,8 +2576,8 @@
                                               style="
                                                 display: flex;
                                                 padding-top: 6px !important;
-                                                justify-content: center;
                                               "
+                                              class="meeting-avatars"
                                             >
                                               <div
                                                 style="
@@ -2825,8 +2831,8 @@
                                         style="
                                           display: flex;
                                           padding-top: 6px !important ;
-                                          justify-content: center;
                                         "
+                                        class="meeting-avatars"
                                       >
                                         <div
                                           style="
@@ -3118,8 +3124,8 @@
                                               style="
                                                 display: flex;
                                                 padding-top: 6px !important;
-                                                justify-content: center;
                                               "
+                                              class="meeting-avatars"
                                             >
                                               <div
                                                 style="
@@ -3370,8 +3376,8 @@
                                         style="
                                           display: flex;
                                           padding-top: 6px !important;
-                                          justify-content: center;
                                         "
+                                        class="meeting-avatars"
                                       >
                                         <div
                                           style="
@@ -3664,8 +3670,8 @@
                                               style="
                                                 display: flex;
                                                 padding-top: 6px !important;
-                                                justify-content: center;
                                               "
+                                              class="meeting-avatars"
                                             >
                                               <div
                                                 style="
@@ -7105,6 +7111,9 @@ export default {
 .navigation_title {
   margin: 0;
 }
+.meeting-avatars{
+  justify-content: center;
+}
 @media only screen and (max-width: 1200px) {
   .navigation_button {
     display: inline-flex;
@@ -7131,6 +7140,12 @@ export default {
 
   .content {
     max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .meeting-avatars{
+    justify-content: flex-start;
   }
 }
 
