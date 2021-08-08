@@ -330,8 +330,12 @@ async function getDisplayUser(state: any): Promise<User> {
     : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1"),
     (displayUser.task = data.get("task"));
   displayUser.project = data.get("project");
-  displayUser.calendar = data.get("calendar") ? data.get("calendar") : "No default calendar";
-  displayUser.zoomRefreshToken =  data.get("zoomRefreshToken") ? data.get("zoomRefreshToken") : null
+  displayUser.calendar = data.get("calendar")
+    ? data.get("calendar")
+    : "No default calendar";
+  displayUser.zoomRefreshToken = data.get("zoomRefreshToken")
+    ? data.get("zoomRefreshToken")
+    : null;
 
   console.log(state.user.photoURL);
   return displayUser;
@@ -340,56 +344,66 @@ async function getDisplayUser(state: any): Promise<User> {
 async function getTasks(state: any): Promise<Task[]> {
   const querySnapshot = await db
     .collection("todo")
-    .where("PIC", "array-contains",db.collection("user").doc(state.user.uid))
+    .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
     .get();
   const tasks: Task[] = [];
-  console.log(querySnapshot)
+  console.log(querySnapshot);
 
   await Promise.all(
-  querySnapshot.docs.map(async (doc) => {
-  console.log(doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString(): "00:00")
-  let newDate = ""
-  if(doc.data().deadline){
-
-  
-  const currLocalDate = doc.data().deadline
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newDate = currYear + "-" + currMonth + "-" + currDate;
-  } 
-  console.log(doc.data().task + " "+doc.data().includeTime)
-    tasks.push({
-      id: doc.id,
-      task: doc.data().task ?? "",
-      complete: doc.data().complete,
-      _createdAt: doc.data().dateTime,
-      note: doc.data().note,
-      project: doc.data().project.reference ? await doc.data().project.reference.get() : await doc.data().project.get(),
-      projectTitle: doc.data().project.reference ? await getTaskProject(doc.data().project.reference) : await getTaskProject(doc.data().project) ,
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadline ? newDate : "",
-      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
-      switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
-      dateSwitchValue: doc.data().deadline ? false : true,
-      displayDeadline: doc.data().deadline ? newDate : "Someday",
-      PIC: doc.data().PIC,
-      PICavatar: await getGroupmatesAvatar(doc.data().PIC),
-    });
-
-  })
-  )
-  console.log(tasks)
+    querySnapshot.docs.map(async (doc) => {
+      console.log(
+        doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString()
+          : "00:00"
+      );
+      let newDate = "";
+      if (doc.data().deadline) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
+      console.log(doc.data().task + " " + doc.data().includeTime);
+      tasks.push({
+        id: doc.id,
+        task: doc.data().task ?? "",
+        complete: doc.data().complete,
+        _createdAt: doc.data().dateTime,
+        note: doc.data().note,
+        project: doc.data().project.reference
+          ? await doc.data().project.reference.get()
+          : await doc.data().project.get(),
+        projectTitle: doc.data().project.reference
+          ? await getTaskProject(doc.data().project.reference)
+          : await getTaskProject(doc.data().project),
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadline ? newDate : "",
+        deadlineTime: doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.data().includeTime !== undefined
+            ? doc.data().includeTime
+            : doc.data().switchValue,
+        dateSwitchValue: doc.data().deadline ? false : true,
+        displayDeadline: doc.data().deadline ? newDate : "Someday",
+        PIC: doc.data().PIC,
+        PICavatar: await getGroupmatesAvatar(doc.data().PIC),
+      });
+    })
+  );
+  console.log(tasks);
   return tasks;
 }
-
 
 async function getTasksOriginal(state: any): Promise<Task[]> {
   const documentSnapshot = await db
@@ -410,16 +424,14 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
     console.log(doc.get("complete"));
 
     console.log(doc.data());
-    const PICid = []
-          for(let j=0; j< doc.data().PIC.length; j++){
-            const pplID = doc.data().PIC[j].id
-            console.log(pplID)
-            PICid.push(pplID)
-          }
-          console.log(PICid)
-    if(PICid.includes(state.user.uid)){
-    
-
+    const PICid = [];
+    for (let j = 0; j < doc.data().PIC.length; j++) {
+      const pplID = doc.data().PIC[j].id;
+      console.log(pplID);
+      PICid.push(pplID);
+    }
+    console.log(PICid);
+    if (PICid.includes(state.user.uid)) {
       tasks.push({
         id: doc.id,
         task: doc.data().task ?? "",
@@ -429,8 +441,8 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
         project: doc.data().project,
         projectTitle: await getTaskProject(doc.data().project),
         deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-        deadlineDate: doc.data().deadline.toDate().substr(0,10),
-        deadlineTime: doc.data().deadline.toDate().substr(12,5),
+        deadlineDate: doc.data().deadline.toDate().substr(0, 10),
+        deadlineTime: doc.data().deadline.toDate().substr(12, 5),
         switchValue: doc.data().switchValue,
         dateSwitchValue: doc.data().dateSwitchValue,
         displayDeadline: doc.data().displayDeadline,
@@ -438,7 +450,6 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
         PICavatar: await getGroupmatesAvatar(doc.data().PIC),
       });
     }
-    
   }
   console.log(tasks);
   return tasks;
@@ -447,52 +458,79 @@ async function getTasksOriginal(state: any): Promise<Task[]> {
 async function getProjectInvitations(state: any): Promise<Project[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("invitations", "array-contains",db.collection("user").doc(state.user.uid))
+    .where(
+      "invitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
     .get();
   console.log(state);
   const projectInvitations: Project[] = [];
   await Promise.all(
-  querySnapshot.docs.map(async (doc) => {
-    let newDate = ""
-  if(doc.data().deadline){
+    querySnapshot.docs.map(async (doc) => {
+      let newDate = "";
+      if (doc.data().deadline) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
 
-  
-  const currLocalDate = doc.data().deadline
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newDate = currYear + "-" + currMonth + "-" + currDate;
-  } 
-    
-    projectInvitations.push({
-      id: doc.id,
-      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
-      meetings: doc.data().meetings,
-      todos: doc.data().todos ?? [],
-      _createdAt: doc.data().dateTime,
-      title: doc.data().title,
-      progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadline ? newDate : "",
-      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
-      switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
-      dateSwitchValue: doc.data().deadline ? false : true,
-      displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
-      groupmatesAvatar: await getGroupmatesAvatar(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-      confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
-      incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
-    });
-  }))
+      projectInvitations.push({
+        id: doc.id,
+        creator: doc.data().creator
+          ? await getCreator(doc.data().creator)
+          : null,
+        meetings: doc.data().meetings,
+        todos: doc.data().todos ?? [],
+        _createdAt: doc.data().dateTime,
+        title: doc.data().title,
+        progress: await getProjectProgress(doc.data().todos),
+        modCode: doc.data().moduleCode
+          ? doc.data().moduleCode
+          : doc.data().modCode,
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadline ? newDate : "",
+        deadlineTime: doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.data().includeTime !== undefined
+            ? doc.data().includeTime
+            : doc.data().switchValue,
+        dateSwitchValue: doc.data().deadline ? false : true,
+        displayDeadline: doc.data().deadline ? newDate : "Someday",
+        groupmates: doc.data().confirmedInvitations
+          ? doc.data().confirmedInvitations
+          : doc.data().groupmates,
+        groupmatesAvatar: await getGroupmatesAvatar(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+        groupmatesName: await getGroupmatesName(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+        confirmedMeetingLength: doc.data().meetings
+          ? await findScheduledMeetingLength(doc.data().meetings)
+          : 0,
+        incompletedTodoLength: doc.data().todos
+          ? await findIncompletedTodoLength(doc.data().todos)
+          : 0,
+      });
+    })
+  );
   console.log(projectInvitations);
   return projectInvitations;
 }
@@ -513,53 +551,81 @@ async function getCreator(creator: any) {
 async function getProjects(state: any): Promise<Project[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
     .get();
   console.log(state);
- 
+
   const projects: Project[] = [];
   await Promise.all(
-  querySnapshot.docs.map(async (doc) => {
-    let newDate = ""
-  if(doc.data().deadline){
+    querySnapshot.docs.map(async (doc) => {
+      let newDate = "";
+      if (doc.data().deadline) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
 
-  
-  const currLocalDate = doc.data().deadline
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newDate = currYear + "-" + currMonth + "-" + currDate;
-  } 
-
-    projects.push({
-      id: doc.id,
-      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
-      meetings: doc.data().meetings,
-      confirmedMeetingLength: doc.data().meetings ? await findScheduledMeetingLength(doc.data().meetings) : 0,
-      incompletedTodoLength:  doc.data().todos ? await findIncompletedTodoLength(doc.data().todos) : 0,
-      todos: doc.data().todos ?? [],
-      _createdAt: doc.data().dateTime,
-      title: doc.data().title,
-      progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadline ? newDate : "",
-      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
-      switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
-      dateSwitchValue: doc.data().deadline ? false : true,
-      displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
-      groupmatesAvatar: await getGroupmatesAvatar(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-    });
-  }))
+      projects.push({
+        id: doc.id,
+        creator: doc.data().creator
+          ? await getCreator(doc.data().creator)
+          : null,
+        meetings: doc.data().meetings,
+        confirmedMeetingLength: doc.data().meetings
+          ? await findScheduledMeetingLength(doc.data().meetings)
+          : 0,
+        incompletedTodoLength: doc.data().todos
+          ? await findIncompletedTodoLength(doc.data().todos)
+          : 0,
+        todos: doc.data().todos ?? [],
+        _createdAt: doc.data().dateTime,
+        title: doc.data().title,
+        progress: await getProjectProgress(doc.data().todos),
+        modCode: doc.data().moduleCode
+          ? doc.data().moduleCode
+          : doc.data().modCode,
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadline ? newDate : "",
+        deadlineTime: doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.data().includeTime !== undefined
+            ? doc.data().includeTime
+            : doc.data().switchValue,
+        dateSwitchValue: doc.data().deadline ? false : true,
+        displayDeadline: doc.data().deadline ? newDate : "Someday",
+        groupmates: doc.data().confirmedInvitations
+          ? doc.data().confirmedInvitations
+          : doc.data().groupmates,
+        groupmatesAvatar: await getGroupmatesAvatar(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+        groupmatesName: await getGroupmatesName(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+      });
+    })
+  );
+  console.log("finally: " + querySnapshot.docs.length);
   console.log(projects);
   return projects;
 }
@@ -610,49 +676,68 @@ async function getProjectProgress(todos: any) {
 async function getTodayProjects(state: any): Promise<TodayProject[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
     .get();
   console.log(state);
   const projects: TodayProject[] = [];
   await Promise.all(
-  querySnapshot.docs.map(async (doc) => {
-    let newDate = ""
-  if(doc.data().deadline){
+    querySnapshot.docs.map(async (doc) => {
+      let newDate = "";
+      if (doc.data().deadline) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
 
-  
-  const currLocalDate = doc.data().deadline
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newDate = currYear + "-" + currMonth + "-" + currDate;
-  } 
-  
-    projects.push({
-      id: doc.id,
-      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
-      meetings: doc.data().meetings,
-      todos: await getTodayTodos(state, doc),
-      _createdAt: doc.data().dateTime,
-      title: doc.data().title,
-      progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadline ? newDate : "",
-      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
-      switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
-      dateSwitchValue: doc.data().deadline ? false : true,
-      displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
-      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-    });
-  }))
+      projects.push({
+        id: doc.id,
+        creator: doc.data().creator
+          ? await getCreator(doc.data().creator)
+          : null,
+        meetings: doc.data().meetings,
+        todos: await getTodayTodos(state, doc),
+        _createdAt: doc.data().dateTime,
+        title: doc.data().title,
+        progress: await getProjectProgress(doc.data().todos),
+        modCode: doc.data().moduleCode
+          ? doc.data().moduleCode
+          : doc.data().modCode,
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadline ? newDate : "",
+        deadlineTime: doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.data().includeTime !== undefined
+            ? doc.data().includeTime
+            : doc.data().switchValue,
+        dateSwitchValue: doc.data().deadline ? false : true,
+        displayDeadline: doc.data().deadline ? newDate : "Someday",
+        groupmates: doc.data().confirmedInvitations
+          ? doc.data().confirmedInvitations
+          : doc.data().groupmates,
+        groupmatesName: await getGroupmatesName(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+      });
+    })
+  );
   console.log(projects);
   return projects;
 }
@@ -660,49 +745,68 @@ async function getTodayProjects(state: any): Promise<TodayProject[]> {
 async function getCalendarProjects(state: any): Promise<TodayProject[]> {
   const querySnapshot = await db
     .collection("project")
-    .where("confirmedInvitations", "array-contains",db.collection("user").doc(state.user.uid))
+    .where(
+      "confirmedInvitations",
+      "array-contains",
+      db.collection("user").doc(state.user.uid)
+    )
     .get();
   console.log(state);
   const projects: TodayProject[] = [];
   await Promise.all(
-  querySnapshot.docs.map(async (doc) => {
-    let newDate = ""
-  if(doc.data().deadline){
+    querySnapshot.docs.map(async (doc) => {
+      let newDate = "";
+      if (doc.data().deadline) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
 
-  
-  const currLocalDate = doc.data().deadline
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newDate = currYear + "-" + currMonth + "-" + currDate;
-  } 
-  
-    projects.push({
-      id: doc.id,
-      creator: doc.data().creator ? await getCreator(doc.data().creator) : null,
-      meetings: doc.data().meetings,
-      todos: await getCalendarTodos(state, doc),
-      _createdAt: doc.data().dateTime,
-      title: doc.data().title,
-      progress: await getProjectProgress(doc.data().todos),
-      modCode: doc.data().moduleCode ? doc.data().moduleCode : doc.data().modCode,
-      deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
-      deadlineDate: doc.data().deadline ? newDate : "",
-      deadlineTime: doc.data().deadline ? doc.data().deadline.toDate().toLocaleTimeString().substr(0,5) : "00:00",
-      switchValue: doc.data().includeTime !== undefined ? doc.data().includeTime : doc.data().switchValue,
-      dateSwitchValue: doc.data().deadline ? false : true,
-      displayDeadline: doc.data().deadline ? newDate : "Someday",
-      groupmates: doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates,
-      groupmatesName: await getGroupmatesName(doc.data().confirmedInvitations ? doc.data().confirmedInvitations : doc.data().groupmates),
-    });
-  }))
+      projects.push({
+        id: doc.id,
+        creator: doc.data().creator
+          ? await getCreator(doc.data().creator)
+          : null,
+        meetings: doc.data().meetings,
+        todos: await getCalendarTodos(state, doc),
+        _createdAt: doc.data().dateTime,
+        title: doc.data().title,
+        progress: await getProjectProgress(doc.data().todos),
+        modCode: doc.data().moduleCode
+          ? doc.data().moduleCode
+          : doc.data().modCode,
+        deadline: doc.data().deadline ? doc.data().deadline.toDate() : null,
+        deadlineDate: doc.data().deadline ? newDate : "",
+        deadlineTime: doc.data().deadline
+          ? doc.data().deadline.toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.data().includeTime !== undefined
+            ? doc.data().includeTime
+            : doc.data().switchValue,
+        dateSwitchValue: doc.data().deadline ? false : true,
+        displayDeadline: doc.data().deadline ? newDate : "Someday",
+        groupmates: doc.data().confirmedInvitations
+          ? doc.data().confirmedInvitations
+          : doc.data().groupmates,
+        groupmatesName: await getGroupmatesName(
+          doc.data().confirmedInvitations
+            ? doc.data().confirmedInvitations
+            : doc.data().groupmates
+        ),
+      });
+    })
+  );
   console.log(projects);
   return projects;
 }
@@ -711,161 +815,184 @@ async function getTodayTodos(state: any, project: any) {
   const pushTodos: Task[] = [];
   const querySnapshot = await db
     .collection("todo")
-    .where("project.reference", "==",db.collection("project").doc(project.id))
+    .where("project.reference", "==", db.collection("project").doc(project.id))
     .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
     .get();
-    await Promise.all(
+  await Promise.all(
     querySnapshot.docs.map(async (doc) => {
-      let newDate = ""
-      let newTodayDate = ""
-      if(doc.get("deadline")){
-    
-      
-      const currLocalDate = doc.data().deadline
-            .toDate()
-            .toLocaleDateString()
-            .substr(0, 10);
-          const currYear = currLocalDate.substr(6);
-          const currMonth = currLocalDate.substr(3, 2);
-          const currDate = currLocalDate.substr(0, 2);
-          console.log(currLocalDate);
-          console.log(currYear);
-          console.log(currMonth);
-          console.log(currDate);
-          newDate = currYear + "-" + currMonth + "-" + currDate;
-      } 
-      console.log(newDate)
-      console.log(new Date().toISOString().substr(0, 10))
+      let newDate = "";
+      let newTodayDate = "";
+      if (doc.get("deadline")) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
+      console.log(newDate);
+      console.log(new Date().toISOString().substr(0, 10));
       const today = new Date(
         Date.now() - new Date().getTimezoneOffset() * 60000
-      )
-      const todayString = today.toLocaleDateString()
+      );
+      const todayString = today.toLocaleDateString();
       const todayYear = todayString.substr(6);
       const todayMonth = todayString.substr(3, 2);
       const todayDate = todayString.substr(0, 2);
-      
-      newTodayDate = todayYear + "-" + todayMonth + "-" + todayDate;
-      console.log(newTodayDate)
-      console.log(new Date().toISOString())
 
-    if (newDate === new Date().toISOString().substr(0,10)) {
-      pushTodos.push({
-        id: doc.id,
-        task: doc.get("task") ?? "",
-        complete: doc.get("complete"),
-        _createdAt: doc.get("dateTime"),
-        note: doc.get("note"),
-        project: doc.get("project").reference ? await doc.get("project").reference.get() : await doc.get("project").get(),
-        projectTitle: doc.get("project").reference ? await getTaskProject(doc.get("project").reference) : await getTaskProject(doc.get("project")) ,
-        deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
-        deadlineDate: doc.get("deadline") ? newDate : "",
-        deadlineTime: doc.get("deadline") ? doc.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-        switchValue: doc.get("includeTime") !== undefined ? doc.get("includeTime") : doc.get("switchValue"),
-      dateSwitchValue: doc.get("deadline") ? false : true,
-      displayDeadline: doc.get("deadline")  ? newDate : "Someday",
-        PIC: doc.get("PIC"),
-        PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
-      });
-    }
-  }))
+      newTodayDate = todayYear + "-" + todayMonth + "-" + todayDate;
+      console.log(newTodayDate);
+      console.log(new Date().toISOString());
+
+      if (newDate === new Date().toISOString().substr(0, 10)) {
+        pushTodos.push({
+          id: doc.id,
+          task: doc.get("task") ?? "",
+          complete: doc.get("complete"),
+          _createdAt: doc.get("dateTime"),
+          note: doc.get("note"),
+          project: doc.get("project").reference
+            ? await doc.get("project").reference.get()
+            : await doc.get("project").get(),
+          projectTitle: doc.get("project").reference
+            ? await getTaskProject(doc.get("project").reference)
+            : await getTaskProject(doc.get("project")),
+          deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
+          deadlineDate: doc.get("deadline") ? newDate : "",
+          deadlineTime: doc.get("deadline")
+            ? doc.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+            : "00:00",
+          switchValue:
+            doc.get("includeTime") !== undefined
+              ? doc.get("includeTime")
+              : doc.get("switchValue"),
+          dateSwitchValue: doc.get("deadline") ? false : true,
+          displayDeadline: doc.get("deadline") ? newDate : "Someday",
+          PIC: doc.get("PIC"),
+          PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
+        });
+      }
+    })
+  );
   console.log(pushTodos);
   return pushTodos;
 }
 
-async function getCalendarTodos(state:any, project: any) {
-  
+async function getCalendarTodos(state: any, project: any) {
   const pushTodos: Task[] = [];
   const querySnapshot = await db
     .collection("todo")
-    .where("project.reference", "==",db.collection("project").doc(project.id))
+    .where("project.reference", "==", db.collection("project").doc(project.id))
     .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
     .get();
-    await Promise.all(
+  await Promise.all(
     querySnapshot.docs.map(async (doc) => {
-      let newDate = ""
-      if(doc.get("deadline")){
-    
-      
-      const currLocalDate = doc.data().deadline
-            .toDate()
-            .toLocaleDateString()
-            .substr(0, 10);
-          const currYear = currLocalDate.substr(6);
-          const currMonth = currLocalDate.substr(3, 2);
-          const currDate = currLocalDate.substr(0, 2);
-          console.log(currLocalDate);
-          console.log(currYear);
-          console.log(currMonth);
-          console.log(currDate);
-          newDate = currYear + "-" + currMonth + "-" + currDate;
-      } 
-  
+      let newDate = "";
+      if (doc.get("deadline")) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
+
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
         complete: doc.get("complete"),
         _createdAt: doc.get("dateTime"),
         note: doc.get("note"),
-        project: doc.get("project").reference ? await doc.get("project").reference.get() : await doc.get("project").get(),
-        projectTitle: doc.get("project").reference ? await getTaskProject(doc.get("project").reference) : await getTaskProject(doc.get("project")) ,
+        project: doc.get("project").reference
+          ? await doc.get("project").reference.get()
+          : await doc.get("project").get(),
+        projectTitle: doc.get("project").reference
+          ? await getTaskProject(doc.get("project").reference)
+          : await getTaskProject(doc.get("project")),
         deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
         deadlineDate: doc.get("deadline") ? newDate : "",
-        deadlineTime: doc.get("deadline") ? doc.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-        switchValue: doc.get("includeTime") !== undefined ? doc.get("includeTime") : doc.get("switchValue"),
-      dateSwitchValue: doc.get("deadline") ? false : true,
-      displayDeadline: doc.get("deadline")  ? newDate : "Someday",
+        deadlineTime: doc.get("deadline")
+          ? doc.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.get("includeTime") !== undefined
+            ? doc.get("includeTime")
+            : doc.get("switchValue"),
+        dateSwitchValue: doc.get("deadline") ? false : true,
+        displayDeadline: doc.get("deadline") ? newDate : "Someday",
         PIC: doc.get("PIC"),
         PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
+    })
+  );
 
-    }))
-
-    const querySnapshotTwo = await db
+  const querySnapshotTwo = await db
     .collection("todo")
-    .where("project", "==",db.collection("project").doc(project.id))
+    .where("project", "==", db.collection("project").doc(project.id))
     .where("PIC", "array-contains", db.collection("user").doc(state.user.uid))
     .get();
-    await Promise.all(
+  await Promise.all(
     querySnapshotTwo.docs.map(async (doc) => {
-      let newDate = ""
-      if(doc.get("deadline")){
-    
-      
-      const currLocalDate = doc.data().deadline
-            .toDate()
-            .toLocaleDateString()
-            .substr(0, 10);
-          const currYear = currLocalDate.substr(6);
-          const currMonth = currLocalDate.substr(3, 2);
-          const currDate = currLocalDate.substr(0, 2);
-          console.log(currLocalDate);
-          console.log(currYear);
-          console.log(currMonth);
-          console.log(currDate);
-          newDate = currYear + "-" + currMonth + "-" + currDate;
-      } 
-  
+      let newDate = "";
+      if (doc.get("deadline")) {
+        const currLocalDate = doc
+          .data()
+          .deadline.toDate()
+          .toLocaleDateString()
+          .substr(0, 10);
+        const currYear = currLocalDate.substr(6);
+        const currMonth = currLocalDate.substr(3, 2);
+        const currDate = currLocalDate.substr(0, 2);
+        console.log(currLocalDate);
+        console.log(currYear);
+        console.log(currMonth);
+        console.log(currDate);
+        newDate = currYear + "-" + currMonth + "-" + currDate;
+      }
+
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
         complete: doc.get("complete"),
         _createdAt: doc.get("dateTime"),
         note: doc.get("note"),
-        project: doc.get("project").reference ? await doc.get("project").reference.get() : await doc.get("project").get(),
-        projectTitle: doc.get("project").reference ? await getTaskProject(doc.get("project").reference) : await getTaskProject(doc.get("project")) ,
+        project: doc.get("project").reference
+          ? await doc.get("project").reference.get()
+          : await doc.get("project").get(),
+        projectTitle: doc.get("project").reference
+          ? await getTaskProject(doc.get("project").reference)
+          : await getTaskProject(doc.get("project")),
         deadline: doc.get("deadline") ? doc.get("deadline").toDate() : null,
         deadlineDate: doc.get("deadline") ? newDate : "",
-        deadlineTime: doc.get("deadline") ? doc.get("deadline").toDate().toLocaleTimeString().substr(0,5) : "00:00",
-        switchValue: doc.get("includeTime") !== undefined ? doc.get("includeTime") : doc.get("switchValue"),
-      dateSwitchValue: doc.get("deadline") ? false : true,
-      displayDeadline: doc.get("deadline")  ? newDate : "Someday",
+        deadlineTime: doc.get("deadline")
+          ? doc.get("deadline").toDate().toLocaleTimeString().substr(0, 5)
+          : "00:00",
+        switchValue:
+          doc.get("includeTime") !== undefined
+            ? doc.get("includeTime")
+            : doc.get("switchValue"),
+        dateSwitchValue: doc.get("deadline") ? false : true,
+        displayDeadline: doc.get("deadline") ? newDate : "Someday",
         PIC: doc.get("PIC"),
         PICavatar: await getGroupmatesAvatar(doc.get("PIC")),
       });
+    })
+  );
 
-    }))
-    
-  
   console.log(pushTodos);
   return pushTodos;
 }
@@ -886,25 +1013,26 @@ async function getMeetingInvitations(
     .get();
   console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
-    let newStartDate = ""
-    let newEndDate = ""
-    const currLocalDate = doc.data().startDate
-        .toDate()
-        .toLocaleDateString()
-        .substr(0, 10);
-      const currYear = currLocalDate.substr(6);
-      const currMonth = currLocalDate.substr(3, 2);
-      const currDate = currLocalDate.substr(0, 2);
-      console.log(currLocalDate);
-      console.log(currYear);
-      console.log(currMonth);
-      console.log(currDate);
-      newStartDate = currYear + "-" + currMonth + "-" + currDate;
-      console.log(newStartDate)
+    let newStartDate = "";
+    let newEndDate = "";
+    const currLocalDate = doc
+      .data()
+      .startDate.toDate()
+      .toLocaleDateString()
+      .substr(0, 10);
+    const currYear = currLocalDate.substr(6);
+    const currMonth = currLocalDate.substr(3, 2);
+    const currDate = currLocalDate.substr(0, 2);
+    console.log(currLocalDate);
+    console.log(currYear);
+    console.log(currMonth);
+    console.log(currDate);
+    newStartDate = currYear + "-" + currMonth + "-" + currDate;
+    console.log(newStartDate);
 
-
-      const currLocalDateEnd = doc.data().endDate
-      .toDate()
+    const currLocalDateEnd = doc
+      .data()
+      .endDate.toDate()
       .toLocaleDateString()
       .substr(0, 10);
     const currYearEnd = currLocalDateEnd.substr(6);
@@ -916,13 +1044,16 @@ async function getMeetingInvitations(
     console.log(currDate);
     newEndDate = currYearEnd + "-" + currMonthEnd + "-" + currDateEnd;
 
-  
     meetingInvitations.push({
       id: doc.id,
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
-      project: doc.data().project.reference ? await doc.data().project.reference.get() : await doc.data().project.get(),
-        projectTitle: doc.data().project.reference ? await getTaskProject(doc.data().project.reference) : await getTaskProject(doc.data().project) ,
+      project: doc.data().project.reference
+        ? await doc.data().project.reference.get()
+        : await doc.data().project.get(),
+      projectTitle: doc.data().project.reference
+        ? await getTaskProject(doc.data().project.reference)
+        : await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
       startTime: doc.data().startTime,
@@ -953,8 +1084,6 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
     .get();
   console.log(querySnapshot);
   querySnapshot.forEach(async (doc) => {
-    
-  
     meetingPendings.push({
       id: doc.id,
       title: doc.data().title,
@@ -962,8 +1091,12 @@ async function getMeetingPendings(state: any): Promise<MeetingPendings[]> {
       confirmed_groupmates: await getPendingGroupmates(
         doc.data().confirmedInvitations
       ),
-      project: doc.data().project.reference ? await doc.data().project.reference.get() : await doc.data().project.get(),
-        projectTitle: doc.data().project.reference ? await getTaskProject(doc.data().project.reference) : await getTaskProject(doc.data().project) ,
+      project: doc.data().project.reference
+        ? await doc.data().project.reference.get()
+        : await doc.data().project.get(),
+      projectTitle: doc.data().project.reference
+        ? await getTaskProject(doc.data().project.reference)
+        : await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
       startTime: doc.data().startTime,
@@ -1000,8 +1133,12 @@ async function getMeetingConfirmations(
       id: doc.id,
       title: doc.data().title,
       invited_groupmates: doc.data().invitations,
-      project: doc.data().project.reference ? await doc.data().project.reference.get() : await doc.data().project.get(),
-        projectTitle: doc.data().project.reference ? await getTaskProject(doc.data().project.reference) : await getTaskProject(doc.data().project) ,
+      project: doc.data().project.reference
+        ? await doc.data().project.reference.get()
+        : await doc.data().project.get(),
+      projectTitle: doc.data().project.reference
+        ? await getTaskProject(doc.data().project.reference)
+        : await getTaskProject(doc.data().project),
       startDate: doc.data().startDate.toDate(),
       endDate: doc.data().endDate.toDate(),
       startTime: doc.data().startTime,
@@ -1010,9 +1147,9 @@ async function getMeetingConfirmations(
       venue: doc.data().meetingVenue,
       creator: await getCreator(doc.data().author),
       groupmates: await getPendingGroupmates(doc.data().groupmates),
-      creatorID: doc.data().author.id
+      creatorID: doc.data().author.id,
     });
-    console.log(doc.data().author.id)
+    console.log(doc.data().author.id);
   });
 
   console.log(meetingConfirmations);
@@ -1036,26 +1173,33 @@ async function getConfirmedMeeting(state: any): Promise<ConfirmedMeetings[]> {
   await Promise.all(
     querySnapshot.docs.map(async (doc) => {
       console.log(doc.data());
-      console.log(doc.data().project)
+      console.log(doc.data().project);
       const test = {
-      
         id: doc.id,
         title: doc.data().title,
         invited_groupmates: doc.data().invitations,
-        project: doc.data().project.reference ? await doc.data().project.reference.get() : await doc.data().project.get(),
-        projectTitle: doc.data().project.reference ? await getTaskProject(doc.data().project.reference) : await getTaskProject(doc.data().project) ,
+        project: doc.data().project.reference
+          ? await doc.data().project.reference.get()
+          : await doc.data().project.get(),
+        projectTitle: doc.data().project.reference
+          ? await getTaskProject(doc.data().project.reference)
+          : await getTaskProject(doc.data().project),
         startDate: doc.data().startDate.toDate(),
         endDate: doc.data().endDate.toDate(),
         startTime: doc.data().startTime,
         endTime: doc.data().endTime,
         timeLength: doc.data().timeLength,
         venue: doc.data().meetingVenue,
-        isOnlineVenue: doc.data().isOnlineVenue ? doc.data().isOnlineVenue : null,
+        isOnlineVenue: doc.data().isOnlineVenue
+          ? doc.data().isOnlineVenue
+          : null,
         creator: await getCreator(doc.data().author),
         selectedStartDate: doc.data().selectedStartDate,
         selectedEndDate: doc.data().selectedEndDate,
         groupmates: await getPendingGroupmates(doc.data().confirmedInvitations),
-        meetingLink: doc.data().meetingLink ? doc.data().meetingLink : "No meeting link"
+        meetingLink: doc.data().meetingLink
+          ? doc.data().meetingLink
+          : "No meeting link",
       };
       // console.log("test: " + JSON.stringify(test));
       ConfirmedMeetings.push(test);
@@ -1079,9 +1223,13 @@ async function getPendingGroupmates(groupmates: any): Promise<User[]> {
       avatar: docRef.get("photoURL")
         ? docRef.get("photoURL")
         : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
-      calendar: docRef.get("calendar") ? docRef.get("calendar") : "No default calendar",
-      zoomRefreshToken: docRef.get("zoomRefreshToken") ? docRef.get("zoomRefreshToken") : null
-      });
+      calendar: docRef.get("calendar")
+        ? docRef.get("calendar")
+        : "No default calendar",
+      zoomRefreshToken: docRef.get("zoomRefreshToken")
+        ? docRef.get("zoomRefreshToken")
+        : null,
+    });
   }
   return groupmatesArray;
 }
@@ -1115,11 +1263,11 @@ async function assignMeetingCalendar(state: any) {
 async function assignTodoDashboardCalendar(state: any) {
   const todoCalendar: any[] = [];
   await getTasks(state);
-  console.log(state.tasks)
-  console.log(state.tasks.length)
+  console.log(state.tasks);
+  console.log(state.tasks.length);
   state.tasks.map((todo: any) => {
-    console.log(todo.deadline)
-    console.log(todo)
+    console.log(todo.deadline);
+    console.log(todo);
     if (todo !== null && todo.deadline !== null) {
       console.log(todo);
       console.log(todo.deadline);
@@ -1135,21 +1283,20 @@ async function assignTodoDashboardCalendar(state: any) {
       console.log(currDate);
       const newDate = currYear + "-" + currMonth + "-" + currDate;
       console.log(newDate);
-      console.log(todo.PIC.includes(db.collection('user').doc(state.user.uid)))
-      const PICid = []
-          for(let j=0; j< todo.PIC.length; j++){
-            const pplID = todo.PIC[j].id
-            console.log(pplID)
-            PICid.push(pplID)
-          }
-          console.log(PICid)
-      if(PICid.includes(state.user.uid)){
+      console.log(todo.PIC.includes(db.collection("user").doc(state.user.uid)));
+      const PICid = [];
+      for (let j = 0; j < todo.PIC.length; j++) {
+        const pplID = todo.PIC[j].id;
+        console.log(pplID);
+        PICid.push(pplID);
+      }
+      console.log(PICid);
+      if (PICid.includes(state.user.uid)) {
         todoCalendar.push({
           date: newDate,
           type: "todo",
         });
       }
-
     }
   });
 
@@ -1181,42 +1328,38 @@ async function assignTodoDashboardCalendar(state: any) {
   return todoCalendar;
 }
 
-async function findScheduledMeetingLength(meetings: any){
-  let counter = 0
-  console.log(meetings)
-  console.log(meetings.length)
-  
-  for(let i=0; i<meetings.length; i++){
-    const meeting = await meetings[i].get()
-    const data = meeting.data()
-    if(data !== undefined){
-      if(data.isConfirmed == true){
-        counter += 1
+async function findScheduledMeetingLength(meetings: any) {
+  let counter = 0;
+  console.log(meetings);
+  console.log(meetings.length);
+
+  for (let i = 0; i < meetings.length; i++) {
+    const meeting = await meetings[i].get();
+    const data = meeting.data();
+    if (data !== undefined) {
+      if (data.isConfirmed == true) {
+        counter += 1;
       }
     }
-    
-
   }
-  console.log(counter)
-  return counter
+  console.log(counter);
+  return counter;
   // meetings.forEach((meeting) => await meeting.get()).filter('isConfirmed' == true)
 }
 
-async function findIncompletedTodoLength(todos: any){
-  let counter = 0
-  
-  for(let i=0; i<todos.length; i++){
-    const todo = await todos[i].get()
-    const data = todo.data()
-    if(data !== undefined) {
-      if(data.complete == false){
-        counter += 1
+async function findIncompletedTodoLength(todos: any) {
+  let counter = 0;
+
+  for (let i = 0; i < todos.length; i++) {
+    const todo = await todos[i].get();
+    const data = todo.data();
+    if (data !== undefined) {
+      if (data.complete == false) {
+        counter += 1;
       }
     }
-
-
   }
-  console.log(counter)
-  return counter
+  console.log(counter);
+  return counter;
   // meetings.forEach((meeting) => await meeting.get()).filter('isConfirmed' == true)
 }
