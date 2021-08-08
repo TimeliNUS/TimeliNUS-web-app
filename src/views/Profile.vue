@@ -127,19 +127,25 @@
         <div>
           <v-img
             src="@/assets/todo_dashboard.png"
-            contain
-            style="display: flex; justify-content: center; align-items: center"
+            cover
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 25px;
+            "
           >
             <v-row
               style="
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                margin: 0;
               "
             >
               <v-col
-                col="12"
-                md="6"
+                cols="3"
+                md="3"
                 style="
                   padding-bottom: 16px;
                   display: flex;
@@ -149,7 +155,7 @@
                 <v-avatar
                   left
                   class="white--text"
-                  size="180"
+                  size="100%"
                   @mouseover="hover = true"
                   @mouseleave="hover = false"
                 >
@@ -195,15 +201,18 @@
                 </v-avatar>
               </v-col>
               <v-col
-                col="12"
+                cols="9"
                 md="6"
                 style="
                   display: flex;
                   justify-content: flex-start;
                   flex-direction: column;
+                  margin-top: 15px;
+                  margin-bottom: 15px;
+                  padding-left: 0;
                 "
               >
-                <v-row style="margin-left: 7px">
+                <v-row style="margin-left: 7px; align-items: center">
                   <span
                     style="
                       font-size: 30px;
@@ -211,6 +220,7 @@
                       font-weight: bold;
                       color: white;
                     "
+                    class="profile-title"
                   >
                     {{ this.$store.state.displayUser.name }}
                   </span>
@@ -262,7 +272,10 @@
                   </v-dialog>
                 </v-row>
                 <v-row style="margin-left: 7px">
-                  <span style="font-size: 20px; display: flex; color: white">
+                  <span
+                    style="font-size: 20px; display: flex; color: white"
+                    class="profile-subtitle"
+                  >
                     {{ this.$store.state.displayUser.email }}
                   </span>
                 </v-row>
@@ -281,7 +294,13 @@
                 <v-row
                   style="margin-left: 7px; display: flex; align-items: center"
                 >
-                  <span style="font-size: 16px; display: flex; color: white"
+                  <span
+                    style="
+                      font-size: 16px;
+                      display: flex;
+                      color: white;
+                      text-align: left;
+                    "
                     >Set default NUSMods calendar:
                   </span>
                   <v-dialog v-model="dialogCalendar" max-width="600px">
@@ -334,31 +353,55 @@
                   </v-dialog>
                 </v-row>
                 <v-row
-                  style="margin-left: 7px; display: flex; align-items: center"
+                  style="
+                    margin-left: 7px;
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0px;
+                  "
                 >
-                  <div
+                  <v-row
+                    cols="6"
                     v-if="
                       this.$store.state.displayUser.zoomRefreshToken == null
                     "
-                    style="font-size: 16px; display: flex; color: white"
+                    style="
+                      font-size: 16px;
+                      display: flex;
+                      color: white;
+                      text-align: left;
+                      margin-top: 10px;
+                    "
                   >
-                    <span>Not Linked with Zoom</span
-                    ><v-btn
-                      text
-                      small
-                      color="white"
-                      @click="redirectToZoomLogin()"
-                      >Click here to link with zoom</v-btn
+                    <v-col
+                      cols="12"
+                      md="5"
+                      style="padding-top: 0px; padding-bottom: 0px"
                     >
-                  </div>
-                  <div
+                      <span>Not Linked with Zoom</span>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="6"
+                      style="padding-top: 0px; padding-bottom: 0px"
+                      ><v-btn
+                        text
+                        small
+                        color="white"
+                        style="padding: 0"
+                        @click="redirectToZoomLogin()"
+                        >Click here to link with zoom</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                  <v-row
                     v-if="
                       this.$store.state.displayUser.zoomRefreshToken != null
                     "
                     style="font-size: 16px; display: flex; color: white"
                   >
                     Linked with Zoom
-                  </div>
+                  </v-row>
                 </v-row>
               </v-col>
             </v-row>
@@ -978,6 +1021,19 @@ td.dx-scheduler-time-panel-cell .dinner .cafe {
 @media all and (-ms-high-contrast: none) {
   td.dx-scheduler-time-panel-cell .dinner .cafe {
     background-color: transparent;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    justify-content: flex-start !important;
+  }
+  .profile-title {
+    font-size: 20px !important;
+  }
+
+  .profile-subtitle {
+    font-size: 16px !important;
   }
 }
 </style>

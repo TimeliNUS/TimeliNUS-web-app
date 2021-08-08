@@ -202,7 +202,6 @@
                             :class="`rounded-xl`"
                             :color="active ? undefined : 'white'"
                             class="ma-2"
-                            height="100%"
                             width="250"
                             outlined
                             style="
@@ -273,6 +272,7 @@
                                     flex-direction: row-reverse;
                                     justify-content: flex-end;
                                     padding-left: 12px;
+                                    margin-top: auto;
                                   "
                                 >
                                   <div
@@ -476,6 +476,7 @@
                                 flex-direction: row-reverse;
                                 justify-content: flex-end;
                                 padding-left: 12px;
+                                margin-top: auto;
                               "
                             >
                               <div
@@ -537,8 +538,10 @@
                             <!-- <span><v-icon color="#ff9d66">place</v-icon> 
               {{meeting.venue}} </span> -->
                             <div
-                              style="display: flex; justify-content: space-between;"
-
+                              style="
+                                display: flex;
+                                justify-content: space-between;
+                              "
                             >
                               <span
                                 v-if="
@@ -656,8 +659,9 @@
                                   Math.trunc(
                                     displaySelectedTimeDifference(
                                       meeting.selectedStartDate
-                                    ) /1000 / 60
-                                  
+                                    ) /
+                                      1000 /
+                                      60
                                   ) * -1
                                 }}
                                 minutes
@@ -946,6 +950,7 @@
                               flex-direction: row-reverse;
                               justify-content: flex-end;
                               padding-left: 12px;
+                              margin-top: auto;
                             "
                           >
                             <div

@@ -785,10 +785,9 @@
                           v-slot="{ active, toggle }"
                         >
                           <v-card
-                            :class="`rounded-xl`"
+                            :class="`rounded-xl project-card-content`"
                             :color="active ? undefined : 'white'"
                             class="ma-2"
-                            height="230"
                             @click="
                               toggle;
                               passCurrSelectedProject(project);
@@ -940,35 +939,44 @@
                               {{ project.confirmedMeetingLength }} Scheduled
                               Meeting</span
                             >
-
-                            <div
-                              style="
-                                display: flex;
-                                justify-content: space-between;
-                              "
-                            >
-                              <span
+                            <v-row style="width: 100%; padding: 0; margin: 0">
+                              <v-col
+                                cols="12"
+                                md="8"
                                 style="
                                   display: flex;
-                                  padding: 3px;
-                                  font-size: 14px;
-                                  align-items: center;
-                                  color: #999999;
+                                  padding: 0;
+                                  justify-content: space-between;
                                 "
-                                ><v-icon
-                                  color="#999999"
-                                  width="20px"
+                              >
+                                <span
                                   style="
+                                    display: flex;
                                     padding: 3px;
-                                    padding-right: 10px;
-                                    padding-top: 0px !important;
+                                    font-size: 14px;
+                                    align-items: center;
+                                    color: #999999;
                                   "
-                                  >check_circle</v-icon
-                                >
-                                {{ project.incompletedTodoLength }} Incompleted
-                                Todo
-                              </span>
-                              <div style="display: flex">
+                                  ><v-icon
+                                    color="#999999"
+                                    width="20px"
+                                    style="
+                                      padding: 3px;
+                                      padding-right: 10px;
+                                      padding-top: 0px !important;
+                                      text-align: left;
+                                    "
+                                    >check_circle</v-icon
+                                  >
+                                  {{ project.incompletedTodoLength }}
+                                  Incompleted Todo
+                                </span>
+                              </v-col>
+                              <v-col
+                                cols="12"
+                                md="4"
+                                style="display: flex; padding: 0"
+                              >
                                 <v-dialog
                                   v-model="display[project.title]"
                                   content-class="elevation-0"
@@ -1464,9 +1472,8 @@
                                 >
                                   <v-icon> mdi-trash-can-outline </v-icon>
                                 </v-btn>
-                              </div>
-                            </div>
-
+                              </v-col>
+                            </v-row>
                             <!-- <v-row
                               class="fill-height"
                               align="center"
@@ -3134,11 +3141,11 @@
                                           font-size: 20px;
                                           flex-direction: column;
                                           padding: 0px;
+                                          padding-left: 3vw;
                                         "
                                       >
                                         <div v-if="todo.finalDeadline !== null">
                                           <span
-                                            style="margin-left: 3vw"
                                             class="todo_item"
                                             v-bind:class="{
                                               completed: todo.complete,
@@ -3156,8 +3163,7 @@
                                         </div>
                                         <div v-else>
                                           <span
-                                            style="margin-left: 3vw"
-                                            class="todo_item"
+                                            class="todo_item someday"
                                             v-bind:class="{
                                               completed: todo.complete,
                                             }"
@@ -3169,10 +3175,7 @@
                                         <div v-if="todo.finalDeadline !== null">
                                           <span
                                             class="centerAlign"
-                                            style="
-                                              margin-left: 3vw;
-                                              font-size: 14px;
-                                            "
+                                            style="font-size: 14px"
                                             v-bind:class="{
                                               completed: todo.complete,
                                             }"
@@ -3833,11 +3836,11 @@
                                           font-weight: bold;
                                           font-size: 20px;
                                           flex-direction: column;
+                                          padding-left: 3vw;
                                         "
                                       >
                                         <div v-if="todo.finalDeadline !== null">
                                           <span
-                                            style="margin-left: 3vw"
                                             v-bind:class="{
                                               completed: todo.complete,
                                             }"
@@ -3855,7 +3858,7 @@
                                         </div>
                                         <div v-else>
                                           <span
-                                            style="margin-left: 3vw"
+                                            class="someday"
                                             v-bind:class="{
                                               completed: todo.complete,
                                             }"
@@ -3867,10 +3870,7 @@
                                         <div v-if="todo.finalDeadline !== null">
                                           <span
                                             class="centerAlign"
-                                            style="
-                                              margin-left: 3vw;
-                                              font-size: 14px;
-                                            "
+                                            style="font-size: 14px"
                                             v-bind:class="{
                                               completed: todo.complete,
                                             }"
@@ -4113,10 +4113,11 @@
                                   font-weight: bold;
                                   font-size: 20px;
                                   flex-direction: column;
+                                  padding-left: 3vw;
                                 "
                               >
                                 <div v-if="project.deadline !== null">
-                                  <span style="margin-left: 3vw">{{
+                                  <span>{{
                                     project.deadline.toLocaleDateString(
                                       "en-US",
                                       {
@@ -4127,15 +4128,13 @@
                                   }}</span>
                                 </div>
                                 <div v-else>
-                                  <span style="margin-left: 3vw">
-                                    Someday
-                                  </span>
+                                  <span class="someday"> Someday </span>
                                 </div>
 
                                 <div v-if="project.deadline !== null">
                                   <span
                                     class="centerAlign"
-                                    style="margin-left: 3vw; font-size: 14px"
+                                    style="font-size: 14px"
                                     >{{
                                       project.deadline.toLocaleTimeString([], {
                                         hour: "2-digit",
@@ -5276,10 +5275,10 @@ export default {
           displayDeadline: this.TaskdisplayDeadline,
           note: this.TaskmyNote,
           project: {
-          id: this.TaskmyProject,
-          title: projectTitle,
-          reference: db.collection("project").doc(this.TaskmyProject),
-        },
+            id: this.TaskmyProject,
+            title: projectTitle,
+            reference: db.collection("project").doc(this.TaskmyProject),
+          },
           PIC: [],
         });
       await this.addFinalPIC(task);
@@ -6284,6 +6283,10 @@ export default {
 .navigation_title {
   margin: 0;
 }
+
+.project-card-content {
+  min-width: 330px;
+}
 @media only screen and (max-width: 1200px) {
   .navigation_button {
     display: inline-flex;
@@ -6310,10 +6313,19 @@ export default {
 
   .content {
     max-width: 100%;
+    height: 100%;
   }
 }
 
 @media only screen and (max-width: 768px) {
+  .someday {
+    writing-mode: vertical-rl;
+    -webkit-transform: rotate(180deg);
+  }
+  .project-card-content {
+    min-width: calc(100vw - 135px) !important;
+    max-width: calc(100vw - 135px);
+  }
   .hide-on-sm {
     display: none !important;
   }
