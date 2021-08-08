@@ -717,6 +717,7 @@ async function getTodayTodos(state: any, project: any) {
     await Promise.all(
     querySnapshot.docs.map(async (doc) => {
       let newDate = ""
+      let newTodayDate = ""
       if(doc.get("deadline")){
     
       
@@ -733,8 +734,19 @@ async function getTodayTodos(state: any, project: any) {
           console.log(currDate);
           newDate = currYear + "-" + currMonth + "-" + currDate;
       } 
+      console.log(newDate)
+      console.log(new Date().toISOString().substr(0, 10))
+      const today = new Date(
+        Date.now() - new Date().getTimezoneOffset() * 60000
+      )
+      const todayString = today.toLocaleDateString()
+      const todayYear = todayString.substr(6);
+      const todayMonth = todayString.substr(3, 2);
+      const todayDate = todayString.substr(0, 2);
       
-    if (newDate === new Date().toISOString().substr(0, 10)) {
+      newTodayDate = todayYear + "-" + todayMonth + "-" + todayDate;
+      console.log(newTodayDate)
+    if (newDate === newTodayDate) {
       pushTodos.push({
         id: doc.id,
         task: doc.get("task") ?? "",
