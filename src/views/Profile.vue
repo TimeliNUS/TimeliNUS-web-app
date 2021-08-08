@@ -398,7 +398,12 @@
                     v-if="
                       this.$store.state.displayUser.zoomRefreshToken != null
                     "
-                    style="font-size: 16px; display: flex; color: white"
+                    style="
+                      font-size: 16px;
+                      display: flex;
+                      color: white;
+                      margin: 0;
+                    "
                   >
                     Linked with Zoom
                   </v-row>
