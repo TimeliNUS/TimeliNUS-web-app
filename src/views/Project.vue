@@ -3332,6 +3332,7 @@
                                                     v-on="on"
                                                     icon
                                                     @click="
+                                                      prefillProject();
                                                       fillTodoInfo(todo);
                                                       getProjectMenu();
                                                     "
@@ -3392,7 +3393,7 @@
                                                                 label="Module Project*"
                                                                 required
                                                                 @input="
-                                                                  renderGroupmates
+                                                                  renderGroupmates()
                                                                 "
                                                                 color="#ff9d66"
                                                                 v-model="
@@ -5005,6 +5006,7 @@ export default {
     },
 
     async renderGroupmates() {
+      console.log("called renderGroupmates");
       const docRef = await db
         .collection("project")
         .doc(this.TaskmyProject)
@@ -5025,15 +5027,15 @@ export default {
             : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
         });
       }
-
+      console.log(this.TasktempGroupmates);
       console.log(this.$store.state.user);
     },
     async getPIC(PIC) {
-      this.TaskvarPIC = [];
+      const TaskvarPIC = [];
       console.log(PIC);
       for (let i = 0; i < PIC.length; i++) {
         const docRef = await PIC[i].get();
-        this.TaskvarPIC.push({
+        TaskvarPIC.push({
           id: docRef.id,
           name: docRef.get("name"),
           object: docRef,
@@ -5042,16 +5044,14 @@ export default {
             : "https://firebasestorage.googleapis.com/v0/b/timelinus-2021.appspot.com/o/default_profile_pic.jpg?alt=media&token=093aee02-56ad-45b8-a937-ab337cf145f1",
         });
       }
-      console.log(this.TaskvarPIC);
-      return this.TaskvarPIC;
+      console.log(TaskvarPIC);
+      return TaskvarPIC;
     },
 
-    async getPICId(PIC) {
+    getPICId(PIC) {
       this.TaskvarPICId = [];
       for (let i = 0; i < PIC.length; i++) {
-        const docRef = await PIC[i].get();
-
-        this.TaskvarPICId.push(docRef.id);
+        this.TaskvarPICId.push(PIC[i].id);
       }
 
       return this.TaskvarPICId;
@@ -5161,7 +5161,9 @@ export default {
         // deadline: firebase.firestore.Timestamp.fromDate(new Date(this.myDeadline)),
         deadline: this.TaskfinalDeadline,
         // displayDeadline: this.TaskdisplayDeadline,
-        PIC: [],
+        PIC: this.TaskgroupmatesChips.map((x) =>
+          db.collection("user").doc(x.id)
+        ),
         note: this.TaskmyNote,
         project: {
           id: this.TaskmyProject,
@@ -5169,11 +5171,10 @@ export default {
           reference: db.collection("project").doc(this.TaskmyProject),
         },
       });
-      await this.addFinalPIC(response);
-      await db
-        .collection("user")
-        .doc(this.$store.state.user.uid)
-        .update({ todo: firebase.firestore.FieldValue.arrayUnion(response) });
+      // await db
+      //   .collection("user")
+      //   .doc(this.$store.state.user.uid)
+      //   .update({ todo: firebase.firestore.FieldValue.arrayUnion(response) });
 
       await db
         .collection("project")
@@ -5256,7 +5257,7 @@ export default {
 
       for (let i = 0; i < this.projects.length; i++) {
         console.log(this.projects[i].title);
-        if (this.projects[i].id == this.myProject) {
+        if (this.projects[i].id == this.TaskmyProject) {
           projectTitle = this.projects[i].title;
         }
       }
@@ -5280,19 +5281,11 @@ export default {
             title: projectTitle,
             reference: db.collection("project").doc(this.TaskmyProject),
           },
-          PIC: [],
+          PIC: this.TaskgroupmatesChips.map((x) =>
+            db.collection("user").doc(x.id)
+          ),
         });
-      await this.addFinalPIC(task);
       if (this.TaskoldMyProject !== this.TaskmyProject) {
-        await db
-          .collection("project")
-          .doc(this.TaskmyProject)
-          .update({
-            todos: firebase.firestore.FieldValue.arrayUnion(
-              db.collection("todo").doc(task.id)
-            ),
-          })
-          .catch((error) => console.log(error));
         await db
           .collection("project")
           .doc(this.TaskoldMyProject)
@@ -5300,8 +5293,15 @@ export default {
             todos: firebase.firestore.FieldValue.arrayRemove(
               db.collection("todo").doc(task.id)
             ),
-          })
-          .catch((error) => console.log(error));
+          });
+      await db
+        .collection("project")
+        .doc(this.TaskmyProject)
+        .update({
+          todos: firebase.firestore.FieldValue.arrayUnion(
+            db.collection("todo").doc(task.id)
+          ),
+        });
       }
 
       this.$store.dispatch("getTasks");
@@ -5379,215 +5379,228 @@ export default {
       console.log(this.oldGroupmatesChips);
       console.log(this.TaskmyTodo);
     },
-    async passCurrSelectedProjectOriginal(project) {
-      console.log(project);
-      this.currTodos = [];
-      this.currGroupmateTodos = [];
-      const todos = project.todos;
-      for (let i = 0; i < todos.length; i++) {
-        const data = await db.collection("todo").doc(todos[i].id).get();
-        const PIC = await this.getPICId(data.get("PIC"));
-        if (PIC.includes(this.$store.state.user.uid)) {
-          console.log(await this.getPICId(data.get("PIC")));
-          this.currTodos.push({
-            id: data.id,
-            title: data.get("task"),
-            complete: data.get("complete"),
-            note: data.get("note"),
-            finalDeadline: data.get("deadline")
-              ? data.get("deadline").toDate()
-              : null,
+    // async passCurrSelectedProjectOriginal(project) {
+    //   console.log(project);
+    //   this.currTodos = [];
+    //   this.currGroupmateTodos = [];
+    //   const todos = project.todos;
+    //   for (let i = 0; i < todos.length; i++) {
+    //     const data = await db.collection("todo").doc(todos[i].id).get();
+    //     const PIC = this.getPICId(data.get("PIC"));
+    //     if (PIC.includes(this.$store.state.user.uid)) {
+    //       console.log(this.getPICId(data.get("PIC")));
+    //       this.currTodos.push({
+    //         id: data.id,
+    //         title: data.get("task"),
+    //         complete: data.get("complete"),
+    //         note: data.get("note"),
+    //         finalDeadline: data.get("deadline")
+    //           ? data.get("deadline").toDate()
+    //           : null,
 
-            project: data.get("project").id,
-            oldProject: data.get("project").id,
-            TaskmyDeadline: data.get("deadlineDate"),
-            TaskmyDeadlineTime: data.get("deadlineTime"),
-            TaskswitchValue: data.get("switchValue"),
-            TaskdateSwitchValue: data.get("dateSwitchValue"),
-            TaskdisplayDeadline: data.get("displayDeadline"),
-            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-          });
-        } else {
-          this.currGroupmateTodos.push({
-            id: data.id,
-            title: data.get("task"),
-            complete: data.get("complete"),
-            note: data.get("note"),
-            finalDeadline: data.get("deadline")
-              ? data.get("deadline").toDate()
-              : null,
+    //         project: data.get("project").id,
+    //         oldProject: data.get("project").id,
+    //         TaskmyDeadline: data.get("deadlineDate"),
+    //         TaskmyDeadlineTime: data.get("deadlineTime"),
+    //         TaskswitchValue: data.get("switchValue"),
+    //         TaskdateSwitchValue: data.get("dateSwitchValue"),
+    //         TaskdisplayDeadline: data.get("displayDeadline"),
+    //         TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+    //         TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+    //         TaskoldGroupmatesChips: this.getPICId(data.get("PIC")),
+    //       });
+    //     } else {
+    //       this.currGroupmateTodos.push({
+    //         id: data.id,
+    //         title: data.get("task"),
+    //         complete: data.get("complete"),
+    //         note: data.get("note"),
+    //         finalDeadline: data.get("deadline")
+    //           ? data.get("deadline").toDate()
+    //           : null,
 
-            project: data.get("project").id,
-            oldProject: data.get("project").id,
-            TaskmyDeadline: data.get("deadlineDate"),
-            TaskmyDeadlineTime: data.get("deadlineTime"),
-            TaskswitchValue: data.get("switchValue"),
-            TaskdateSwitchValue: data.get("dateSwitchValue"),
-            TaskdisplayDeadline: data.get("displayDeadline"),
-            TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
-            TaskoldGroupmatesChips: await this.getPICId(data.get("PIC")),
-          });
-        }
-      }
+    //         project: data.get("project").id,
+    //         oldProject: data.get("project").id,
+    //         TaskmyDeadline: data.get("deadlineDate"),
+    //         TaskmyDeadlineTime: data.get("deadlineTime"),
+    //         TaskswitchValue: data.get("switchValue"),
+    //         TaskdateSwitchValue: data.get("dateSwitchValue"),
+    //         TaskdisplayDeadline: data.get("displayDeadline"),
+    //         TaskgroupmatesChips: await this.getPIC(data.get("PIC")),
+    //         TaskoldGroupmatesChipsObject: await this.getPIC(data.get("PIC")),
+    //         TaskoldGroupmatesChips: this.getPICId(data.get("PIC")),
+    //       });
+    //     }
+    //   }
 
-      console.log(this.currTodos);
-    },
+    //   console.log(this.currTodos);
+    // },
 
     async passCurrSelectedProject(project) {
       console.log(project);
+      let promises = [];
       this.currTodos = [];
       this.currGroupmateTodos = [];
       const tasks = project.todos;
       for (let i = 0; i < tasks.length; i++) {
-        const doc = await tasks[i].get();
-        const data = doc.data();
-        const PIC = await this.getPICId(data.PIC);
-        let newDate = "";
-        if (data.deadline) {
-          const currLocalDate = data.deadline
-            .toDate()
-            .toLocaleDateString()
-            .substr(0, 10);
-          const currYear = currLocalDate.substr(6);
-          const currMonth = currLocalDate.substr(3, 2);
-          const currDate = currLocalDate.substr(0, 2);
-          console.log(currLocalDate);
-          console.log(currYear);
-          console.log(currMonth);
-          console.log(currDate);
-          newDate = currYear + "-" + currMonth + "-" + currDate;
-        }
+        promises.push(
+          tasks[i].get().then(async (doc) => {
+            const data = doc.data();
+            const PIC = this.getPICId(data.PIC);
+            let newDate = "";
+            if (data.deadline) {
+              const currLocalDate = data.deadline
+                .toDate()
+                .toLocaleDateString()
+                .substr(0, 10);
+              const currYear = currLocalDate.substr(6);
+              const currMonth = currLocalDate.substr(3, 2);
+              const currDate = currLocalDate.substr(0, 2);
+              console.log(currLocalDate);
+              console.log(currYear);
+              console.log(currMonth);
+              console.log(currDate);
+              newDate = currYear + "-" + currMonth + "-" + currDate;
+            }
+            const pics = await this.getPIC(data.PIC);
+            if (PIC.includes(this.$store.state.user.uid)) {
+              this.currTodos.push({
+                id: doc.id,
+                title: data.task,
+                complete: data.complete,
+                note: data.note,
+                finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
-        if (PIC.includes(this.$store.state.user.uid)) {
-          this.currTodos.push({
-            id: doc.id,
-            title: data.task,
-            complete: data.complete,
-            note: data.note,
-            finalDeadline: data.deadline ? data.deadline.toDate() : null,
+                project: data.project.id,
+                oldProject: data.project.id,
+                TaskmyDeadline: data.deadline ? newDate : "",
+                TaskmyDeadlineTime: data.deadline
+                  ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+                  : "00:00",
+                TaskswitchValue: data.includeTime
+                  ? data.includeTime
+                  : data.includeTime,
+                TaskdateSwitchValue: data.deadline ? false : true,
+                TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+                TaskgroupmatesChips: pics,
+                TaskoldGroupmatesChipsObject: pics,
+                TaskoldGroupmatesChips: this.getPICId(data.PIC),
+              });
+            } else {
+              this.currGroupmateTodos.push({
+                id: data.id,
+                title: data.task,
+                complete: data.complete,
+                note: data.note,
+                finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
-            project: data.project.id,
-            oldProject: data.project.id,
-            TaskmyDeadline: data.deadline ? newDate : "",
-            TaskmyDeadlineTime: data.deadline
-              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-              : "00:00",
-            TaskswitchValue: data.includeTime
-              ? data.includeTime
-              : data.includeTime,
-            TaskdateSwitchValue: data.deadline ? false : true,
-            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-            TaskgroupmatesChips: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-        } else {
-          this.currGroupmateTodos.push({
-            id: data.id,
-            title: data.task,
-            complete: data.complete,
-            note: data.note,
-            finalDeadline: data.deadline ? data.deadline.toDate() : null,
-
-            project: data.project.id,
-            oldProject: data.project.id,
-            TaskmyDeadline: data.deadline ? newDate : "",
-            TaskmyDeadlineTime: data.deadline
-              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-              : "00:00",
-            TaskswitchValue: data.includeTime
-              ? data.includeTime
-              : data.includeTime,
-            TaskdateSwitchValue: data.deadline ? false : true,
-            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-            TaskgroupmatesChips: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-        }
+                project: data.project.id,
+                oldProject: data.project.id,
+                TaskmyDeadline: data.deadline ? newDate : "",
+                TaskmyDeadlineTime: data.deadline
+                  ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+                  : "00:00",
+                TaskswitchValue: data.includeTime
+                  ? data.includeTime
+                  : data.includeTime,
+                TaskdateSwitchValue: data.deadline ? false : true,
+                TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+                TaskgroupmatesChips: pics,
+                TaskoldGroupmatesChipsObject: pics,
+                TaskoldGroupmatesChips: this.getPICId(data.PIC),
+              });
+            }
+          })
+        );
       }
+      await Promise.all(promises);
+      console.log("now todos: ");
+      console.log(this.currTodos);
+      // this.currTodos = currTodos;
       console.log(this.currTodos);
     },
 
     async EditpassCurrSelectedProject(projectID) {
       console.log(project);
       this.currTodos = [];
+      let promises = [];
       this.currGroupmateTodos = [];
       const projectDoc = await db.collection("project").doc(projectID).get();
       const project = projectDoc.data();
       console.log(project);
       const tasks = project.todos;
       for (let i = 0; i < tasks.length; i++) {
-        const doc = await tasks[i].get();
-        const data = doc.data();
-        const PIC = await this.getPICId(data.PIC);
-        let newDate = "";
-        if (data.deadline) {
-          const currLocalDate = data.deadline
-            .toDate()
-            .toLocaleDateString()
-            .substr(0, 10);
-          const currYear = currLocalDate.substr(6);
-          const currMonth = currLocalDate.substr(3, 2);
-          const currDate = currLocalDate.substr(0, 2);
-          console.log(currLocalDate);
-          console.log(currYear);
-          console.log(currMonth);
-          console.log(currDate);
-          newDate = currYear + "-" + currMonth + "-" + currDate;
-        }
+        promises.push(
+          tasks[i].get().then(async (doc) => {
+            const data = doc.data();
+            const PIC = this.getPICId(data.PIC);
+            let newDate = "";
+            if (data.deadline) {
+              const currLocalDate = data.deadline
+                .toDate()
+                .toLocaleDateString()
+                .substr(0, 10);
+              const currYear = currLocalDate.substr(6);
+              const currMonth = currLocalDate.substr(3, 2);
+              const currDate = currLocalDate.substr(0, 2);
+              console.log(currLocalDate);
+              console.log(currYear);
+              console.log(currMonth);
+              console.log(currDate);
+              newDate = currYear + "-" + currMonth + "-" + currDate;
+            }
+            const pics = await this.getPIC(data.PIC);
+            if (PIC.includes(this.$store.state.user.uid)) {
+              this.currTodos.push({
+                id: doc.id,
+                title: data.task,
+                complete: data.complete,
+                note: data.note,
+                finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
-        if (PIC.includes(this.$store.state.user.uid)) {
-          this.currTodos.push({
-            id: doc.id,
-            title: data.task,
-            complete: data.complete,
-            note: data.note,
-            finalDeadline: data.deadline ? data.deadline.toDate() : null,
+                project: data.project.id,
+                oldProject: data.project.id,
+                TaskmyDeadline: data.deadline ? newDate : "",
+                TaskmyDeadlineTime: data.deadline
+                  ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+                  : "00:00",
+                TaskswitchValue: data.includeTime
+                  ? data.includeTime
+                  : data.includeTime,
+                TaskdateSwitchValue: data.deadline ? false : true,
+                TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+                TaskgroupmatesChips: pics,
+                TaskoldGroupmatesChipsObject: pics,
+                TaskoldGroupmatesChips: this.getPICId(data.PIC),
+              });
+            } else {
+              this.currGroupmateTodos.push({
+                id: data.id,
+                title: data.task,
+                complete: data.complete,
+                note: data.note,
+                finalDeadline: data.deadline ? data.deadline.toDate() : null,
 
-            project: data.project.id,
-            oldProject: data.project.id,
-            TaskmyDeadline: data.deadline ? newDate : "",
-            TaskmyDeadlineTime: data.deadline
-              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-              : "00:00",
-            TaskswitchValue: data.includeTime
-              ? data.includeTime
-              : data.includeTime,
-            TaskdateSwitchValue: data.deadline ? false : true,
-            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-            TaskgroupmatesChips: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-        } else {
-          this.currGroupmateTodos.push({
-            id: data.id,
-            title: data.task,
-            complete: data.complete,
-            note: data.note,
-            finalDeadline: data.deadline ? data.deadline.toDate() : null,
-
-            project: data.project.id,
-            oldProject: data.project.id,
-            TaskmyDeadline: data.deadline ? newDate : "",
-            TaskmyDeadlineTime: data.deadline
-              ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
-              : "00:00",
-            TaskswitchValue: data.includeTime
-              ? data.includeTime
-              : data.includeTime,
-            TaskdateSwitchValue: data.deadline ? false : true,
-            TaskdisplayDeadline: data.deadline ? newDate : "Someday",
-            TaskgroupmatesChips: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChipsObject: await this.getPIC(data.PIC),
-            TaskoldGroupmatesChips: await this.getPICId(data.PIC),
-          });
-        }
+                project: data.project.id,
+                oldProject: data.project.id,
+                TaskmyDeadline: data.deadline ? newDate : "",
+                TaskmyDeadlineTime: data.deadline
+                  ? data.deadline.toDate().toLocaleTimeString().substr(0, 5)
+                  : "00:00",
+                TaskswitchValue: data.includeTime
+                  ? data.includeTime
+                  : data.includeTime,
+                TaskdateSwitchValue: data.deadline ? false : true,
+                TaskdisplayDeadline: data.deadline ? newDate : "Someday",
+                TaskgroupmatesChips: pics,
+                TaskoldGroupmatesChipsObject: pics,
+                TaskoldGroupmatesChips: this.getPICId(data.PIC),
+              });
+            }
+          })
+        );
       }
+      await Promise.all(promises);
       console.log(this.currTodos);
     },
 
