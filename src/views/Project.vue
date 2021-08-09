@@ -5294,14 +5294,14 @@ export default {
               db.collection("todo").doc(task.id)
             ),
           });
-      await db
-        .collection("project")
-        .doc(this.TaskmyProject)
-        .update({
-          todos: firebase.firestore.FieldValue.arrayUnion(
-            db.collection("todo").doc(task.id)
-          ),
-        });
+        await db
+          .collection("project")
+          .doc(this.TaskmyProject)
+          .update({
+            todos: firebase.firestore.FieldValue.arrayUnion(
+              db.collection("todo").doc(task.id)
+            ),
+          });
       }
 
       this.$store.dispatch("getTasks");
