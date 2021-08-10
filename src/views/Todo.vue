@@ -1050,7 +1050,11 @@
                                                 <v-btn
                                                   color="#ff9d66"
                                                   text
-                                                  :disabled="!valid"
+                                                  :disabled="!valid ||
+                            myTodo == '' ||
+                            myProject == null ||
+                            displayDeadline == 'Deadline' ||
+                            groupmatesChips.length == 0"
                                                   @click="
                                                     display[task.task] = false;
                                                     checkEdit(task);

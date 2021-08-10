@@ -72,7 +72,7 @@ export const googleSignIn = () => {
     });
 };
 
-export const findCommonTime = (
+export const findCommonTime = async (
   link: string,
   startDateString: string,
   endDateString: string,
@@ -86,7 +86,7 @@ export const findCommonTime = (
     id: id,
     user: user,
   };
-  axios.post(
+  await axios.post(
     "https://asia-east2-timelinus-2021.cloudfunctions.net/findNusModsCommon",
     obj
   );
