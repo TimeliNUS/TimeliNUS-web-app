@@ -155,7 +155,7 @@
                 <v-avatar
                   left
                   class="white--text"
-                  size="100%"
+                  size="10vw"
                   @mouseover="hover = true"
                   @mouseleave="hover = false"
                 >
