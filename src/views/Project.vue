@@ -377,16 +377,11 @@
                                     </div>
                                   </v-date-picker>
                                 </v-menu>
-                                 <v-row
-                                  style="padding-top: 5px"
-                                >
+                                <v-row style="padding-top: 5px">
                                   <v-col
                                     cols="12"
                                     md="6"
-                                    style="
-                                      display: flex;
-                                      align-items: center;
-                                    "
+                                    style="display: flex; align-items: center"
                                   >
                                     <v-switch
                                       :disabled="dateSwitchValue == 1"
@@ -998,7 +993,10 @@
                                       v-bind="attrs"
                                       v-on="on"
                                       icon
-                                      @click="fillInfo(project); clearSearch()"
+                                      @click="
+                                        fillInfo(project);
+                                        clearSearch();
+                                      "
                                     >
                                       <v-icon> mdi-pencil-outline</v-icon>
                                     </v-btn>
@@ -1906,7 +1904,7 @@
                                                         goMeetingInv(meetingInv)
                                                       "
                                                     >
-                                                    Import Calendar
+                                                      Import Calendar
                                                     </v-btn>
                                                     <v-btn
                                                       small
@@ -4457,7 +4455,7 @@
                                                                 color="#ff9d66"
                                                                 text
                                                                 @click="
-                                                                  groupmateDialogEditTable = false; 
+                                                                  groupmateDialogEditTable = false;
                                                                   clearSearch();
                                                                 "
                                                               >
@@ -4690,6 +4688,7 @@
                               <!-- todo -->
                               <v-col
                                 cols="12"
+                                md="2"
                                 class="centerAlign"
                                 style="background-color: #ff9d66"
                                 :class="`rounded-r-xl`"
@@ -5852,12 +5851,12 @@ export default {
       this.finalDeadline = new Date().toISOString().substr(0, 10);
     },
 
-    async clearSearch(){
-      this.searchName = ""
-      this.searchEmail = ""
-      this.searchId = ""
-      this.searchAvatar = null
-      this.search = ""
+    async clearSearch() {
+      this.searchName = "";
+      this.searchEmail = "";
+      this.searchId = "";
+      this.searchAvatar = null;
+      this.search = "";
     },
 
     async getMatchedUserbyEmail() {
@@ -5882,7 +5881,6 @@ export default {
           console.log("Error getting documents: ", error);
         });
     },
-
 
     async getMatchedUserbyName() {
       console.log("getMatchedUserbyName");

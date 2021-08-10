@@ -689,6 +689,7 @@
                                             icon
                                             @click="
                                               fillInfo(task);
+                                              renderGroupmates();
                                               getProjectMenu();
                                             "
                                           >
@@ -1505,9 +1506,8 @@ export default {
             title: projectTitle,
             reference: db.collection("project").doc(this.myProject),
           },
-          PIC: [],
+          PIC: this.groupmatesChips.map((x) => db.collection("user").doc(x.id)),
         });
-      await this.addFinalPIC(task);
       if (this.oldMyProject !== this.myProject) {
         await db
           .collection("project")
