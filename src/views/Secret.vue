@@ -1077,7 +1077,7 @@
                             style="
                               margin-bottom: 10px;
                               min-width: 300px;
-                              max-width: 300px;
+                            
                               box-shadow: none !important;
                             "
                           >
