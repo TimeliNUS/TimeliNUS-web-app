@@ -3876,6 +3876,11 @@
                               :eventSettings="eventSettings"
                               :currentView="currentView"
                               :readonly="readonly"
+                              
+                              :showQuickInfo="readonly"
+                              :cellDoubleClick="onDoubleClick"
+                              :cellClick="onCellClick"
+                              :select="getSelectedCellTimes"
                             ></ejs-schedule>
                           </div>
                           <v-row style="padding-left: 10px; margin-top: 20px">
@@ -4749,7 +4754,11 @@
                               :eventSettings="eventSettings"
                               :currentView="currentView"
                               :readonly="readonly"
-                              :allowMultiple="allowMultiple"
+                            
+                              :showQuickInfo="readonly"
+                              :cellDoubleClick="onDoubleClick"
+                              :cellClick="onCellClick"
+                              :select="getSelectedCellTimes"
                             ></ejs-schedule>
                           </div>
                           <v-row style="padding-left: 10px; margin-top: 20px">
@@ -5376,8 +5385,7 @@
                 style="margin: 30px"
               ></v-img>
               <span style="font-weight: bold; font-size: 18px">
-                You have not selected any meeting invitation, pending meeting or
-                meeting confirmation yet
+                You have not selected anything yet
               </span>
             </div>
           </v-col>

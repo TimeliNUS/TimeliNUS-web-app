@@ -116,6 +116,21 @@ export const findGoogleCommonTime = async (
   );
 };
 
+export const deleteProjectCloudFunctions = async (
+  // googleToken: string,
+  projectId: string,
+  userId: string
+) => {
+  const obj = {
+    projectId,
+    userId,
+  };
+  await axios.post(
+    "https://asia-east2-timelinus-2021.cloudfunctions.net/deleteProject",
+    obj
+  );
+};
+
 // https://zoom.us/oauth/authorize?response_type=code&client_id=5NM6HEpT4CWNO0zQ9s0fg&redirect_uri=http://localhost:5001/timelinus-2021/asia-east2/zoomAuth&state={"client":"web", "id": "j1JiHkaJkLNO2o19VtTKl76qhgi1"}
 
 export const createZoomMeeting = async (
