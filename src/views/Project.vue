@@ -5274,6 +5274,16 @@ export default {
       console.log(this.TaskgroupmatesChips);
     },
 
+    generateGroupmates() {
+      console.log(this.tempGroupmates);
+      console.log(this.oldGroupmates);
+      const invitations = this.tempGroupmates
+        .filter((x) => !this.oldGroupmates.includes(x.id))
+        .map((y) => db.collection("user").doc(y.id));
+      console.log(invitations);
+      return invitations;
+    },
+
     async editTask(task) {
       console.log(task.id);
       console.log(this.TaskdateSwitchValue);
@@ -5665,7 +5675,7 @@ export default {
           new Date(this.myDeadline + "T" + this.myDeadlineTime + ":00+08:00")
         );
       }
-      this.passGroupmates();
+      // this.passGroupmates();
       this.editProject(project);
     },
 
@@ -5820,6 +5830,7 @@ export default {
 
     async editProject(project) {
       this.errors = "";
+      console.log(this.oldGroupmates);
       const response = await db
         .collection("project")
         .doc(project.id)
@@ -5830,8 +5841,11 @@ export default {
           // deadlineTime: this.myDeadlineTime,
           // deadlineDate: this.myDeadline,
           includeTime: this.switchValue,
-          confirmedInvitations: this.finalGroupmates.map((x) =>
+          confirmedInvitations: this.oldGroupmates.map((x) =>
             db.collection("user").doc(x)
+          ),
+          invitations: firebase.firestore.FieldValue.arrayUnion(
+            ...this.generateGroupmates()
           ),
           // dateSwitchValue: this.dateSwitchValue,
           deadline: this.finalDeadline,
