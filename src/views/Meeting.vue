@@ -5376,8 +5376,7 @@
                 style="margin: 30px"
               ></v-img>
               <span style="font-weight: bold; font-size: 18px">
-                You have not selected any meeting invitation, pending meeting or
-                meeting confirmation yet
+                You have not selected anything yet
               </span>
             </div>
           </v-col>
