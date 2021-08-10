@@ -83,8 +83,10 @@
                       <div class="v-text-field">
                         <v-text-field
                           prepend-inner-icon="mdi-lock"
+                          :type="showPassword ? 'text' : 'password'"
                           outlined
-                          type="password"
+                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          @click:append="showPassword = !showPassword"
                           placeholder="Password"
                           v-model="password"
                           color="#ff9d66"
@@ -124,6 +126,7 @@ export default {
     email: "",
     password: "",
     error: "",
+    showPassword: false,
   }),
 
   methods: {
