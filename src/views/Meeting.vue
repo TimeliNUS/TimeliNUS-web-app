@@ -2350,6 +2350,7 @@
                                           );
                                           getBlockedTimeSlot(meetingInv);
                                           checkExistingCalendar();
+
                                         "
                                       >
                                         Import Calendar
@@ -3999,7 +4000,7 @@
                                 importCalendarChoice == null ||
                                 importedCalendar == true
                               "
-                              @click="importCalendar(link, currMeetingInv)"
+                              @click="importCalendar(existingCalendarURL, currMeetingInv)"
                             >
                               Import
                             </v-btn>
@@ -6863,19 +6864,31 @@ export default {
       ).toISOString();
 
       this.tempImportLink = link;
-      this.importedCalendar = true;
-      this.tempImportedCalendar = true;
+      
     },
 
     async importCalendar(link, meeting) {
-      this.tempImportCalendar(link, meeting);
+      // this.tempImportCalendar(link, meeting);
       await findCommonTime(
-        this.tempImportLink,
-        this.tempImportStartDate,
-        this.tempImportEndDate,
+        link,
+        new Date(
+          this.currMeetingInv.displayMeetingDateRange.substr(0, 10) +
+            "T" +
+            this.currMeetingInv.startTime +
+            ":00+08:00"
+        ).toISOString(),
+        new Date(
+          this.currMeetingInv.displayMeetingDateRange.substr(13) +
+            "T" +
+            this.currMeetingInv.endTime +
+            ":00+08:00"
+        ).toISOString(),
         this.currMeetingInv.id,
         this.$store.state.user.uid
       );
+      this.getBlockedTimeSlot(this.currMeetingInv);
+      this.importedCalendar = true;
+      this.tempImportedCalendar = true;
     },
 
     async importGoogleCalendar() {
