@@ -95,6 +95,9 @@
                           v-model="password"
                           color="#ff9d66"
                           hide-details="auto"
+                         
+                          persistent-hint
+                          hint="Password should consist of at least 8 characters, including letters and numbers"
                         />
                       </div>
                     </v-col>
@@ -102,7 +105,8 @@
                   <v-row>
                     <v-col>
                       <div class="my-2 centerAlign">
-                        <v-btn color="#ff9d66" depressed large type="submit">
+                        <v-btn color="#ff9d66" depressed large type="submit"  
+                        :disabled="email == '' || password == '' || name == ''">
                           <span style="color: #ffffff">Register</span>
                         </v-btn>
                       </div>
@@ -130,6 +134,7 @@ export default {
     password: "",
     error: "",
     name: "",
+    
   }),
 
   methods: {
