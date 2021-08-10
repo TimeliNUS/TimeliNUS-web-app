@@ -90,12 +90,14 @@
                         <v-text-field
                           prepend-inner-icon="mdi-lock"
                           outlined
-                          type="password"
+                          :type="showPassword ? 'text' : 'password'"
                           placeholder="Password"
                           v-model="password"
                           color="#ff9d66"
                           hide-details="auto"
-                         
+                          :rules="passwordRules"
+                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          @click:append="showPassword = !showPassword"
                           persistent-hint
                           hint="Password should consist of at least 8 characters, including letters and numbers"
                         />
@@ -134,6 +136,12 @@ export default {
     password: "",
     error: "",
     name: "",
+    showPassword: false,
+    passwordRules: [(v) => (v && v.length >= 8) || "Password should consist of at least 8 characters, including letters and numbers",
+    v => /(?=.*[A-z])(?=.*[0-9])/.test(v) || "Password should consist of at least 8 characters, including letters and numbers"
+    
+    
+    ],
     
   }),
 

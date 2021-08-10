@@ -1406,7 +1406,11 @@
                                             <v-btn
                                               color="#ff9d66"
                                               text
-                                              :disabled="!valid"
+                                              :disabled=" !valid ||
+                                              title == '' ||
+                                              modCode == '' ||
+                                            checkTempGroupmates() == 0 ||
+                                                displayDeadline == 'Deadline'"
                                               @click="
                                                 display[project.title] = false;
                                                 checkEdit(project);
@@ -3745,7 +3749,11 @@
                                                         <v-btn
                                                           color="#ff9d66"
                                                           text
-                                                          :disabled="!valid"
+                                                          :disabled="!valid ||
+                                      TaskmyTodo == '' ||
+                                      TaskmyProject == null ||
+                                      TaskdisplayDeadline == 'Deadline' ||
+                                      TaskgroupmatesChips.length == 0"
                                                           @click="
                                                             Taskdisplay[
                                                               todo.title
@@ -4652,7 +4660,11 @@
                                             <v-btn
                                               color="#ff9d66"
                                               text
-                                              :disabled="!valid"
+                                              :disabled=" !valid ||
+                                                title == '' ||
+                                                modCode == '' ||
+                                                checkTempGroupmates() == 0 ||
+                                                displayDeadline == 'Deadline'"
                                               @click="
                                                 displayTable[
                                                   project.title
