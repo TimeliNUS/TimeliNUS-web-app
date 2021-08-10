@@ -377,8 +377,17 @@
                                     </div>
                                   </v-date-picker>
                                 </v-menu>
-                                <v-row style="padding-top: 5px">
-                                  <v-col cols="12" md="6" style="display: flex">
+                                 <v-row
+                                  style="padding-top: 5px"
+                                >
+                                  <v-col
+                                    cols="12"
+                                    md="6"
+                                    style="
+                                      display: flex;
+                                      align-items: center;
+                                    "
+                                  >
                                     <v-switch
                                       :disabled="dateSwitchValue == 1"
                                       inset
@@ -989,7 +998,7 @@
                                       v-bind="attrs"
                                       v-on="on"
                                       icon
-                                      @click="fillInfo(project)"
+                                      @click="fillInfo(project); clearSearch()"
                                     >
                                       <v-icon> mdi-pencil-outline</v-icon>
                                     </v-btn>
@@ -1207,7 +1216,8 @@
                                                                 color="#ff9d66"
                                                                 text
                                                                 @click="
-                                                                  groupmateDialogEdit = false
+                                                                  groupmateDialogEdit = false;
+                                                                  clearSearch();
                                                                 "
                                                               >
                                                                 Close
@@ -1626,7 +1636,7 @@
                                 name: 'Meeting',
                                 params: { dialog: true },
                               }"
-                              >Add meeting</router-link
+                              >Add Meeting</router-link
                             ></v-btn
                           >
                         </div>
@@ -1896,6 +1906,7 @@
                                                         goMeetingInv(meetingInv)
                                                       "
                                                     >
+                                                    Import Calendar
                                                     </v-btn>
                                                     <v-btn
                                                       small
@@ -4446,7 +4457,8 @@
                                                                 color="#ff9d66"
                                                                 text
                                                                 @click="
-                                                                  groupmateDialogEditTable = false
+                                                                  groupmateDialogEditTable = false; 
+                                                                  clearSearch();
                                                                 "
                                                               >
                                                                 Close
@@ -5840,6 +5852,14 @@ export default {
       this.finalDeadline = new Date().toISOString().substr(0, 10);
     },
 
+    async clearSearch(){
+      this.searchName = ""
+      this.searchEmail = ""
+      this.searchId = ""
+      this.searchAvatar = null
+      this.search = ""
+    },
+
     async getMatchedUserbyEmail() {
       console.log("getMatchedUserbyEmail");
       db.collection("user")
@@ -5862,6 +5882,8 @@ export default {
           console.log("Error getting documents: ", error);
         });
     },
+
+
     async getMatchedUserbyName() {
       console.log("getMatchedUserbyName");
       db.collection("user")
