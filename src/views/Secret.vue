@@ -1292,12 +1292,9 @@ export default {
       console.log(currMonth);
       console.log(currDate);
       const newDate = currYear + "-" + currMonth + "-" + currDate;
-      const today = new Date(
-        Date.now() - new Date().getTimezoneOffset() * 60000
-      )
-        .toISOString()
-        .substr(0, 10);
+      const today = new Date().toISOString().substr(0, 10)
       console.log(today);
+     
       if (newDate == today) {
         return true;
       }
@@ -1416,11 +1413,8 @@ export default {
         console.log(currMonth);
         console.log(currDate);
         const newDate = currYear + "-" + currMonth + "-" + currDate;
-        const today = new Date(
-          Date.now() - new Date().getTimezoneOffset() * 60000
-        )
-          .toISOString()
-          .substr(0, 10);
+        const today = new Date().toISOString().substr(0, 10)
+        
         if (newDate == today) {
           return true;
         }
@@ -1487,11 +1481,8 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           const newDate = currYear + "-" + currMonth + "-" + currDate;
-          const today = new Date(
-            Date.now() - new Date().getTimezoneOffset() * 60000
-          )
-            .toISOString()
-            .substr(0, 10);
+          const today = new Date().toISOString().substr(0, 10)
+            
           // const PIC = await this.getPICId(data.PIC)
           const PICid = [];
           for (let j = 0; j < data.PIC.length; j++) {
@@ -1500,6 +1491,7 @@ export default {
             PICid.push(pplID);
           }
           console.log(PICid);
+          console.log(newDate)
           if (newDate == today && PICid.includes(this.$store.state.user.uid)) {
             return true;
           }
