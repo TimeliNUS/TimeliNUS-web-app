@@ -4729,6 +4729,7 @@
 <script>
 import firebase from "firebase";
 import { db } from "../main.ts";
+import { deleteProjectCloudFunctions } from "../services/firebaseService.ts";
 import _ from "lodash";
 
 export default {
@@ -5790,6 +5791,7 @@ export default {
       //       ),
       //     });
       // }
+      deleteProjectCloudFunctions(project.id, this.$store.state.user.uid);
       await db
         .collection("project")
         .doc(project.id)
