@@ -1160,6 +1160,8 @@ export default {
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
+      today: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString().substr(0, 10),
       events: null,
       navItems: [
         { title: "Dashboard", href: "./secret", icon: "dashboard" },
@@ -1292,10 +1294,9 @@ export default {
       console.log(currMonth);
       console.log(currDate);
       const newDate = currYear + "-" + currMonth + "-" + currDate;
-      const today = new Date().toISOString().substr(0, 10)
-      console.log(today);
+      
      
-      if (newDate == today) {
+      if (newDate == this.today) {
         return true;
       }
 
@@ -1413,9 +1414,8 @@ export default {
         console.log(currMonth);
         console.log(currDate);
         const newDate = currYear + "-" + currMonth + "-" + currDate;
-        const today = new Date().toISOString().substr(0, 10)
         
-        if (newDate == today) {
+        if (newDate == this.today) {
           return true;
         }
       }
@@ -1481,7 +1481,6 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           const newDate = currYear + "-" + currMonth + "-" + currDate;
-          const today = new Date().toISOString().substr(0, 10)
             
           // const PIC = await this.getPICId(data.PIC)
           const PICid = [];
@@ -1492,7 +1491,7 @@ export default {
           }
           console.log(PICid);
           console.log(newDate)
-          if (newDate == today && PICid.includes(this.$store.state.user.uid)) {
+          if (newDate == this.today && PICid.includes(this.$store.state.user.uid)) {
             return true;
           }
         }
@@ -1575,6 +1574,12 @@ export default {
           console.log(currMonth);
           console.log(currDate);
           const newDate = currYear + "-" + currMonth + "-" + currDate;
+          console.log(this.date)
+          console.log(new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10))
+        console.log(new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString())
           if (newDate == this.date) {
             return true;
           }
