@@ -5274,14 +5274,20 @@ export default {
       console.log(this.TaskgroupmatesChips);
     },
 
-    generateGroupmates() {
-      console.log(this.tempGroupmates);
-      console.log(this.oldGroupmates);
+    generateInvitationGroupmates() {
       const invitations = this.tempGroupmates
         .filter((x) => !this.oldGroupmates.includes(x.id))
         .map((y) => db.collection("user").doc(y.id));
       console.log(invitations);
       return invitations;
+    },
+
+
+    generateGroupmates() {
+      const groupmates = this.tempGroupmates
+        .filter((x) => this.oldGroupmates.includes(x.id))
+        .map((y) => db.collection("user").doc(y.id));
+      return groupmates;
     },
 
     async editTask(task) {
@@ -5831,7 +5837,8 @@ export default {
     async editProject(project) {
       this.errors = "";
       console.log(this.oldGroupmates);
-      const response = await db
+      const promises = [];
+      promises.push(db
         .collection("project")
         .doc(project.id)
         .update({
@@ -5841,18 +5848,18 @@ export default {
           // deadlineTime: this.myDeadlineTime,
           // deadlineDate: this.myDeadline,
           includeTime: this.switchValue,
-          confirmedInvitations: this.oldGroupmates.map((x) =>
-            db.collection("user").doc(x)
-          ),
+          confirmedInvitations: this.generateGroupmates(),
           invitations: firebase.firestore.FieldValue.arrayUnion(
-            ...this.generateGroupmates()
+            ...this.generateInvitationGroupmates()
           ),
           // dateSwitchValue: this.dateSwitchValue,
           deadline: this.finalDeadline,
           // displayDeadline: this.displayDeadline,
           moduleCode: this.modCode,
           todos: project.todos,
-        });
+        }));
+      promises.push(deleteProjectCloudFunctions(project.id, this.$store.state.user.uid));
+      await Promise.all(promises);
 
       if (this.currProjectObject !== null) {
         if (project.id == this.currProjectObject.id) {

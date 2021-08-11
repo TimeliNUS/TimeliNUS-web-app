@@ -183,6 +183,7 @@
                               overflow-wrap: break-word;
                               text-align: left;
                               font-size: 14px;
+                              cursor: pointer;
                             "
                             @click="
                               clearAddMeetingInfo();
@@ -195,6 +196,7 @@
                               overflow-wrap: break-word;
                               text-align: left;
                               font-size: 14px;
+                              cursor: pointer;
                             "
                             v-if="newMeetingType == 'direct'"
                             @click="
