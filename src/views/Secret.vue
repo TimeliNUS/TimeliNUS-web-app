@@ -678,7 +678,7 @@
                                 color="#ff9d66"
                                 small
                                 :href="meeting.meetingLink"
-                                :target="blank"
+                                :target="'_blank'"
                                 >Join Now</v-btn
                               >
                             </div>
