@@ -5290,6 +5290,12 @@ export default {
       return groupmates;
     },
 
+    generateDeletedGroupmates() {
+      const groupmates = this.oldGroupmates
+        .filter((x) => !this.tempGroupmates.map(y => y.id).includes(x))
+      return groupmates;
+    },
+
     async editTask(task) {
       console.log(task.id);
       console.log(this.TaskdateSwitchValue);
@@ -5819,7 +5825,7 @@ export default {
       //       ),
       //     });
       // }
-      deleteProjectCloudFunctions(project.id, this.$store.state.user.uid);
+      deleteProjectCloudFunctions(project.id, [this.$store.state.user.uid]);
       await db
         .collection("project")
         .doc(project.id)
@@ -5858,7 +5864,10 @@ export default {
           moduleCode: this.modCode,
           todos: project.todos,
         }));
-      promises.push(deleteProjectCloudFunctions(project.id, this.$store.state.user.uid));
+      const listOfGroupmates = this.generateDeletedGroupmates()
+      if(listOfGroupmates.length != 0){
+        promises.push(deleteProjectCloudFunctions(project.id, listOfGroupmates));
+      }
       await Promise.all(promises);
 
       if (this.currProjectObject !== null) {

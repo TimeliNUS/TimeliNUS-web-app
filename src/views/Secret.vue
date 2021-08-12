@@ -852,7 +852,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col col="12" md="4">
+          <v-col col="12" md="4" style="max-height: 90vh">
             <div
               style="
                 margin-right: auto;
@@ -892,8 +892,7 @@
                     flex: 1;
                     flex-direction: column;
                     font-size: 15px;
-                    overflow-y: scroll;
-                    overflow: hidden;
+                    overflow: auto;
                     margin-bottom: 36px;
                   "
                   :class="`rounded-b-xl`"
