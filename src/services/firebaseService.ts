@@ -119,7 +119,7 @@ export const findGoogleCommonTime = async (
 export const deleteProjectCloudFunctions = async (
   // googleToken: string,
   projectId: string,
-  userId: string
+  userId: string[]
 ) => {
   const obj = {
     projectId,
